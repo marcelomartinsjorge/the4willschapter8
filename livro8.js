@@ -1,0 +1,754 @@
+/* ==========================================================================
+   MOTOR DO LIVRO INTERATIVO · As Quatro Vontades · versão Capítulo VIII
+   O motor do Capítulo IV, com o que é da Laura aos 36: o CORAÇÃO DE PEDRA
+   (o pulso fica perto de 52 e só dispara quando a página pede: pico),
+   o "Continuar" antes de som e de dublagem no meio do texto, opções que
+   dependem do estado e os minijogos do capítulo (jogos8.js e duelo8.js).
+   O roteiro vem de window.LIVRO (capitulo8.js).
+   ========================================================================== */
+(() => {
+'use strict';
+const L = window.LIVRO, CFG = window.CHAPTER_CONFIG || {}, CODEX = CFG.codex || {}, ZONES = Object.assign({}, CFG.zones || {}, L.zonas || {});
+const SUPA = { url: 'https://qoxvlgscpljsrybywivf.supabase.co', key: 'sb_publishable_XvoczGgXZGAezAmabNUBrQ_r25L-7ga' };
+const $ = (s, r = document) => r.querySelector(s);
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const IS_TOUCH = matchMedia('(pointer: coarse)').matches;
+const H264 = !!document.createElement('video').canPlayType('video/mp4; codecs="avc1.42E01E"');
+const vsrc = (u) => (H264 || !/\.mp4$/.test(u) ? u : u.replace(/\.mp4$/, '.webm'));
+const SAVE_KEY = 'livro_' + L.id;
+let LANG = 'en'; try { LANG = localStorage.getItem('livro_lang') || 'en'; } catch (e) {}
+const EN = window.LIVRO_EN || {};
+const tr = (t) => (LANG === 'en' && t != null ? (EN[t] != null ? EN[t] : t) : t);
+const UI = window.LIVRO_UI;
+const U = (k) => UI[LANG][k];
+
+// ---------------------------------------------------------------- estado
+const novoEstado = () => ({ i: 0, peso: 0, perfil: {}, f: {}, escolhas: {}, dialogo: {}, feitos: {}, olhar: {}, duelo: null, sessao: (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random()) });
+let st = novoEstado();
+const salvar = () => { try { localStorage.setItem(SAVE_KEY, JSON.stringify(st)); } catch (e) {} };
+const carregar = () => { try { const j = JSON.parse(localStorage.getItem(SAVE_KEY)); return j && j.sessao ? j : null; } catch (e) { return null; } };
+// o que capítulos anteriores deixaram (mesmo navegador)
+let ANTES = {}; try { ANTES = JSON.parse(localStorage.getItem('aqv_estado') || '{}') || {}; } catch (e) {}
+window.AQV_ANTES = ANTES;
+const P = L.paginas;
+const visivel = (p) => !p.se || p.se(st);
+const narrOf = (p) => (typeof p.narracao === 'function' ? p.narracao(st) : p.narracao);
+const idxVis = (from, dir) => { let i = from + dir; while (i >= 0 && i < P.length && !visivel(P[i])) i += dir; return i; };
+
+// ---------------------------------------------------------------- áudio (Web Audio)
+const AC = window.AudioContext || window.webkitAudioContext;
+const A = {
+  ctx: null, bufs: {}, zone: null, narr: null, on: true,
+  init() {
+    if (this.ctx) return; this.ctx = new AC();
+    this.master = this.ctx.createGain(); this.master.connect(this.ctx.destination);
+    this.bed = this.ctx.createGain(); this.lpBed = this.ctx.createBiquadFilter(); this.lpBed.type = 'lowpass'; this.lpBed.frequency.value = 18000; this.bed.connect(this.lpBed); this.lpBed.connect(this.master);
+    this.fx = this.ctx.createGain(); this.fx.gain.value = .8; this.fx.connect(this.master);
+    const n = this.ctx.createBuffer(1, this.ctx.sampleRate, this.ctx.sampleRate), d = n.getChannelData(0);
+    for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1; this.noise = n;
+  },
+  resume() { this.ctx && this.ctx.state === 'suspended' && this.ctx.resume(); },
+  async buf(url) {
+    if (!this.ctx) return null;
+    if (this.bufs[url]) return this.bufs[url];
+    const p = fetch(url).then((r) => (r.ok ? r.arrayBuffer() : Promise.reject())).then((ab) => new Promise((res, rej) => this.ctx.decodeAudioData(ab, res, rej))).catch(() => null);
+    this.bufs[url] = p; return p;
+  },
+  async loop(url, vol, fade = 1.5) {
+    const b = await this.buf(url); if (!b) return null;
+    const s = this.ctx.createBufferSource(); s.buffer = b; s.loop = true;
+    const g = this.ctx.createGain(); g.gain.value = 0; s.connect(g); g.connect(this.bed); s.start();
+    g.gain.linearRampToValueAtTime(vol, this.ctx.currentTime + fade);
+    return { s, g };
+  },
+  stop(h, fade = 1.5) { if (!h) return; const t = this.ctx.currentTime; h.g.gain.cancelScheduledValues(t); h.g.gain.setValueAtTime(h.g.gain.value, t); h.g.gain.linearRampToValueAtTime(0, t + fade); setTimeout(() => { try { h.s.stop(); } catch (e) {} }, fade * 1000 + 100); },
+  async setZone(z) {
+    if (!this.ctx || z === this.zone) return; this.zone = z;
+    const old = this.zoneH; this.zoneH = null; this.stop(old, 2);
+    clearInterval(this.oneT);
+    const cfg = ZONES[z]; if (!cfg) return;
+    if (cfg.oneShot) { const l = [].concat(cfg.oneShot); this.oneT = setInterval(() => { if (this.zone === z && Math.random() < .5) this.once(l[Math.floor(Math.random() * l.length)], .35); }, 9000); }
+    if (!cfg.src) return;
+    const h = await this.loop(cfg.src, cfg.volume * .8, 2.2);
+    if (this.zone === z) this.zoneH = h; else this.stop(h, .3);
+  },
+  async once(url, vol = .7) { const b = await this.buf(url); if (!b) return 0; const s = this.ctx.createBufferSource(); s.buffer = b; const g = this.ctx.createGain(); g.gain.value = vol; s.connect(g); g.connect(this.fx); s.start(); return b.duration; },
+  async narrate(url, onEnd, abafa) {
+    this.stopNarr(); const b = await this.buf(url); if (!b) return false;
+    const s = this.ctx.createBufferSource(); s.buffer = b;
+    if (abafa) { const f = this.ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1900; f.Q.value = .9; const pk = this.ctx.createBiquadFilter(); pk.type = 'peaking'; pk.frequency.value = 520; pk.gain.value = 5; s.connect(pk); pk.connect(f); f.connect(this.master); } else s.connect(this.master);
+    s.start();
+    this.duck(true); this.narr = s; s.onended = () => { if (this.narr === s) { this.narr = null; this.duck(false); onEnd && onEnd(); } };
+    return true;
+  },
+  async vozAbafada(url) { const b = await this.buf(url); if (!b) return; const s = this.ctx.createBufferSource(); s.buffer = b; const f = this.ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1900; const g = this.ctx.createGain(); g.gain.value = 1.1; s.connect(f); f.connect(g); g.connect(this.master); s.start(); },
+  stopNarr() { if (this.narr) { const s = this.narr; this.narr = null; try { s.stop(); } catch (e) {} this.duck(false); } },
+  abafa(x) { if (!this.lpBed) return; this.lpBed.frequency.setTargetAtTime(18000 - clamp(x, 0, 1) * 16600, this.ctx.currentTime, .6); },
+  duck(on) { if (!this.ctx) return; const t = this.ctx.currentTime; this.bed.gain.cancelScheduledValues(t); this.bed.gain.setTargetAtTime(on ? .25 : 1, t, .25); },
+  setOn(on) { this.on = on; if (this.master) this.master.gain.setTargetAtTime(on ? 1 : 0, this.ctx.currentTime, .1); },
+  tone(f, d, type = 'sine', v = .08, when = 0, bend = 0) {
+    if (!this.ctx) return; const t = this.ctx.currentTime + when, o = this.ctx.createOscillator(), g = this.ctx.createGain();
+    o.type = type; o.frequency.setValueAtTime(f, t); if (bend) o.frequency.exponentialRampToValueAtTime(f * bend, t + d);
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + .01); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+    o.connect(g); g.connect(this.fx); o.start(t); o.stop(t + d + .05);
+  },
+  hiss(d, f, q, v, when = 0, type = 'bandpass') {
+    if (!this.ctx) return; const t = this.ctx.currentTime + when, s = this.ctx.createBufferSource(); s.buffer = this.noise;
+    const fl = this.ctx.createBiquadFilter(); fl.type = type; fl.frequency.value = f; fl.Q.value = q; const g = this.ctx.createGain();
+    g.gain.setValueAtTime(.0001, t); g.gain.exponentialRampToValueAtTime(v, t + d * .3); g.gain.exponentialRampToValueAtTime(.0001, t + d);
+    s.connect(fl); fl.connect(g); g.connect(this.fx); s.start(t); s.stop(t + d + .05);
+  },
+  // sfx: se o arquivo existir em assets/audio/sfx, toca ele; senão, um som sintetizado de reserva
+  async sfx(nome, vol = .6, reserva) { if (!this.ctx) return; const d = await this.once('assets/audio/sfx/' + nome + '.mp3', vol); if (!d && reserva) reserva(); },
+  virar() { this.sfx('pagina', .35, () => this.hiss(.35, 2400, .7, .05)); },
+  escolha() { this.tone(392, .5, 'sine', .05); this.tone(587, .6, 'sine', .035, .06); },
+  aviso() { this.tone(440, .9, 'triangle', .03); },
+  // o peso: um baque surdo, grave, dentro do peito
+  peso() { this.sfx('peso', .7, () => { this.tone(48, 1.4, 'sine', .32, 0, .7); this.hiss(.9, 120, .6, .18, 0, 'lowpass'); }); },
+  // batida do coração (sintetizada): tum-tum
+  batida(forca = .5) { if (!this.ctx) return; const v = .12 + forca * .3; this.tone(58, .22, 'sine', v, 0, .6); this.hiss(.16, 90, .7, v * .5, 0, 'lowpass'); this.tone(52, .2, 'sine', v * .7, .17, .6); this.hiss(.14, 80, .7, v * .35, .17, 'lowpass'); },
+};
+
+// ---------------------------------------------------------------- o coração de pedra
+// st.base = o pulso de repouso (52; sobe depois do sangue). A página pode pedir um pico: { bpm, ms }.
+// O pulso sobe rápido e desce devagar. Abaixo de 70, quase não se ouve.
+const Coracao = (() => {
+  let alvo = 52, atual = 52, t = null, extra = 0, ult = performance.now();
+  const root = document.documentElement;
+  const base = () => (Number.isFinite(st.base) ? st.base : 52);
+  const bater = () => {
+    const bpm = clamp(atual + extra * 12, 44, 190);
+    const bn = $('#bpmN'); if (bn) bn.textContent = Math.round(bpm);
+    document.body.classList.toggle('dispara', bpm >= 100);
+    document.body.classList.toggle('pedra', bpm < 64);
+    A.ctx && A.abafa && A.abafa(bpm >= 110 && !document.body.classList.contains('mg-on') ? (bpm - 105) / 60 : 0);
+    document.body.classList.remove('bate'); void document.body.offsetWidth; document.body.classList.add('bate');
+    if (A.ctx && A.on && bpm >= 68 && !document.body.classList.contains('mg-on')) A.batida(clamp((bpm - 60) / 100, 0, 1));
+    t = setTimeout(bater, 60000 / bpm);
+  };
+  const desenha = (now) => {
+    const dt = Math.min(.1, (now - ult) / 1000); ult = now;
+    atual += clamp(alvo - atual, -3.2 * dt, 26 * dt);
+    st.bpm = atual;
+    root.style.setProperty('--pulso', clamp((atual - 52) / 110, 0, 1).toFixed(3));
+    root.style.setProperty('--peso', '0');
+    requestAnimationFrame(desenha);
+  };
+  return {
+    start() { if (!t) { atual = alvo = Number.isFinite(st.bpm) ? st.bpm : base(); bater(); requestAnimationFrame(desenha); } },
+    alvo(v) { alvo = Number.isFinite(v) ? v : base(); },
+    repouso() { alvo = base(); },
+    agora(v) { atual = alvo = v; },
+    set() {}, extra(v) { extra = v || 0; },
+  };
+})();
+// ---------------------------------------------------------------- a língua de sensação de Laura (vinda do Cap. II)
+// rosto quente = Justine (dourado, lento, som abafado) · lágrimas = mentir (a tela embaça)
+const Sensa = {
+  quente(on) { on = !!on; if (document.body.classList.contains('quente') === on) return; document.body.classList.toggle('quente', on); A.quenteOn = on; A.ctx && A.abafa && A.abafa(on ? .62 : 0); },
+  pulsoQuente() { document.body.classList.remove('quente-pulso'); void document.body.offsetWidth; document.body.classList.add('quente-pulso'); setTimeout(() => document.body.classList.remove('quente-pulso'), 2600); },
+  lagrimas() { document.body.classList.remove('lagrimas'); void document.body.offsetWidth; document.body.classList.add('lagrimas'); setTimeout(() => document.body.classList.remove('lagrimas'), 4600); },
+};
+const valP = (v) => (typeof v === 'function' ? v(st) : v);
+function mudaPeso(d) {
+  if (!d) return; st.peso = Math.max(0, st.peso + d);
+  if (d < 0) { A.tone(392, 1.2, 'sine', .03); A.tone(523, 1.4, 'sine', .02, .1); return; }
+  A.peso(); document.body.classList.remove('pesa'); void document.body.offsetWidth; document.body.classList.add('pesa');
+}
+
+// ---------------------------------------------------------------- fundos
+const bgWrap = $('#bg');
+let bgKey = '';
+const resolveFundo = (p) => (st.fundoPag && st.fundoPag[p.id]) || (typeof p.fundo === 'function' ? p.fundo(st) : p.fundo);
+function setFundo(f) {
+  if (!f) return; const key = JSON.stringify(f); if (key === bgKey) return; bgKey = key;
+  const layer = document.createElement('div');
+  layer.className = 'bgl kb-' + (f.kb || 'in') + (f.tint ? ' tint-' + f.tint : '') + (f.retrato ? ' retrato' : '');
+  layer.style.setProperty('--dim', f.dim != null ? f.dim : .5);
+  layer.style.setProperty('--foco', f.foco || '50% 40%');
+  const src = f.img;
+  if (f.retrato) { const b = document.createElement('div'); b.className = 'blur'; b.style.backgroundImage = `url("${src}")`; layer.appendChild(b); }
+  if (f.video || f.clip) {
+    const v = document.createElement('video'); v.src = vsrc(f.video || f.clip); v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.autoplay = true;
+    v.style.objectPosition = f.foco || '50% 40%'; v.className = 'img';
+    if (f.img) v.poster = f.img; layer.appendChild(v); v.play().catch(() => {});
+  } else { const im = document.createElement('div'); im.className = 'img'; im.style.backgroundImage = [src].concat(f.alt || []).map((u) => `url("${u}")`).join(', '); layer.appendChild(im); }
+  bgWrap.appendChild(layer);
+  document.body.classList.toggle('lado-dir', f.lado === 'dir');
+  Clima.set(f.clima || null);
+  requestAnimationFrame(() => requestAnimationFrame(() => layer.classList.add('on')));
+  const olds = [...bgWrap.children].filter((c) => c !== layer);
+  setTimeout(() => olds.forEach((o) => o.remove()), 1600);
+}
+
+// ---------------------------------------------------------------- clima: poeira na luz, fagulhas de vela, poeira azul no laranjal
+const Clima = (() => {
+  const cv = $('#fx'), cx = cv.getContext('2d'); let modo = null, alvo = 0, dens = 0, parts = [], t0 = performance.now();
+  const PERFIS = {
+    poeira: { n: 70, cor: '236,214,170', vy: [-4, 6], vx: [-5, 8], r: [.5, 1.8], a: [.12, .45], wob: 10 },
+    velas: { n: 26, cor: '255,196,120', vy: [-16, -5], vx: [-4, 4], r: [.5, 1.4], a: [.2, .7], wob: 8, pisca: true },
+    'poeira-azul': { n: 80, cor: '200,214,232', vy: [-3, 5], vx: [-4, 6], r: [.5, 1.7], a: [.08, .35], wob: 9 },
+    chuva: { n: 170, cor: '205,218,232', vy: [700, 1050], vx: [-110, -70], r: [9, 20], a: [.12, .32], wob: 0, linha: true },
+  };
+  const rs = () => { const d = Math.min(devicePixelRatio || 1, 2); cv.width = innerWidth * d; cv.height = innerHeight * d; cx.setTransform(d, 0, 0, d, 0, 0); };
+  addEventListener('resize', rs); rs();
+  const rnd = (a) => a[0] + Math.random() * (a[1] - a[0]);
+  const novo = (pf) => ({ x: Math.random() * innerWidth, y: Math.random() * innerHeight, vx: rnd(pf.vx), vy: rnd(pf.vy), r: rnd(pf.r), a: rnd(pf.a), ph: Math.random() * 6.28 });
+  let last = performance.now();
+  const loop = (now) => {
+    const dt = Math.max(0, Math.min((now - last) / 1000, .05)); last = now;
+    dens = Math.max(0, dens + (alvo - dens) * Math.min(1, dt * 1.5));
+    cx.clearRect(0, 0, innerWidth, innerHeight);
+    const pf = PERFIS[modo];
+    if (pf) {
+      const n = Math.max(0, Math.round(pf.n * dens * (innerWidth < 700 ? .55 : 1)) || 0);
+      while (parts.length < n) parts.push(novo(pf));
+      if (parts.length > n) parts.length = n;
+      const tt = (now - t0) / 1000;
+      for (const q of parts) {
+        q.x += (q.vx + Math.sin(tt * .6 + q.ph) * pf.wob * .3) * dt; q.y += q.vy * dt;
+        if (pf.linha && q.y > innerHeight + 10) { Object.assign(q, novo(pf)); q.y = -20; } else if (q.y > innerHeight + 10 || q.y < -12 || q.x < -20 || q.x > innerWidth + 20) { Object.assign(q, novo(pf)); if (q.vy < 0) q.y = innerHeight + 6; }
+        const al = q.a * (pf.pisca ? .55 + .45 * Math.sin(tt * 3 + q.ph * 3) : 1) * dens;
+        if (pf.linha) { cx.beginPath(); cx.strokeStyle = `rgba(${pf.cor},${al.toFixed(3)})`; cx.lineWidth = 1; cx.moveTo(q.x, q.y); cx.lineTo(q.x - q.vx * .012, q.y - q.r); cx.stroke(); }
+        else { cx.beginPath(); cx.fillStyle = `rgba(${pf.cor},${al.toFixed(3)})`; cx.arc(q.x, q.y, q.r, 0, 6.283); cx.fill(); }
+      }
+    }
+    requestAnimationFrame(loop);
+  };
+  requestAnimationFrame(loop);
+  return { set(m) { if (m === modo) return; if (matchMedia('(prefers-reduced-motion: reduce)').matches) m = null; modo = m; parts = []; dens = 0; alvo = m ? 1 : 0; } };
+})();
+
+// ---------------------------------------------------------------- codex
+function aliasesAtuais() {
+  const out = [];
+  for (const [id, c] of Object.entries(CODEX)) {
+    const al = LANG === 'en' ? (c.aliasesEn || [c.en && c.en.title]) : (c.aliasesPt || [c.pt && c.pt.title]);
+    for (const a of al.filter(Boolean)) out.push([a, id]);
+  }
+  return out.sort((a, b) => b[0].length - a[0].length);
+}
+const esc = (t) => String(t).replace(/[&<>"]/g, (m) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[m]));
+const linkUsados = new Set();
+function linkify(text) {
+  let html = esc(text);
+  for (const [a, id] of aliasesAtuais()) {
+    if (linkUsados.has(id)) continue;
+    const re = new RegExp(`(^|[^\\p{L}])(${a.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})(?![\\p{L}])`, 'u');
+    if (re.test(html)) { html = html.replace(re, `$1<button class="gloss" data-codex="${id}">$2</button>`); linkUsados.add(id); }
+  }
+  return html;
+}
+function abrirCodex(id) {
+  const c = CODEX[id]; if (!c) return; const t = c[LANG] || c.pt || c.en; let pg = 0;
+  const m = $('#codex'); $('#cxImg').style.backgroundImage = `url("${c.image}")`; $('#cxEye').textContent = t.eyebrow || ''; $('#cxTitle').textContent = t.title;
+  const draw = () => { $('#cxText').innerHTML = t.pages[pg].map((p) => `<p>${esc(p)}</p>`).join(''); $('#cxPg').textContent = `${pg + 1} / ${t.pages.length}`; $('#cxPrev').disabled = pg === 0; $('#cxNext').disabled = pg === t.pages.length - 1; };
+  $('#cxPrev').onclick = () => { pg--; draw(); }; $('#cxNext').onclick = () => { pg++; draw(); };
+  draw(); m.classList.add('show'); A.tone(660, .5, 'sine', .03);
+}
+document.addEventListener('click', (e) => { const g = e.target.closest('.gloss'); if (g) { e.preventDefault(); abrirCodex(g.dataset.codex); } });
+$('#cxClose').onclick = () => $('#codex').classList.remove('show');
+
+function toast(t) { const el = document.createElement('div'); el.className = 'toast'; el.textContent = t; $('#toasts').appendChild(el); A.aviso(); setTimeout(() => el.classList.add('out'), 3600); setTimeout(() => el.remove(), 4400); }
+
+// ---------------------------------------------------------------- estatísticas (Supabase)
+function registrar(escolha, opcao) {
+  fetch(`${SUPA.url}/rest/v1/livro_escolhas?on_conflict=sessao,capitulo,escolha`, {
+    method: 'POST', headers: { apikey: SUPA.key, 'Content-Type': 'application/json', Prefer: 'resolution=ignore-duplicates,return=minimal' },
+    body: JSON.stringify({ capitulo: L.id, escolha, opcao, sessao: st.sessao }),
+  }).catch(() => {});
+}
+async function estatisticas() {
+  try {
+    const r = await fetch(`${SUPA.url}/rest/v1/rpc/livro_estatisticas`, { method: 'POST', headers: { apikey: SUPA.key, 'Content-Type': 'application/json' }, body: JSON.stringify({ p_capitulo: L.id }) });
+    return r.ok ? r.json() : [];
+  } catch (e) { return []; }
+}
+
+// ---------------------------------------------------------------- render de página
+const txt = $('#ptext'), box = $('#choices'), btnNext = $('#next'), btnPrev = $('#prev'), panel = $('#page');
+// um parágrafo pode ser: 'texto', { se: st => bool, t: 'texto' } ou st => 'texto' | null
+const CONT = '\u0000CONT';
+const umPara = (p) => (typeof p === 'string' ? p : typeof p === 'function' ? p(st) : p && p.continuar ? CONT : (p && p.se && p.se(st) ? p.t : null));
+const paras = (list) => [].concat(list || []).map(umPara).flat(2).filter(Boolean).map((t) => (t === CONT ? t : tr(t)));
+const itensCont = (p) => [].concat(typeof p.texto === 'function' ? [] : (p.texto || [])).filter((x) => x && x.continuar);
+const temContinuar = (p) => itensCont(p).length > 0;
+function pHTML(p, extra = '') { const dlg = p.startsWith('—'); return `<p class="${dlg ? 'dlg' : ''} ${extra}">${linkify(p)}</p>`; }
+let timers = [];
+const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
+const later = (fn, ms) => timers.push(setTimeout(fn, ms));
+// o coração na jogabilidade: com o peito apertado (peso >= NERV), algumas falas de Laura saem tremidas
+const NERV = 2;
+const nervosa = (o, cid) => { if (!o.txtNervoso) return false; const k = cid + ':' + o.id, m = st.nervosas || {}; return k in m ? m[k] : st.peso >= NERV; };
+const rotulo = (o, cid) => (o.silencio ? U('silencioR') : tr(nervosa(o, cid) ? o.txtNervoso : (typeof o.txt === 'function' ? o.txt(st) : o.txt)));
+const resultadoDe = (o, cid) => (nervosa(o, cid) && o.resultadoNervoso ? o.resultadoNervoso : o.resultado);
+const marcaNervosa = (o, cid) => { (st.nervosas = st.nervosas || {})[cid + ':' + o.id] = nervosa(o, cid); };
+// sons e vozes amarrados a um parágrafo: tocam quando o leitor, no ritmo médio de leitura, chega nele (p = índice; -1 = o último).
+// fim:true => se o leitor virar a página antes, toca na virada. Item de voz: { voz, p|ms }. Item de som: { s, p|ms, v, fim }.
+let cuesPend = [];
+const palavras = (el) => (el.textContent || '').trim().split(/\s+/).length;
+const msAte = (els, k) => { if (!els.length) return 900; if (k < 0) k = els.length + k; k = Math.max(0, Math.min(els.length - 1, k)); let w = 0; for (let i = 0; i < k; i++) w += palavras(els[i]); return (700 + (w / 3.3) * 1000) * (window.__LEITURA_K || 1); };
+function agendaItens(itens, els, base = 0) {
+  (itens || []).forEach((it) => {
+    const c = { done: false, fim: !!it.fim };
+    c.tocar = () => { if (c.done) return; c.done = true; if (!A.ctx || !A.on) return; if (it.voz) A.narrate(vozUrl(it.voz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .7); };
+    if (c.fim) cuesPend.push(c);
+    later(c.tocar, base + (it.p != null ? msAte(els, it.p) : (it.ms != null ? it.ms : 900)));
+  });
+}
+function vozesDe(p) {
+  const v = typeof p.vozAuto === 'function' ? p.vozAuto(st) : p.vozAuto; if (!v) return [];
+  if (typeof v === 'string') { const va = typeof p.vozAtraso === 'function' ? p.vozAtraso(st) : p.vozAtraso; return [{ voz: v, ms: va != null ? va : (txt.children.length * .35 + 1.2) * 1000 }]; }
+  return [].concat(v);
+}
+// as falas dubladas de Laura tocam sozinhas
+const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3';
+const vozDeOpcao = (o, cid) => { const v = nervosa(o, cid) ? o.vozNervosa : o.voz; return typeof v === 'function' ? v(st) : v; };
+const ABAFA = /^$/;   // o elmo já vem gravado nos arquivos (efeito aplicado na edição)
+const fala = (nome, ms = 0) => { if (!nome) return; later(() => { if (A.ctx && A.on) A.narrate(vozUrl(nome), null, ABAFA.test(nome)); }, ms); };
+
+function render(dir = 1) {
+  clearTimers(); cuesPend = []; A.stopNarr(); linkUsados.clear();
+  const p = P[st.i]; if (!p) return;
+  setFundo(resolveFundo(p));
+  if (A.ctx) { A.setZone(p.zona); if (p.som && dir > 0) A.once(p.som, .55); }
+  document.body.dataset.zona = p.zona;
+  Coracao.extra(0); Coracao.repouso();
+  const pico = valP(p.pico); if (pico && dir >= 0 && !temContinuar(p)) later(() => { if (P[st.i] === p) Coracao.alvo(pico.bpm); }, pico.ms || 0);
+  Sensa.quente(valP(p.quente));
+  { let k = st.i; while (k > 0 && !P[k].parte) k--; $('#parte').textContent = U('parte') + ' ' + (P[k].parte || 'I'); }
+  const vis = P.filter(visivel), n = vis.indexOf(p) + 1; $('#pnum').textContent = `${n}`;
+  $('#prog').style.setProperty('--p', (n / vis.length).toFixed(3));
+  panel.classList.remove('in'); void panel.offsetWidth; panel.classList.add('in');
+  panel.classList.toggle('cartao', !!p.cartao);
+  if (p.cartao) {
+    const c = p.cartao;
+    txt.innerHTML = `<div class="ct"><p class="ct-num">${U('parte')} ${c.num}</p><h2 class="ct-nome">${esc(tr(c.nome))}</h2><span class="ct-orn">✦</span>
+      <blockquote class="ct-epi"><p>${esc(tr(c.epigrafe))}</p><cite>${esc(tr(c.fonte))}</cite></blockquote></div>`;
+  } else {
+    const todos = paras(p.texto), blocos = [[]];
+    todos.forEach((t) => (t === CONT ? blocos.push([]) : blocos[blocos.length - 1].push(t)));
+    txt.innerHTML = blocos[0].map((t, k) => pHTML(t, k === 0 && p.capitular ? 'cap' : '')).join('');
+    p._blocos = blocos; p._bloco = (st.feitos['cont:' + p.id] || dir < 0) ? blocos.length : 1;
+    if (p._bloco > 1) for (let b = 1; b < blocos.length; b++) blocos[b].forEach((t) => txt.insertAdjacentHTML('beforeend', pHTML(t)));
+  }
+  box.innerHTML = ''; box.classList.remove('urgente', 'sobPressao');
+  document.querySelectorAll('.numeral').forEach((n) => n.remove());
+  { const passo = document.body.classList.contains('quente') ? .6 : .35; [...txt.children].forEach((el, k) => { el.style.animationDelay = (k * passo) + 's'; }); }
+  if (valP(p.quentePulso) && dir >= 0) later(() => Sensa.pulsoQuente(), (txt.children.length * .35 + .4) * 1000);
+  const extras = $('#extras'); extras.innerHTML = '';
+  const narr = narrOf(p);
+  const narrTag = p.narracaoLang && p.narracaoLang !== LANG ? ` (${p.narracaoLang.toUpperCase()})` : '';
+  if (narr) extras.insertAdjacentHTML('beforeend', `<button class="chip" id="narr"><i class="eq"></i>${U('ouvir')}${narrTag}</button>`);
+  const cena = typeof p.cena === 'function' ? p.cena(st) : p.cena;
+  if (cena) extras.insertAdjacentHTML('beforeend', `<button class="chip" id="cena">${U('cena')}</button>`);
+  if (narr) {
+    ligaNarr(p, narr);
+    if (A.ctx && A.on && dir >= 0) later(() => { const b = $('#narr'); if (b && P[st.i] === p && !A.narr) b.click(); }, 700);
+  } else if (p.vozAuto && dir >= 0) agendaItens(vozesDe(p), [...txt.children]);
+  if (p.sons && dir >= 0) agendaItens(p.sons, [...txt.children]);
+  if (cena) $('#cena').onclick = () => verCena(cena);
+  const efP = valP(p.efeito); if (efP && !st.feitos['ef:' + p.id]) { st.feitos['ef:' + p.id] = 1; const ef = efP; if (ef.flag) st.f[ef.flag] = true; if (ef.peso) later(() => mudaPeso(ef.peso), 1200); }
+  if (p.quieto) renderQuieto(p);
+  if (p._blocos && p._bloco < p._blocos.length) { renderContinuar(p); setNext(false); btnPrev.disabled = idxVis(st.i, -1) < 0; btnPrev.textContent = U('voltar'); btnNext.textContent = U('prox'); st.feitos[p.id] = st.feitos[p.id] || 1; salvar(); panel.scrollTop = 0; return; }
+  let livre = true;
+  if (p.escolha) livre = renderEscolha(p);
+  if (p.dialogo) livre = renderDialogo(p);
+  if (p.minijogo) livre = renderMinijogo(p);
+  setNext(livre);
+  btnPrev.disabled = idxVis(st.i, -1) < 0; btnPrev.textContent = U('voltar');
+  btnNext.textContent = p.recomeca ? (LANG === 'en' ? 'Start the chapter again' : 'Recomeçar o capítulo') : p.fim ? U('fim') : U('prox');
+  st.feitos[p.id] = st.feitos[p.id] || 1; salvar();
+  panel.scrollTop = 0;
+}
+function renderContinuar(p) {
+  box.innerHTML = `<button class="opt cont" id="contBtn"><span class="k">›</span>${U('continuar')}</button>`;
+  $('#contBtn').onclick = () => {
+    const it = itensCont(p)[p._bloco - 1] || {};
+    const novos = p._blocos[p._bloco]; p._bloco++;
+    box.innerHTML = '';
+    novos.forEach((t, k) => { txt.insertAdjacentHTML('beforeend', pHTML(t, 'novo')); txt.lastElementChild.style.animationDelay = (k * .35) + 's'; });
+    if (A.ctx && A.on) { if (it.voz) A.narrate(vozUrl(it.voz), null, false); if (it.s) A.once(it.s, it.v != null ? it.v : .8); }
+    const pico = valP(p.pico); if (pico && p._bloco === 2) later(() => { if (P[st.i] === p) Coracao.alvo(pico.bpm); }, 300);
+    if (p._bloco < p._blocos.length) return renderContinuar(p);
+    st.feitos['cont:' + p.id] = 1; salvar();
+    let livre = true;
+    if (p.escolha) livre = renderEscolha(p);
+    if (p.minijogo) livre = renderMinijogo(p);
+    setNext(livre);
+  };
+}
+function ligaNarr(p, url) {
+  const b = $('#narr'); if (!b) return;
+  b.onclick = () => {
+    if (A.narr) { A.stopNarr(); b.classList.remove('on'); return; }
+    b.classList.add('on'); A.narrate(url, () => b.classList.remove('on')).then((ok) => { if (!ok) b.classList.remove('on'); });
+  };
+}
+function setNext(on) { btnNext.disabled = !on; btnNext.classList.toggle('pulse', on); }
+function appendParas(list, cls = '') { paras(list).forEach((t, k) => { txt.insertAdjacentHTML('beforeend', pHTML(t, 'novo ' + cls)); txt.lastElementChild.style.animationDelay = (k * .35) + 's'; }); }
+const riscada = (o) => !!(o.riscavel && o.se && !o.se(st));
+const optHTML = (cid) => (o, k) => `<button class="opt ${o.silencio ? 'sil' : ''} ${nervosa(o, cid) || o.tremida ? 'nervosa' : ''} ${riscada(o) ? 'riscada' : ''}" data-id="${o.id}" ${riscada(o) ? 'disabled aria-disabled="true"' : ''}><span class="k">${riscada(o) ? '–' : k + 1}</span>${o.silencio ? `<em>${U('silencio')}</em>` : `<span class="rot">${esc(rotulo(o, cid))}</span>`}${riscada(o) && U('coracaoNao') ? `<small class="porque">${U('coracaoNao')}</small>` : ''}</button>`;
+const opcoesVis = (lista) => lista.filter((o) => !o.se || o.se(st));
+// numeração só entre as que se pode escolher; as riscadas vêm por último
+const opcoesEscolha = (lista) => { const v = opcoesVis(lista), r = lista.filter(riscada); return { v, r }; };
+
+// ----- quieto: nenhum botão; se o leitor esperar, surge um "…". Pode ser uma fala com resposta ou um gesto.
+function renderQuieto(p) {
+  const q = p.quieto, ja = st.escolhas[q.id];
+  const mostra = (anim) => {
+    const c = anim ? 'novo' : '';
+    if (q.fala) {
+      txt.insertAdjacentHTML('beforeend', `<p class="dlg eu ${c}">— ${esc(tr(q.fala))}</p>`);
+      const resp = () => txt.insertAdjacentHTML('beforeend', `<p class="dlg ele ${c}">— ${esc(tr(q.resposta))}</p>`);
+      if (anim) later(resp, 900); else resp();
+    }
+    if (anim) later(() => appendParas(q.depois), q.fala ? 1800 : 200); else appendParas(q.depois);
+  };
+  if (ja === 'fala') { mostra(false); return; }
+  if (ja) { appendParas(q.seCalar); return; }
+  later(() => {
+    if (P[st.i] !== p || st.escolhas[q.id]) return;
+    txt.insertAdjacentHTML('beforeend', '<button class="quieto" aria-label="…">…</button>');
+    txt.querySelector('.quieto').onclick = (e) => {
+      e.currentTarget.remove(); st.escolhas[q.id] = 'fala'; aplicar({ eixo: q.eixo, flag: q.flag }); registrar(q.id, 'fala'); salvar(); mostra(true); setFundo(resolveFundo(p));
+    };
+  }, q.espera * 1000);
+}
+
+// ----- escolhas (sem relógio sobre a leitura; o "Decidir" abre uma janela curta, só quando o leitor quer)
+const opsDe = (e) => (typeof e.opcoes === 'function' ? e.opcoes(st) : e.opcoes);
+function renderEscolha(p) {
+  const e = p.escolha, feita = st.escolhas[e.id];
+  if (feita) { const o = opsDe(e).find((x) => x.id === feita); if (o) { box.innerHTML = `<p class="feita">${U('escolheu')} ${esc(rotulo(o, e.id))}</p>`; appendParas(resultadoDe(o, e.id)); } return true; }
+  // a decisão não aparece sozinha: o leitor termina de ler e clica em "Próxima"; só então ela abre (ver irProxima)
+  p._revelado = false; box.innerHTML = '';
+  return true;
+}
+const janelaDe = (e) => (typeof e.janela === 'function' ? e.janela(st) : e.janela);
+function abreEscolha(p) {
+  const e = p.escolha;
+  const { v, r } = opcoesEscolha(opsDe(e));
+  box.innerHTML = `<p class="eyebrow">${e.urgente ? U('decida') : (e.pergunta ? esc(tr(e.pergunta)) : U('oque'))}</p>` + r.map(optHTML(e.id)).join('') + v.map(optHTML(e.id)).join('') + (e.janela ? `<div class="tenso" style="--j:${janelaDe(e)}s"></div>` : '');
+  box.classList.toggle('urgente', !!e.urgente);
+  p._ops = opsDe(e);
+  box.querySelectorAll('.opt:not(.riscada)').forEach((b) => b.onclick = () => escolher(p, b.dataset.id));
+  if (e.janela) {
+    box.classList.add('sobPressao'); Coracao.extra(1.5);
+    if (e.somJanela) A.once(e.somJanela, .7); else A.sfx('passos-guarda', .8, () => { for (let k = 0; k < 5; k++) A.hiss(.25, 300, 1.2, .12, k * .8, 'lowpass'); });
+    later(() => { if (!st.escolhas[e.id]) escolher(p, e.padrao); }, janelaDe(e) * 1000);
+  }
+}
+function aplicar(o) {
+  if (!o) return;
+  if (o.eixo) { st.perfil = st.perfil || {}; st.perfil[o.eixo] = (st.perfil[o.eixo] || 0) + 1; }
+  if (o.peso) mudaPeso(o.peso);
+  if (o.deslize) { st.deslizes = (st.deslizes || 0) + 1; st.bpm = Math.min(170, (st.bpm || 96) + 8); Coracao.extra(3); A.batida && A.batida(1); }
+  if (o.flag) [].concat(o.flag).forEach((f) => { st.f[f] = true; });
+  if (o.aviso) later(() => toast(tr(o.aviso)), 500);
+  if (o.lagrimas) later(() => Sensa.lagrimas(), 900);
+  if (o.quente) Sensa.pulsoQuente();
+}
+function escolher(p, id) {
+  const e = p.escolha; if (st.escolhas[e.id]) return;
+  const o = (p._ops || opsDe(e)).find((x) => x.id === id); marcaNervosa(o, e.id); if (o.efeito) o.efeito(st); st.escolhas[e.id] = id;
+  if (o.fundo) { (st.fundoPag = st.fundoPag || {})[p.id] = o.fundo; setFundo(o.fundo); }
+  box.classList.remove('sobPressao'); Coracao.extra(0);
+  const sel = box.querySelector(`.opt[data-id="${id}"]`);
+  box.querySelectorAll('.opt').forEach((b) => { b.disabled = true; b.classList.toggle('sel', b.dataset.id === id); });
+  if (!sel) box.innerHTML = `<p class="feita">${U('escolheu')} ${esc(rotulo(o, e.id))}</p>`;
+  if (o.som) A.sfx(o.som, .7);
+  if (o.pico) Coracao.alvo(o.pico);
+  aplicar(o); A.escolha(); registrar(e.id, id); salvar();
+  const vo = vozDeOpcao(o, e.id);
+  later(() => { const n0 = txt.children.length; appendParas(resultadoDe(o, e.id)); setNext(true); if (Array.isArray(vo)) agendaItens(vo, [...txt.children].slice(n0)); }, 450);
+  if (typeof vo === 'string') fala(vo, o.vozAtraso || 900);
+}
+
+// ----- diálogo em rodadas: cada opção pode ter a própria resposta; a rodada pode abrir com uma fala do outro
+function renderDialogo(p) {
+  const d = p.dialogo, feito = st.dialogo[p.id] || [];
+  const log = document.createElement('div'); log.className = 'dlog'; txt.appendChild(log);
+  const linha = (quem, t, novo) => { log.insertAdjacentHTML('beforeend', `<p class="dlg ${quem} ${novo ? 'novo' : ''}">— ${esc(t)}</p>`); };
+  const narra = (t, novo) => { log.insertAdjacentHTML('beforeend', `<p class="nar ${novo ? 'novo' : ''}">${linkify(t)}</p>`); };
+  const resp = (r, o) => [].concat(typeof o.resposta === 'function' ? o.resposta(st) : (o.resposta || r.resposta)).filter(Boolean);
+  const emite = (lista, novo) => lista.forEach((t) => (t.startsWith('—') ? linha('ele', tr(t).replace(/^—\s*/, ''), novo) : narra(tr(t), novo)));
+  feito.forEach(([rid, oid]) => {
+    const r = d.rodadas.find((x) => x.id === rid), o = r.opcoes.find((x) => x.id === oid);
+    if (r.antes) emite([].concat(r.antes));
+    o.silencio ? log.insertAdjacentHTML('beforeend', '<p class="dlg sil">…</p>') : linha('eu', rotulo(o, rid));
+    emite(resp(r, o));
+  });
+  const next = () => {
+    const k = (st.dialogo[p.id] || []).length;
+    if (k >= d.rodadas.length) { box.innerHTML = ''; appendParas(p.depois); setNext(true); return; }
+    const r = d.rodadas[k];
+    if (r.antes && !r._dito) { r._dito = true; emite([].concat(r.antes), true); later(next, 1300); return; }
+    box.innerHTML = `<p class="eyebrow">${r.pergunta ? esc(tr(r.pergunta)) : U('resp') + ' ' + esc(tr(d.interlocutor))}</p>` + opcoesVis(r.opcoes).map(optHTML(r.id)).join('');
+    box.querySelectorAll('.opt').forEach((b) => b.onclick = () => {
+      const o = r.opcoes.find((x) => x.id === b.dataset.id);
+      marcaNervosa(o, r.id); (st.dialogo[p.id] = st.dialogo[p.id] || []).push([r.id, o.id]); st.escolhas[r.id] = o.id; fala(vozDeOpcao(o, r.id), 150);
+      aplicar(o); if (o.pulso != null) Coracao.extra(o.pulso); registrar(r.id, o.id); salvar(); A.escolha(); box.innerHTML = '';
+      o.silencio ? log.insertAdjacentHTML('beforeend', '<p class="dlg sil novo">…</p>') : linha('eu', rotulo(o, r.id), true);
+      later(() => { A.tone(196, .4, 'sine', .03); emite(resp(r, o), true); }, 900);
+      later(next, 2300);
+    });
+  };
+  d.rodadas.forEach((r) => { r._dito = (st.dialogo[p.id] || []).some(([rid]) => rid === r.id); });
+  next();
+  return (st.dialogo[p.id] || []).length >= d.rodadas.length;
+}
+
+// ----- vídeo em tela cheia
+function verCena(src) {
+  const m = $('#cenaModal'), v = $('#cenaV'); v.src = vsrc(src); m.classList.add('show'); A.duck(true); v.play().catch(() => {});
+  const close = () => { v.pause(); m.classList.remove('show'); A.duck(false); };
+  $('#cenaClose').onclick = close; v.onended = close;
+}
+
+// ---------------------------------------------------------------- minijogos e momentos de jogo
+let overlay = $('#mg');
+function renovaOverlay() { const n = overlay.cloneNode(false); n.className = ''; n.innerHTML = ''; overlay.replaceWith(n); overlay = n; }
+function abreOverlay(cls) { renovaOverlay(); overlay.className = 'show ' + cls; document.body.classList.add('mg-on'); return overlay; }
+function fechaOverlay() { renovaOverlay(); document.body.classList.remove('mg-on'); }
+// um número que fica no canto da tela depois do minijogo e apaga devagar (o 13 da final)
+function mostraNumeral(p) { if (!p.numeral) return; document.querySelectorAll('.numeral').forEach((n) => n.remove()); document.body.insertAdjacentHTML('beforeend', `<div class="numeral" aria-hidden="true">${esc(p.numeral)}</div>`); }
+function renderMinijogo(p) {
+  const tipo = p.minijogo, done = st.feitos['mg:' + p.id];
+  if (done) { appendParas(typeof p.depois === 'function' ? p.depois(st) : p.depois); mostraNumeral(p); return true; }
+  const dica = typeof U('dica')[tipo] === 'function' ? U('dica')[tipo](st) : U('dica')[tipo];
+  box.innerHTML = `<p class="eyebrow">${U('momento')}</p><button class="opt jogar" id="mgGo"><span class="k">▶</span>${U('mg')[tipo]}</button><p class="dica">${dica}</p>`;
+  $('#mgGo').onclick = () => { box.innerHTML = ''; MG[tipo](p).then(() => {
+    st.feitos['mg:' + p.id] = 1; salvar();
+    if (p.avancaDepois) return irProxima();
+    const dep = paras(typeof p.depois === 'function' ? p.depois(st) : p.depois); appendParas(dep); setNext(true); mostraNumeral(p);
+    if (p.sonsDepois) agendaItens(p.sonsDepois, [...txt.children].slice(-dep.length));
+    if (p.vozDepois) fala(p.vozDepois(st), (dep.length * .35 + 1.5) * 1000);
+  }); };
+  return false;
+}
+
+const pegaBpm = (r) => { if (r && Number.isFinite(r.bpm)) { st.bpm = r.bpm; Coracao.agora(r.bpm); } };
+const tx = (x) => (typeof x === 'function' ? x(st) : x);
+const MG = {
+  // ---------- Ler o corpo: um suspeito por noite, quatro olhares em seis lugares
+  ler(p) {
+    const k = p.ler.k, o = abreOverlay('j8 ler'), D = window.LIVRO_DADOS;
+    const lista = D.suspeitosDaNoite(st, k).map((id) => {
+      const s = D.SUSPEITOS[id], dela = id === D.ELA();
+      const olhar = {}; Object.keys(s.olhar).forEach((kk) => { olhar[kk] = tr(dela ? D.OLHAR_DELA[kk] : s.olhar[kk]); });
+      return { id, nome: tr(s.nome), papel: tr(s.papel), img: s.img, olhar };
+    });
+    const rot = {}; Object.keys(D.OLHAR_ROTULO).forEach((kk) => { rot[kk] = tr(D.OLHAR_ROTULO[kk]); });
+    return window.JOGOS8.ler(o, { lang: LANG, A, lista, rotulos: rot, fundo: tx(p.fundo).img }).then((r) => {
+      (st.lidoNoite = st.lidoNoite || [])[k] = r.quem; st.leituras = st.leituras || {};
+      st.leituras[r.quem] = Array.from(new Set((st.leituras[r.quem] || []).concat(r.olhares)));
+      registrar('ler' + k, r.quem); salvar(); fechaOverlay();
+    });
+  },
+  roda(p) {
+    const o = abreOverlay('j8 roda');
+    return window.JOGOS8.roda(o, { lang: LANG, A, img: tx(p.fundo).img }).then((r) => { st.roda = r; registrar('roda', String(r.voltas)); salvar(); fechaOverlay(); });
+  },
+  chao(p) {
+    const o = abreOverlay('j8 chao');
+    return window.JOGOS8.chao(o, { lang: LANG, A, img: tx(p.fundo).img }).then((r) => { st.chao = r; registrar('chao', r.acertos >= 6 ? 'ouviu' : 'vento'); salvar(); fechaOverlay(); });
+  },
+  erguer(p) {
+    const o = abreOverlay('j8 erguer');
+    return window.JOGOS8.erguer(o, { lang: LANG, A, img: tx(p.fundo).img }).then((r) => { st.erguer = r; salvar(); fechaOverlay(); });
+  },
+  conta(p) {
+    const o = abreOverlay('j8 conta'), D = window.LIVRO_DADOS;
+    const rostos = [];
+    if (!(st.mortos || []).includes('ansel')) rostos.push({ img: D.RETRATO('ansel'), nome: 'Ansel' });
+    rostos.push({ img: D.RETRATO('varr'), nome: 'Varr' }, { img: D.RETRATO('intendente'), nome: tr(D.INTENDENTE) });
+    return window.JOGOS8.conta(o, { lang: LANG, A, img: tx(p.fundo).img, total: D.sobreviventes(st), rostos }).then((r) => { st.conta = r; salvar(); fechaOverlay(); });
+  },
+  // ---------- o Grakh grande: o motor dos Caps. II e IV, com o corpo do Kronk do Cap. VI
+  duelo(p) {
+    const o = abreOverlay('duelo8');
+    return window.DUELO8.start(o, { lang: LANG, A, modo: 'kronk', bpm: st.base || 52, fundo: 'assets/images/duelo-fundo.jpg',
+      aoLado: (((window.AQV_ANTES || {}).cap6 || {}).aoLado || []) }).then((r) => {
+      st.duelo = r; st.base = 78; pegaBpm({ bpm: Math.max(78, r.bpmFinal || 80) }); registrar('duelo', r.rodeou ? 'rodeou' : 'reto'); salvar(); fechaOverlay();
+    });
+  },
+  maior(p) {
+    const o = abreOverlay('duelo8 maior'), D = window.LIVRO_DADOS;
+    const n = D.sobreviventes(st);
+    return window.DUELO8.start(o, { lang: LANG, A, modo: 'maior', bpm: Math.max(150, st.bpm || 150), fundo: 'assets/images/maior-fundo.jpg',
+      rajadas: n >= 80 ? 3 : n >= 60 ? 4 : 5, ombro: !!(((window.AQV_ANTES || {}).cap3 || {}).correcoes >= 3), coragem: st.escolhas.prece === 'coragem' }).then((r) => {
+      st.maior = r; st.base = 70; pegaBpm({ bpm: 96 }); registrar('maior', String(r.deslizes || 0)); salvar(); fechaOverlay();
+    });
+  },
+};
+
+// ---------------------------------------------------------------- navegação
+function irProxima() {
+  const p = P[st.i];
+  if (p && p.escolha && !st.escolhas[p.escolha.id] && !p._revelado) { p._revelado = true; setNext(false); abreEscolha(p); box.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); return; }
+  cuesPend.forEach((c) => c.tocar()); cuesPend = [];     // som que o leitor ainda não tinha alcançado toca na virada da página
+  if (MG._limpaPrece) { MG._limpaPrece(); MG._limpaPrece = null; }
+  document.body.classList.remove('aperta', 'sangra');
+  if (p && p.quieto && !st.escolhas[p.quieto.id]) { st.escolhas[p.quieto.id] = 'cala'; aplicar({ eixo: p.quieto.eixoCalar || null }); registrar(p.quieto.id, 'cala'); salvar(); }
+  if (p && p.fim) return resumo();
+  if (p && p.volta) { st.f.lembranca = null; salvar(); st.i = P.findIndex((x) => x.id === p.volta); A.ctx && A.virar(); return render(1); }
+  const j = idxVis(st.i, 1); if (j >= P.length) return resumo();
+  st.i = j; A.ctx && A.virar(); render(1);
+}
+function irAnterior() {
+  if (MG._limpaPrece) { MG._limpaPrece(); MG._limpaPrece = null; }
+  document.body.classList.remove('aperta', 'sangra');
+  const j = idxVis(st.i, -1); if (j < 0) return; st.i = j; A.ctx && A.virar(); render(-1);
+}
+btnNext.onclick = () => { if (!btnNext.disabled) irProxima(); };
+btnPrev.onclick = irAnterior;
+addEventListener('keydown', (e) => {
+  if (document.body.classList.contains('mg-on') || !$('#cover').classList.contains('hide')) return;
+  if ($('#codex').classList.contains('show')) { if (e.key === 'Escape') $('#codex').classList.remove('show'); return; }
+  if (['ArrowRight', 'Enter', ' '].includes(e.key)) { e.preventDefault(); if (!btnNext.disabled) irProxima(); }
+  else if (e.key === 'ArrowLeft') irAnterior();
+  else if (/^[1-4]$/.test(e.key)) { const b = box.querySelectorAll('.opt:not(:disabled)')[+e.key - 1]; b && b.click(); }
+});
+let sx = null, sy = null;
+panel.addEventListener('touchstart', (e) => { sx = e.touches[0].clientX; sy = e.touches[0].clientY; }, { passive: true });
+panel.addEventListener('touchend', (e) => {
+  if (sx == null) return; const dx = e.changedTouches[0].clientX - sx, dy = e.changedTouches[0].clientY - sy; sx = null;
+  if (Math.abs(dx) > 70 && Math.abs(dx) > Math.abs(dy) * 1.5) { if (dx < 0 && !btnNext.disabled) irProxima(); else if (dx > 0) irAnterior(); }
+});
+
+// ---------------------------------------------------------------- resumo final
+function guardaEstado() {
+  try {
+    const todos = JSON.parse(localStorage.getItem('aqv_estado') || '{}');
+    todos.v = 1;
+    todos.cap8 = L.estadoFinal(st);
+    todos.cap8.quando = new Date().toISOString();
+    localStorage.setItem('aqv_estado', JSON.stringify(todos));
+  } catch (e) {}
+}
+// ---------------------------------------------------------------- pontuação escondida (só aparece no fim)
+// O capítulo calcula as suas partes (L.pontos); a jornada soma os capítulos anteriores lidos neste navegador.
+function pontosCap1() {
+  try {
+    const e = JSON.parse(localStorage.getItem('aqv_estado') || '{}');
+    if (e.cap1 && Number.isFinite(e.cap1.pontos)) return Math.round(e.cap1.pontos);
+    const c1 = JSON.parse(localStorage.getItem('livro_cap01') || 'null');
+    if (c1 && c1.jogo && Number.isFinite(Number(c1.jogo.score))) return Math.round(Number(c1.jogo.score));
+  } catch (e) {}
+  return null;
+}
+function anteriores() {
+  const e = window.AQV_ANTES || {}, out = {};
+  const c1 = pontosCap1(); if (c1 != null) out.cap01 = c1;
+  for (let k = 2; k <= 7; k++) {
+    const c = e['cap' + k]; if (!c) continue;
+    const v = c.pontos && Number.isFinite(c.pontos.total) ? c.pontos.total : Number.isFinite(c.pontos) ? c.pontos : null;
+    if (v != null) out['cap0' + k] = Math.round(v);
+  }
+  return out;
+}
+const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+function jogadorId() {
+  try {
+    let j = localStorage.getItem('aqv_jogador');
+    if (!j || !UUID.test(j)) {
+      const c1 = JSON.parse(localStorage.getItem('livro_cap01') || 'null');
+      j = c1 && UUID.test(c1.sessao || '') ? c1.sessao : UUID.test(st.sessao) ? st.sessao : (crypto.randomUUID ? crypto.randomUUID() : null);
+      if (j) localStorage.setItem('aqv_jogador', j);
+    }
+    return j;
+  } catch (e) { return UUID.test(st.sessao) ? st.sessao : null; }
+}
+function calculaPontos() {
+  const r = L.pontos(st), ant = anteriores();
+  st.pontos = { total: r.total, partes: r.partes, antes: ant, somaAntes: Object.values(ant).reduce((a, b) => a + b, 0) };
+  return st.pontos;
+}
+async function enviaPontos(pt) {
+  const j = jogadorId(); if (!j) return null;
+  const rpc = (cap, pontos, detalhes) => fetch(`${SUPA.url}/rest/v1/rpc/livro_salva_pontos`, {
+    method: 'POST', headers: { apikey: SUPA.key, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ p_jogador: j, p_capitulo: cap, p_pontos: pontos, p_detalhes: detalhes }),
+  }).then((r) => (r.ok ? r.json() : null)).catch(() => null);
+  for (const [cap, v] of Object.entries(pt.antes)) await rpc(cap, Math.min(2000000, v), { origem: L.id });
+  const r = await rpc(L.id, pt.total, Object.fromEntries(pt.partes));
+  return r && r[0] ? r[0] : null;
+}
+function mostraPontos(pt, srv) {
+  const loc = LANG === 'en' ? 'en-US' : 'pt-BR', n = (x) => Number(x).toLocaleString(loc);
+  const temAntes = Object.keys(pt.antes).length > 0;
+  const jornada = srv && srv.total != null ? Number(srv.total) : temAntes ? pt.somaAntes + pt.total : null;
+  $('#rsPontos').innerHTML = `
+    <p class="eyebrow">${U('pontos')}</p>
+    <p class="rs-num">${n(pt.total)}</p>
+    <ul class="rs-pts">${pt.partes.map(([k, v]) => `<li><span>${U('pts')[k]}</span><b>${n(v)}</b></li>`).join('')}
+    ${temAntes ? `<li><span>${U('pts').antes}</span><b>${n(pt.somaAntes)}</b></li>` : ''}</ul>
+    ${jornada != null ? `<p class="rs-jornada"><span>${U('jornada')}</span><b>${n(jornada)}</b>${srv && srv.posicao ? `<em>${U('posicao')(n(srv.posicao), n(srv.leitores))}</em>` : ''}</p>` : `<p class="rs-sem">${U('semCap1')}</p>`}`;
+}
+async function resumo() {
+  const pt = calculaPontos();
+  guardaEstado();
+  $('#resumo').classList.add('show');
+  mostraPontos(pt, null); enviaPontos(pt).then((srv) => { if (srv) mostraPontos(pt, srv); });
+  const R = L.resumo(st, LANG);
+  $('#rsFrase').textContent = R.frase;
+  const rv = $('#rsRevela'); if (rv) rv.innerHTML = R.revela ? `<div class="revela"><p class="eyebrow">${esc(R.revela.nome)}</p><p>${esc(R.revela.linha)}</p></div>` : '';
+  $('#rsRel').innerHTML = R.notas.map((r) => `<li>${esc(r)}</li>`).join('');
+  const desenha = (stats) => {
+    $('#rsEsc').innerHTML = R.linhas.map((l) => {
+      const tot = stats.filter((x) => x.escolha === l.id).reduce((a, b) => a + Number(b.total), 0);
+      const mine = stats.find((x) => x.escolha === l.id && x.opcao === l.opcao);
+      const pct = tot && mine ? Math.round((Number(mine.total) / tot) * 100) : null;
+      return `<li><span class="q">${esc(l.q)}</span><span class="a">${esc(l.a)}</span>${pct != null ? `<span class="pct"><i style="width:${pct}%"></i><b>${U('mesmo')(pct)}</b></span>` : ''}</li>`;
+    }).join('');
+  };
+  const selo = L.selo ? L.selo(st, LANG) : null, sb = $('#rsSelo');
+  const desenhaSelo = (stats) => {
+    if (!sb) return; if (!selo) { sb.innerHTML = ''; return; }
+    const tot = stats.filter((x) => x.escolha === selo.escolha).reduce((a, b) => a + Number(b.total), 0);
+    const sim = stats.find((x) => x.escolha === selo.escolha && x.opcao === selo.opcao);
+    const pct = tot && sim ? Math.round((Number(sim.total) / tot) * 100) : null;
+    sb.innerHTML = `<div class="selo"><svg viewBox="0 0 64 64" aria-hidden="true"><path d="M32 4 L40 24 L60 26 L44 39 L49 60 L32 48 L15 60 L20 39 L4 26 L24 24 Z"/><path class="lam" d="M32 14 L35 42 L32 50 L29 42 Z"/></svg><div><b>${esc(selo.titulo)}</b><span>${esc(selo.texto)}</span>${pct != null ? `<em>${esc(selo.pct(pct))}</em>` : ''}</div></div>`;
+  };
+  desenha([]); desenhaSelo([]); const ss = await estatisticas(); desenha(ss); desenhaSelo(ss);
+}
+const reiniciar = () => { st = novoEstado(); if (L.inicio) L.inicio(st); salvar(); $('#resumo').classList.remove('show'); document.body.classList.remove('aperta', 'sangra'); render(1); };
+$('#rsReler').onclick = () => { if (confirm(U('confirm'))) reiniciar(); };
+$('#menuReset').onclick = () => { if (confirm(U('confirm'))) reiniciar(); };
+
+// ---------------------------------------------------------------- idioma
+function aplicaIdioma() {
+  document.documentElement.lang = LANG === 'pt' ? 'pt-BR' : 'en';
+  document.querySelectorAll('.lang').forEach((b) => { b.textContent = LANG === 'pt' ? 'EN' : 'PT'; b.setAttribute('aria-label', LANG === 'pt' ? 'Read in English' : 'Ler em português'); });
+  $('#cvEye').textContent = U('coverEye'); $('#cvSub').textContent = LANG === 'en' ? L.subtituloEn : L.subtitulo; $('#cvLede').textContent = U('coverLede');
+  $('#cvGo').textContent = salvo && salvo.i > 0 ? U('coverRestart') : U('coverGo'); $('#cvCont').textContent = U('coverCont'); $('#cvHint').textContent = U('coverHint');
+  $('.tl .cap').textContent = U('capN'); $('#rhead').textContent = `${L.titulo} · ${LANG === 'en' ? L.subtituloEn : L.subtitulo}`;
+  $('#rsEye').textContent = U('fimCap'); $('#rsH').textContent = U('ficou'); $('#rsSuas').textContent = U('suas'); $('#rsReler').textContent = U('reler');
+  $('#rsProx').textContent = (LANG === 'en' ? L.proximo.tituloEn : L.proximo.titulo) + (L.proximo.url ? ' →' : '');
+  document.title = LANG === 'en' ? L.tituloPagEn : L.tituloPag;
+}
+document.querySelectorAll('.lang').forEach((b) => b.addEventListener('click', () => {
+  LANG = LANG === 'pt' ? 'en' : 'pt'; try { localStorage.setItem('livro_lang', LANG); } catch (e) {}
+  aplicaIdioma(); if ($('#cover').classList.contains('hide') && !document.body.classList.contains('mg-on')) render(0); if ($('#resumo').classList.contains('show')) resumo();
+}));
+
+// ---------------------------------------------------------------- capa / início
+$('#cvTitle').textContent = L.titulo; $('#cover').style.setProperty('--capa', `url("${L.capa}")`);
+if (L.proximo.url) $('#rsProx').href = L.proximo.url; else { $('#rsProx').removeAttribute('href'); $('#rsProx').classList.add('off'); }
+const salvo = carregar();
+if (salvo && salvo.i > 0) $('#cvCont').hidden = false;
+aplicaIdioma();
+Clima.set('poeira'); document.body.classList.add('na-capa');
+const comecar = (continuar) => {
+  A.init(); A.resume();
+  st = continuar && salvo ? salvo : novoEstado();
+  if (!(continuar && salvo) && L.inicio) L.inicio(st);
+  salvar();
+  $('#cover').classList.add('hide'); document.body.classList.remove('na-capa'); A.virar(); Coracao.start(); render(1);
+};
+$('#cvGo').onclick = () => comecar(false);
+$('#cvCont').onclick = () => comecar(true);
+$('#som').onclick = () => { A.init(); A.setOn(!A.on); $('#som').classList.toggle('off', !A.on); };
+window.__LIVRO = { get st() { return st; }, set st(v) { st = v; }, render, irProxima, MG, A, ir: (id) => { st.i = P.findIndex((p) => p.id === id); render(1); } };
+})();
