@@ -1,6 +1,7 @@
 /* ==========================================================================
    Capítulo VIII · os momentos de jogo menores
-   ler    — Ler o corpo (a caça, Parte III): um suspeito por noite, quatro olhares em seis lugares
+   ler    — Ler o corpo (a caça, Parte III): todos os suspeitos da noite, seis olhares para dividir
+   sala   — O quarto dela (o templo, Parte I): tocar no que olhar; a laje solta abre a cisterna
    roda   — Girar a roda do poço (Parte IV): segurar para girar; o rangido que o Simon conhecia
    chao   — Ouvir o chão (Parte V): tocar junto com três batidas e um silêncio, no meio do vento
    erguer — Erguer a espada (Parte VI): segurar; o sol é comido antes de a espada chegar lá
@@ -45,45 +46,83 @@ function ler(root, o) {
     const lista = o.lista || [], rot = o.rotulos || {};
     const LUG = ['testa', 'orelhas', 'boca', 'pescoco', 'maos', 'pulso'];
     const POS = { testa: [50, 18], orelhas: [24, 33], boca: [50, 44], pescoco: [50, 60], maos: [27, 86], pulso: [73, 86] };
-    const MAX = 4;
-    root.innerHTML = `<div class="j8-ler">
+    const MAX = o.max || 6;
+    const vistos = {}; lista.forEach((s) => { vistos[s.id] = []; });
+    let atual = lista[0], usados = 0;
+    root.innerHTML = `<div class="j8-ler j8-perto">
       <div class="j8-ler-bg" style="${o.fundo ? `background-image:url('${esc(o.fundo)}')` : ''}"></div>
-      <div class="j8-ler-in">
-        <p class="eyebrow">${L(o, 'Mando trazer quem dormiu perto', 'I have whoever slept nearby brought to me')}</p>
-        <h2>${L(o, 'Quem eu olho de perto?', 'Whom do I look at closely?')}</h2>
-        <div class="j8-sus">${lista.map((s, k) => `<button class="j8-card" data-k="${k}"><span class="j8-foto" style="background-image:url('${esc(s.img)}')"></span><b>${esc(s.nome)}</b><small>${esc(s.papel)}</small></button>`).join('')}</div>
-        <p class="j8-nota">${L(o, 'Um por noite. Quatro olhares. O corpo fala antes da boca.', 'One a night. Four looks. The body speaks before the mouth.')}</p>
+      <div class="j8-ler-topo">
+        <div class="j8-abas">${lista.map((s, k) => `<button class="j8-aba" data-k="${k}"><span class="j8-foto" style="background-image:url('${esc(s.img)}')"></span><b>${esc(s.nome)}</b><small>${esc(s.papel)}</small></button>`).join('')}</div>
+        <p class="j8-olhares">${L(o, 'Olhares', 'Looks')} <b>${MAX}</b></p>
+      </div>
+      <div class="j8-ler-duo">
+        <div class="j8-retrato"><span class="j8-foto"></span>
+          ${LUG.map((k) => `<button class="j8-ponto" data-k="${k}" style="left:${POS[k][0]}%;top:${POS[k][1]}%"><i></i><span>${esc(rot[k] || k)}</span></button>`).join('')}
+        </div>
+        <div class="j8-ler-lado">
+          <p class="eyebrow j8-papel"></p><h2 class="j8-nome"></h2>
+          <div class="j8-visto"></div>
+          <button class="cta j8-pronto">${L(o, 'Mandar todos de volta', 'Send them all back')}</button>
+        </div>
       </div></div>`;
-    const abre = (s) => {
-      const vistos = [];
-      root.innerHTML = `<div class="j8-ler j8-perto">
-        <div class="j8-ler-bg" style="${o.fundo ? `background-image:url('${esc(o.fundo)}')` : ''}"></div>
-        <div class="j8-ler-duo">
-          <div class="j8-retrato"><span class="j8-foto" style="background-image:url('${esc(s.img)}')"></span>
-            ${LUG.map((k) => `<button class="j8-ponto" data-k="${k}" style="left:${POS[k][0]}%;top:${POS[k][1]}%"><i></i><span>${esc(rot[k] || k)}</span></button>`).join('')}
-          </div>
-          <div class="j8-ler-lado">
-            <p class="eyebrow">${esc(s.papel)}</p><h2>${esc(s.nome)}</h2>
-            <p class="j8-olhares">${L(o, 'Olhares', 'Looks')} <b>${MAX}</b></p>
-            <div class="j8-visto"></div>
-            <button class="cta j8-pronto" hidden>${L(o, 'Mandar de volta', 'Send them back')}</button>
-          </div>
-        </div></div>`;
-      const visto = root.querySelector('.j8-visto'), cont = root.querySelector('.j8-olhares b'), pronto = root.querySelector('.j8-pronto');
-      const olha = (k, b) => {
-        if (vistos.length >= MAX || vistos.includes(k)) return;
-        vistos.push(k); b.classList.add('visto'); b.disabled = true;
-        o.A && o.A.tone && o.A.tone(330, .25, 'sine', .03);
-        visto.insertAdjacentHTML('beforeend', `<p><b>${esc(rot[k] || k)}.</b> ${esc(s.olhar[k] || '')}</p>`);
-        cont.textContent = MAX - vistos.length;
-        if (vistos.length >= MAX) { root.querySelectorAll('.j8-ponto:not(.visto)').forEach((x) => { x.disabled = true; x.classList.add('apagado'); }); pronto.hidden = false; pronto.focus(); }
-      };
-      root.querySelectorAll('.j8-ponto').forEach((b) => b.onclick = () => olha(b.dataset.k, b));
-      pronto.onclick = () => resolve({ quem: s.id, olhares: vistos.slice() });
-      if (BOT()) { const pref = window.__JOGO_BOT_OLHAR || ['testa', 'boca', 'pescoco', 'pulso']; pref.forEach((k) => olha(k, root.querySelector(`.j8-ponto[data-k="${k}"]`))); setTimeout(() => pronto.click(), 10); }
+    const $ = (s) => root.querySelector(s);
+    const cont = $('.j8-olhares b'), visto = $('.j8-visto'), pronto = $('.j8-pronto');
+    pronto.disabled = true;
+    const mostra = (s) => {
+      atual = s;
+      root.querySelectorAll('.j8-aba').forEach((b) => b.classList.toggle('on', lista[+b.dataset.k] === s));
+      $('.j8-retrato .j8-foto').style.backgroundImage = `url('${s.img}')`;
+      $('.j8-papel').textContent = s.papel; $('.j8-nome').textContent = s.nome;
+      visto.innerHTML = vistos[s.id].map((k) => `<p><b>${esc(rot[k] || k)}.</b> ${esc(s.olhar[k] || '')}</p>`).join('') || `<p class="j8-vazio">${L(o, 'Ainda não olhei.', 'I haven’t looked yet.')}</p>`;
+      root.querySelectorAll('.j8-ponto').forEach((b) => {
+        const k = b.dataset.k, ja = vistos[s.id].includes(k);
+        b.classList.toggle('visto', ja); b.classList.toggle('apagado', !ja && usados >= MAX); b.disabled = ja || usados >= MAX;
+      });
     };
-    root.querySelectorAll('.j8-card').forEach((b) => b.onclick = () => abre(lista[+b.dataset.k]));
-    if (BOT()) { const want = window.__JOGO_BOT_QUEM; const s = (want && lista.find((x) => x.id === want)) || lista[0]; setTimeout(() => abre(s), 10); }
+    const olha = (k) => {
+      if (usados >= MAX || vistos[atual.id].includes(k)) return;
+      vistos[atual.id].push(k); usados++;
+      o.A && o.A.tone && o.A.tone(330, .25, 'sine', .03);
+      cont.textContent = MAX - usados; pronto.disabled = false;
+      mostra(atual);
+      if (usados >= MAX) pronto.focus();
+    };
+    root.querySelectorAll('.j8-aba').forEach((b) => b.onclick = () => mostra(lista[+b.dataset.k]));
+    root.querySelectorAll('.j8-ponto').forEach((b) => b.onclick = () => olha(b.dataset.k));
+    pronto.onclick = () => resolve({ olhares: vistos });
+    mostra(lista[0]);
+    if (BOT()) {
+      const quem = window.__JOGO_BOT_QUEM, alvo = lista.find((x) => x.id === quem) || lista[0];
+      mostra(alvo); ['testa', 'boca', 'pescoco', 'pulso'].forEach(olha);
+      const outro = lista.find((x) => x !== alvo); if (outro) { mostra(outro); ['orelhas', 'maos'].forEach(olha); }
+      setTimeout(() => pronto.click(), 10);
+    }
+  });
+}
+
+/* ------------------------------------------------------------------ O QUARTO DELA (o templo, Parte I) */
+function sala(root, o) {
+  return new Promise((resolve) => {
+    const P = o.pontos || {};
+    const POS = { esteira: [26, 60], bacia: [72, 58], janela: [72, 20], laje: [48, 54] };
+    root.innerHTML = `<div class="j8-sala">
+      <div class="j8-sala-bg" style="${o.img ? `background-image:url('${esc(o.img)}')` : ''}"></div>
+      ${Object.keys(POS).map((k) => `<button class="j8-ponto j8-sp" data-k="${k}" style="left:${POS[k][0]}%;top:${POS[k][1]}%"><i></i><span>${esc((P[k] || {}).rot || k)}</span></button>`).join('')}
+      <div class="j8-sala-txt"><p class="j8-vazio">${esc(o.intro || '')}</p></div>
+      <div class="j8-sala-pe"><button class="opt j8-levantar" hidden>${esc(o.levantar || '')}</button><button class="cta j8-subir">${esc(o.subir || '')}</button></div>
+    </div>`;
+    const $ = (s) => root.querySelector(s), txt = $('.j8-sala-txt'), lev = $('.j8-levantar');
+    let cisterna = false; const vistos = [];
+    const diz = (s) => { txt.innerHTML = `<p>${esc(s)}</p>`; };
+    root.querySelectorAll('.j8-sp').forEach((b) => b.onclick = () => {
+      const k = b.dataset.k; b.classList.add('visto'); if (!vistos.includes(k)) vistos.push(k);
+      diz((P[k] || {}).txt || '');
+      lev.hidden = !(k === 'laje' && !cisterna);
+      o.A && o.A.tone && o.A.tone(300, .2, 'sine', .03);
+    });
+    lev.onclick = () => { cisterna = true; lev.hidden = true; diz(o.cisterna || ''); o.A && o.A.sfx && o.A.sfx('pedra-arrasta', .7, () => o.A.hiss && o.A.hiss(.6, 300, 1, .08)); };
+    $('.j8-subir').onclick = () => resolve({ cisterna, vistos });
+    if (BOT()) { root.querySelector('.j8-sp[data-k="laje"]').click(); if (window.__JOGO_BOT_LAJE !== false) lev.click(); setTimeout(() => $('.j8-subir').click(), 10); }
   });
 }
 
@@ -298,5 +337,5 @@ function conta(root, o) {
   });
 }
 
-window.JOGOS8 = { ler, roda, chao, erguer, conta };
+window.JOGOS8 = { ler, sala, roda, chao, erguer, conta };
 })();

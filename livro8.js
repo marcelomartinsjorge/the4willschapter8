@@ -540,11 +540,17 @@ const MG = {
       return { id, nome: tr(s.nome), papel: tr(s.papel), img: s.img, olhar };
     });
     const rot = {}; Object.keys(D.OLHAR_ROTULO).forEach((kk) => { rot[kk] = tr(D.OLHAR_ROTULO[kk]); });
-    return window.JOGOS8.ler(o, { lang: LANG, A, lista, rotulos: rot, fundo: tx(p.fundo).img }).then((r) => {
-      (st.lidoNoite = st.lidoNoite || [])[k] = r.quem; st.leituras = st.leituras || {};
-      st.leituras[r.quem] = Array.from(new Set((st.leituras[r.quem] || []).concat(r.olhares)));
-      registrar('ler' + k, r.quem); salvar(); fechaOverlay();
+    return window.JOGOS8.ler(o, { lang: LANG, A, lista, rotulos: rot, max: 6, fundo: tx(p.fundo).img }).then((r) => {
+      const lidos = Object.keys(r.olhares).filter((id) => r.olhares[id].length);
+      (st.lidoNoite = st.lidoNoite || [])[k] = lidos; st.leituras = st.leituras || {};
+      lidos.forEach((id) => { st.leituras[id] = Array.from(new Set((st.leituras[id] || []).concat(r.olhares[id]))); });
+      registrar('ler' + k, lidos.join('+') || 'ninguem'); salvar(); fechaOverlay();
     });
+  },
+  sala(p) {
+    const o = abreOverlay('j8 sala'), S = window.LIVRO_DADOS.SALA, pontos = {};
+    Object.keys(S.txt).forEach((k) => { pontos[k] = { rot: tr(S.rot[k]), txt: tr(S.txt[k]) }; });
+    return window.JOGOS8.sala(o, { lang: LANG, A, img: tx(p.fundo).img, pontos, intro: tr(S.intro), levantar: tr(S.levantar), cisterna: tr(S.cisterna), subir: tr(S.subir) }).then((r) => { st.sala = r; registrar('sala', r.cisterna ? 'cisterna' : 'subiu'); salvar(); fechaOverlay(); });
   },
   roda(p) {
     const o = abreOverlay('j8 roda');
@@ -577,7 +583,7 @@ const MG = {
     const o = abreOverlay('duelo8 maior'), D = window.LIVRO_DADOS;
     const n = D.sobreviventes(st);
     return window.DUELO8.start(o, { lang: LANG, A, modo: 'maior', bpm: Math.max(150, st.bpm || 150), fundo: 'assets/images/maior-fundo.jpg',
-      rajadas: n >= 80 ? 3 : n >= 60 ? 4 : 5, ombro: !!(((window.AQV_ANTES || {}).cap3 || {}).correcoes >= 3), coragem: st.escolhas.prece === 'coragem' }).then((r) => {
+      rajadas: n >= 80 ? 3 : n >= 60 ? 4 : 5, ombro: !!(((window.AQV_ANTES || {}).cap3 || {}).correcoes >= 3), coragem: st.escolhas.prece === 'perdao' }).then((r) => {
       st.maior = r; st.base = 70; pegaBpm({ bpm: 96 }); registrar('maior', String(r.deslizes || 0)); salvar(); fechaOverlay();
     });
   },

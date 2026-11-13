@@ -125,3 +125,33 @@ Leitura corrida da rota B em `leitura_rota_B.md` (todo texto, na ordem, com as o
 - **Vozes:** L01 a L07b (ver MIDIAS). Sem arquivo, o texto segue sem som.
 - **Sons novos:** o riso do Maior; a água subindo de um poço (a onda); o resto já existe na pasta.
 - **Cap. IX:** o botão do fim aponta para “Capítulo IX · Aheryn” sem link (`proximo.url` vazio).
+
+---
+
+## v2 · 12/11/2026 · o feedback das Partes I a III
+
+**Aplicado do seu texto (com ajuste de português):** epígrafe da Parte I (“os seus guerreiros”); a01 sem a contagem dupla (a sede de vingança, a Capital Branca vista da cadeira); a mãe com a fala nova e três respostas da Laura (eu volto / pelo Simon / o Torneio), a resposta dela muda com a Consorte (Justine, Markus ou nenhuma), e uma segunda escolha (prometer comer ou rezar), que fecha com o beijo na mão; Aubert sem a leitura de orelha, com o detalhe da fuga do Cap. VII mantido numa linha; Markus com a espada reforjada e a versão de consorte (a revanche só aparece com ele, porque no Cap. IV ela só acontece se a Laura visitou o Markus); o templo com Força para a mãe / Matar o Grakh grande / Perdão (é o perdão que faz o ombro pesar, e é ele que ajuda diante do Maior); epígrafe da Parte II na boca do Kassian; a fila da panela com três tigelas e a escolha do vinho do Joseph (prometer / proibir → “Bah!” → ordem ou deixar / não responder); a Nymae com a fala nova.
+
+**Novo jogo: O quarto dela** (a06b). Tocar na esteira (fria, nunca usada), na bacia (crosta de sal), na janela (muro cego) e na laje (balança). Levantar a laje mostra a cisterna; a Laura manda o Markus seguir a água. Fica em `aqv_estado.cap8.laje` para o Cap. IX.
+
+**A caça, reescrita** (as dúvidas sobre Nell, Wil e Bram): o problema era real. Os nomes só apareciam dentro do jogo, e a decisão falava de alguém que o texto nunca apresentou. Agora:
+1. A página da noite mostra o estrago, e a Laura manda trazer todos os que dormiram perto do lugar. Na primeira noite ela diz: “Servo não se conta, e eu nunca soube o nome de nenhum. Hoje, pergunto.”
+2. O texto apresenta cada um: “São Nell, que serve a panela da cozinha, e Ansel, o sentinela, que fazia a ronda daquele lado.” Ela pergunta, dura, o que aconteceu, e ninguém responde.
+3. **Ler o corpo:** todos os suspeitos da noite lado a lado, seis olhares para dividir entre eles.
+4. **A Lei:** a Laura resume o que viu de cada um (“Em Nell, o que eu vi não é de gente.” / “Tasso mentiu sobre a água.”) e o jogador escolhe quem executar, ou põe guardas e espera.
+- Quem são: em cada noite vem o servo que dorme naquele lugar (Wil na estrebaria, Nell na cozinha, Ilse com os feridos, Bram na forja) e um engano (Tasso, que vende água de verdade; o Ansel; a Nymae, se ela veio). **Um dos quatro servos é a hóspede disfarçada**: é o rosto que ela roubou no Cap. VII. Só ela mostra o que não é de gente (testa seca, sal na boca, escama no pescoço, pulso rachado).
+- A Nymae do Cap. VII (a lavadeira com argola) e a Nell são pessoas diferentes. A Nymae só aparece se ela veio na coluna no Cap. VII.
+
+**Justine:** a cena dela existe (a capela, a vírgula “e voltar”, as duas velas) e só aparece quando ela é a Consorte. A leitura que você recebeu era da rota com o Markus.
+
+**O túmulo do pai:** nas Goelas, depois do Simon, a Laura vê um túmulo mais velho no pé do muro e pode descer (escolha). Kassian, o General-Rei, que ela conheceu “de costas, num cavalo saindo pelo portão sul”.
+
+**A espada do Simon:** se ela leva, não finca mais no túmulo. Encosta o cabo nas pedras (“Ela volta suja, irmão”), desembainha diante do Grakh grande, e é com ela que abre a coxa dele.
+
+**Menos conta no resto do capítulo:** saíram a pedra contada no poço seco, a tenda contando companhias e sargentos, o “Somem antes do sete”, o “Conto outra vez” no fim, e o intendente conferindo em vez de contar. Ficaram as contas que carregam alguma coisa: o portão sul, os fogos (trinta e quatro contra trezentos), os vivos no fim, e a mãe.
+
+**Mais da Laura por dentro, no seu tom:** “Bebo também. A outra sede continua.” (Goelas), “Amanhã eu vejo a cara de quem matou o Simon.” (a véspera), “É o grande do Ansel. Não preciso perguntar.” e o laranjal antes de erguer a espada.
+
+**“Oprato”:** no jogo, o “O” é a letra capitular grande, desenhada separada do resto. Na leitura corrida que eu extraí da tela ela saiu colada. Na tela está certo.
+
+**Os números [1], [2], [3]…:** são as posições internas das páginas na rota jogada. Páginas que a rota pula (a Justine, na rota do Markus) não aparecem, por isso saltou do [1] para o [3].

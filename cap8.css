@@ -134,3 +134,26 @@ body.dispara #aperto { animation: aperta8 calc(60s / 120) ease-in-out infinite; 
   .d8-op small { display: none; }
   .d8-rin li { grid-template-columns: 1fr; gap: 2px; }
 }
+
+/* ler o corpo: todos os suspeitos da noite, olhares divididos */
+.j8-ler-topo { position: relative; display: flex; align-items: center; justify-content: center; gap: 18px; flex-wrap: wrap; padding: 18px 16px 0; }
+.j8-abas { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+.j8-aba { display: grid; grid-template-columns: 44px auto; grid-template-rows: auto auto; column-gap: 10px; align-items: center; text-align: left; padding: 6px 12px 6px 6px; border: 1px solid rgba(242,220,192,.22); background: rgba(14,10,8,.75); color: var(--frost); cursor: pointer; }
+.j8-aba .j8-foto { grid-row: span 2; width: 44px; height: 56px; background: #2a211b center/cover; }
+.j8-aba b { font-family: var(--serif-d); font-weight: 400; letter-spacing: .05em; font-size: 16px; }
+.j8-aba small { font-style: italic; color: var(--mist); font-size: 13px; }
+.j8-aba.on { border-color: var(--gold-hot); background: rgba(40,28,20,.9); }
+.j8-ler-topo .j8-olhares { margin: 0; }
+.j8-perto .j8-ler-duo { padding-top: 22px; }
+.j8-vazio { font-style: italic; color: var(--mist); }
+.j8-pronto:disabled { opacity: .4; }
+
+/* o quarto dela */
+#mg.j8.sala { background: #070504; }
+.j8-sala { position: absolute; inset: 0; }
+.j8-sala-bg { position: absolute; inset: 0; background: #1a1411 center/cover; filter: brightness(.6); }
+.j8-sala .j8-ponto { position: absolute; }
+.j8-sala-txt { pointer-events: none; position: absolute; left: 50%; bottom: 96px; transform: translateX(-50%); width: min(720px, calc(100% - 32px)); text-align: center; }
+.j8-sala-txt p { display: inline-block; margin: 0; padding: 10px 16px; font-size: clamp(17px, 1.6vw, 20px); line-height: 1.45; color: var(--frost); background: rgba(8,5,4,.75); animation: surge .5s ease both; }
+.j8-sala-pe { position: absolute; left: 0; right: 0; bottom: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; padding: 0 16px; }
+.j8-sala-pe .opt { width: auto; }
