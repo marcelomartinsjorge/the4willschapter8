@@ -172,6 +172,8 @@ function setFundo(f) {
     const v = document.createElement('video'); v.src = vsrc(f.video || f.clip); v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.autoplay = true;
     v.style.objectPosition = f.foco || '50% 40%'; v.className = 'img';
     if (f.img) v.poster = f.img; layer.appendChild(v); v.play().catch(() => {});
+    // vídeo ainda não gerado: fica a imagem
+    v.onerror = () => { if (!f.img) return; const im = document.createElement('div'); im.className = 'img'; im.style.backgroundImage = `url("${f.img}")`; v.replaceWith(im); };
   } else { const im = document.createElement('div'); im.className = 'img'; im.style.backgroundImage = [src].concat(f.alt || []).map((u) => `url("${u}")`).join(', '); layer.appendChild(im); }
   bgWrap.appendChild(layer);
   document.body.classList.toggle('lado-dir', f.lado === 'dir');
@@ -288,10 +290,26 @@ const marcaNervosa = (o, cid) => { (st.nervosas = st.nervosas || {})[cid + ':' +
 let cuesPend = [];
 const palavras = (el) => (el.textContent || '').trim().split(/\s+/).length;
 const msAte = (els, k) => { if (!els.length) return 900; if (k < 0) k = els.length + k; k = Math.max(0, Math.min(els.length - 1, k)); let w = 0; for (let i = 0; i < k; i++) w += palavras(els[i]); return (700 + (w / 3.3) * 1000) * (window.__LEITURA_K || 1); };
+// ---------------------------------------------------------------- efeitos de tela do Cap. VIII (a batalha)
+// tremor (o chão), clarao (luz branca), sangue (borda vermelha que pulsa), agua (a onda varre a tela),
+// eclipse (a luz é comida devagar; fica até 'sol'), sol (a luz volta), bronze (o compasso treme a tela em quatro), apaga (escurece e volta)
+const FX = {
+  go(nome, dur, forca = 1) {
+    const b = document.body, d = dur || ({ tremor: 900, clarao: 700, sangue: 2600, agua: 2400, sol: 3200, bronze: 2400, apaga: 1800 }[nome] || 1000);
+    if (nome === 'eclipse') { b.classList.remove('fx-sol', 'fx-eclipse-ja'); b.classList.add('fx-eclipse'); return; }
+    if (nome === 'sol') { b.classList.remove('fx-eclipse'); b.classList.add('fx-sol'); later(() => b.classList.remove('fx-sol'), d); return; }
+    const cls = 'fx-' + nome; b.style.setProperty('--fxf', forca); b.style.setProperty('--fxd', d + 'ms');
+    b.classList.remove(cls); void b.offsetWidth; b.classList.add(cls);
+    later(() => b.classList.remove(cls), d);
+    if (navigator.vibrate && (nome === 'tremor' || nome === 'agua')) try { navigator.vibrate(nome === 'agua' ? [60, 40, 200] : [80, 40, 80]); } catch (e) { /* sem vibração */ }
+  },
+  limpa() { ['fx-eclipse', 'fx-eclipse-ja', 'fx-sol'].forEach((c) => document.body.classList.remove(c)); },
+};
+
 function agendaItens(itens, els, base = 0) {
   (itens || []).forEach((it) => {
     const c = { done: false, fim: !!it.fim };
-    c.tocar = () => { if (c.done) return; c.done = true; if (!A.ctx || !A.on) return; if (it.voz) A.narrate(vozUrl(it.voz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .7); };
+    c.tocar = () => { if (c.done) return; c.done = true; if (it.fx) FX.go(it.fx, it.dur, it.forca); if (!A.ctx || !A.on) return; const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz; if (vz) A.narrate(vozUrl(vz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .7); };
     if (c.fim) cuesPend.push(c);
     later(c.tocar, base + (it.p != null ? msAte(els, it.p) : (it.ms != null ? it.ms : 900)));
   });
@@ -313,6 +331,7 @@ function render(dir = 1) {
   setFundo(resolveFundo(p));
   if (A.ctx) { A.setZone(p.zona); if (p.som && dir > 0) A.once(p.som, .55); }
   document.body.dataset.zona = p.zona;
+  if (valP(p.escuro)) { document.body.classList.remove('fx-sol'); document.body.classList.add('fx-eclipse', 'fx-eclipse-ja'); } else FX.limpa();
   Coracao.extra(0); Coracao.repouso();
   const pico = valP(p.pico); if (pico && dir >= 0 && !temContinuar(p)) later(() => { if (P[st.i] === p) Coracao.alvo(pico.bpm); }, pico.ms || 0);
   Sensa.quente(valP(p.quente));
@@ -369,6 +388,7 @@ function renderContinuar(p) {
     box.innerHTML = '';
     novos.forEach((t, k) => { txt.insertAdjacentHTML('beforeend', pHTML(t, 'novo')); txt.lastElementChild.style.animationDelay = (k * .35) + 's'; });
     if (A.ctx && A.on) { if (it.voz) A.narrate(vozUrl(it.voz), null, false); if (it.s) A.once(it.s, it.v != null ? it.v : .8); }
+    if (it.fx) [].concat(it.fx).forEach((f) => (typeof f === 'string' ? FX.go(f) : later(() => FX.go(f.fx, f.dur, f.forca), f.ms || 0)));
     const pico = valP(p.pico); if (pico && p._bloco === 2) later(() => { if (P[st.i] === p) Coracao.alvo(pico.bpm); }, 300);
     if (p._bloco < p._blocos.length) return renderContinuar(p);
     st.feitos['cont:' + p.id] = 1; salvar();
@@ -583,7 +603,7 @@ const MG = {
     const o = abreOverlay('duelo8 maior'), D = window.LIVRO_DADOS;
     const n = D.sobreviventes(st);
     return window.DUELO8.start(o, { lang: LANG, A, modo: 'maior', bpm: Math.max(150, st.bpm || 150), fundo: 'assets/images/maior-fundo.jpg',
-      rajadas: n >= 80 ? 3 : n >= 60 ? 4 : 5, ombro: !!(((window.AQV_ANTES || {}).cap3 || {}).correcoes >= 3), coragem: st.escolhas.prece === 'perdao' }).then((r) => {
+      rajadas: n >= 48 ? 3 : n >= 36 ? 4 : 5, ombro: !!(((window.AQV_ANTES || {}).cap3 || {}).correcoes >= 3), coragem: st.escolhas.prece === 'perdao' }).then((r) => {
       st.maior = r; st.base = 70; pegaBpm({ bpm: 96 }); registrar('maior', String(r.deslizes || 0)); salvar(); fechaOverlay();
     });
   },

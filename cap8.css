@@ -157,3 +157,38 @@ body.dispara #aperto { animation: aperta8 calc(60s / 120) ease-in-out infinite; 
 .j8-sala-txt p { display: inline-block; margin: 0; padding: 10px 16px; font-size: clamp(17px, 1.6vw, 20px); line-height: 1.45; color: var(--frost); background: rgba(8,5,4,.75); animation: surge .5s ease both; }
 .j8-sala-pe { position: absolute; left: 0; right: 0; bottom: 24px; display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; padding: 0 16px; }
 .j8-sala-pe .opt { width: auto; }
+
+/* ==========================================================================
+   efeitos de tela da batalha (FX no livro8.js)
+   ========================================================================== */
+#fxv { position: fixed; inset: 0; pointer-events: none; z-index: 4; }
+body.fx-tremor #bg, body.fx-tremor #page { animation: fxTremor var(--fxd, 900ms) cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes fxTremor {
+  0%, 100% { transform: translate(0, 0); }
+  10% { transform: translate(calc(-9px * var(--fxf, 1)), calc(5px * var(--fxf, 1))); }
+  20% { transform: translate(calc(8px * var(--fxf, 1)), calc(-6px * var(--fxf, 1))); }
+  35% { transform: translate(calc(-6px * var(--fxf, 1)), calc(4px * var(--fxf, 1))); }
+  50% { transform: translate(calc(5px * var(--fxf, 1)), calc(-3px * var(--fxf, 1))); }
+  70% { transform: translate(calc(-3px * var(--fxf, 1)), calc(2px * var(--fxf, 1))); }
+  85% { transform: translate(calc(2px * var(--fxf, 1)), 0); }
+}
+body::before { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 3; opacity: 0; }
+body.fx-clarao::before { background: #fff8ec; animation: fxClarao var(--fxd, 700ms) ease-out both; }
+@keyframes fxClarao { 0% { opacity: .9; } 100% { opacity: 0; } }
+body.fx-sangue::before { box-shadow: inset 0 0 22vmin rgba(150,12,8,.85); animation: fxSangue var(--fxd, 2600ms) ease-in-out both; }
+@keyframes fxSangue { 0% { opacity: 0; } 15% { opacity: 1; } 30% { opacity: .45; } 45% { opacity: .95; } 100% { opacity: 0; } }
+body.fx-agua::before { background: linear-gradient(180deg, rgba(30,70,90,0) 0%, rgba(40,95,120,.85) 30%, rgba(210,230,235,.9) 34%, rgba(25,60,80,.92) 40%, rgba(10,30,40,.95) 100%); background-size: 100% 300%; animation: fxAgua var(--fxd, 2400ms) cubic-bezier(.5,0,.3,1) both; }
+@keyframes fxAgua { 0% { opacity: 1; background-position: 0 100%; } 45% { opacity: 1; background-position: 0 0%; } 100% { opacity: 0; background-position: 0 0%; } }
+body.fx-bronze #bg { animation: fxBronze var(--fxd, 2400ms) steps(1) both; }
+@keyframes fxBronze { 0%, 25%, 50%, 75% { transform: translateY(2px) scale(1.004); } 12%, 37%, 62%, 87%, 100% { transform: none; } }
+body.fx-apaga::before { background: #000; animation: fxApaga var(--fxd, 1800ms) ease-in-out both; }
+@keyframes fxApaga { 0% { opacity: 0; } 40% { opacity: .92; } 60% { opacity: .92; } 100% { opacity: 0; } }
+/* o dia comido: a luz é comida devagar e a cor some; a borda fica de faca */
+body.fx-eclipse #bg { filter: saturate(.25) brightness(.42) contrast(1.25); transition: filter 7s ease-in; }
+body.fx-eclipse.fx-eclipse-ja #bg { transition: none; }
+body.fx-eclipse::after { content: ''; position: fixed; inset: 0; pointer-events: none; z-index: 2; background: radial-gradient(ellipse at 70% 18%, rgba(255,245,225,.10) 0, rgba(0,0,0,0) 18%, rgba(0,0,0,.55) 70%); }
+body.fx-sol #bg { filter: none; transition: filter 3s ease-out; }
+body.fx-sol::before { background: radial-gradient(ellipse at 70% 18%, rgba(255,240,200,.55), rgba(255,240,200,0) 60%); animation: fxClarao var(--fxd, 3200ms) ease-out both; }
+@media (prefers-reduced-motion: reduce) {
+  body.fx-tremor #bg, body.fx-tremor #page, body.fx-bronze #bg { animation: none; }
+}

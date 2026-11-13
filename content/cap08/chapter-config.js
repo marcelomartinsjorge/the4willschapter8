@@ -1,4 +1,4 @@
-/* Capítulo VIII (Laura, a Lâmina): zonas de som e codex. Seis verbetes vêm dos Caps. V a VII; um é novo (o Último Gole). */
+/* Capítulo VIII (Laura, a Lâmina): zonas de som e codex. Seis verbetes vêm dos Caps. V a VII; dois são novos (o Último Gole e os Picos de Cinza). */
 window.CHAPTER_CONFIG = {
  "zones": {
   "capital": {
@@ -344,6 +344,38 @@ window.CHAPTER_CONFIG = {
     ]
    }
   },
+  "picos-de-cinza": {
+   "image": "assets/images/codex-picos-de-cinza.jpg",
+   "accent": "gold",
+   "aliasesPt": [
+    "Picos de Cinza",
+    "Azrahekt"
+   ],
+   "aliasesEn": [
+    "Ash Peaks",
+    "Azrahekt"
+   ],
+   "pt": {
+    "title": "Os Picos de Cinza",
+    "eyebrow": "A cordilheira do Sol Faminto",
+    "pages": [
+     [
+      "Cordilheira vulcânica a leste do grande deserto, depois que as dunas terminam e o chão vira rocha negra. A pouca água que existe ali é quente e amarga.",
+      "Os livros de lendas de Redom dizem que Azrahekt, o Sol Faminto, dorme sob os Picos entre uma erupção e outra, e que as secas e as tempestades de areia são a fúria dele. Os Queimados se ajoelham aos Picos. Os Grakh não se ajoelham a nada, e não moram lá."
+     ]
+    ]
+   },
+   "en": {
+    "title": "The Ash Peaks",
+    "eyebrow": "The Hungry Sun’s range",
+    "pages": [
+     [
+      "A volcanic range east of the great desert, past where the dunes give out and the ground turns to black rock. What little water there is runs hot and bitter.",
+      "Redom’s books of legend say that Azrahekt, the Hungry Sun, sleeps beneath the Peaks between one eruption and the next, and that the droughts and sandstorms are his fury. The Burned kneel to the Peaks. The Grakh kneel to nothing, and do not live there."
+     ]
+    ]
+   }
+  },
   "ultimo-gole": {
    "image": "assets/images/codex-ultimo-gole.jpg",
    "accent": "gold",
@@ -360,8 +392,8 @@ window.CHAPTER_CONFIG = {
     "eyebrow": "O poço da borda",
     "pages": [
      [
-      "Um vale raso de pedra a dois dias além das Goelas, com sete bocas de poço abertas na pedra. No fim da estação seca, quase sempre só um ainda tem água.",
-      "Nos mapas de Redom ele se chama Último Gole: é a última água antes do fim do deserto. Quem chega de fora, do outro lado da areia, chama o mesmo vale de Primeiro Gole. Os batedores dizem que dá para saber de onde um homem vem perguntando o nome do poço."
+      "Um vale raso de pedra a três dias de marcha forçada além das Goelas, com sete bocas de poço abertas na pedra. No fim da estação seca, quase sempre só um ainda tem água, amarga de enxofre.",
+      "Nos mapas de Redom ele se chama Último Gole: é a última água antes da rocha negra do leste. Quem chega de fora, do outro lado da areia, chama o mesmo vale de Primeiro Gole. Os batedores dizem que dá para saber de onde um homem vem perguntando o nome do poço."
      ]
     ]
    },
@@ -370,8 +402,8 @@ window.CHAPTER_CONFIG = {
     "eyebrow": "The well at the edge",
     "pages": [
      [
-      "A shallow stone valley two days beyond the Gullets, with seven well mouths opened in the stone. At the end of the dry season, almost always only one still holds water.",
-      "On Redom’s maps it is called the Last Swallow: it is the last water before the desert’s end. Those who come in from outside, from the far side of the sand, call the same valley the First Swallow. The scouts say you can tell where a man comes from by asking him the well’s name."
+      "A shallow stone valley three days’ forced march beyond the Gullets, with seven well mouths opened in the stone. At the end of the dry season, almost always only one still holds water, and it tastes of sulphur.",
+      "On Redom’s maps it is called the Last Swallow: it is the last water before the black rock of the east. Those who come in from outside, from the far side of the sand, call the same valley the First Swallow. The scouts say you can tell where a man comes from by asking him the well’s name."
      ]
     ]
    }

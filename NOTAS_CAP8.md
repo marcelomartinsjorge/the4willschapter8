@@ -10,16 +10,16 @@ Laura, 36 anos, General-Rainha (o povo diz Lâmina), leva dois mil dos melhores 
 
 | Parte | Cartão | O que acontece | Jogo |
 |---|---|---|---|
-| I · O Prato Cheio | “Redom enterra os seus onde caem.” | O prato que volta cheio, Justine (rota), Dolores e a 21ª saída, Aubert (a hóspede sumiu), Markus fica, o templo, a laje com cal nova, o portão sul | — |
+| I · O Prato Cheio | “Redom enterra os seus onde caem.” | O prato que volta cheio, Justine (rota), Dolores e a 21ª saída, Aubert (a Nymae sumiu), Markus fica, o templo, a laje com cal nova, o portão sul | — |
 | II · A Estrada | “Exército conta lança. Deserto conta água.” | Laura come da panela dos soldados; Joseph quer a última campanha; a Nymae (rota do Cap. VII); água para onze dias | — |
 | III · A Areia | “No deserto, quem carrega a água carrega o exército.” | Três noites de sabotagem, três suspeitos, a Lei da Lâmina; Laura começa a desconfiar da Madrinha | **Ler o corpo** (3×) |
 | IV · As Goelas | “O posto das Goelas não tem muralha.” | Ansel mostra onde o Simon caiu, a roda, o túmulo (dois dedos no peito), Joseph pede para ficar, o Último Gole | **Girar a roda** |
 | V · O Último Gole | “Quem chega chama de primeiro gole…” | 34 fogos; o chão bate em três; Varr e o Merrow; a tigela; a fila do amanhecer | **Ouvir o chão** |
-| VI · O Dia Comido | “Dia ser comido, Maior nascer.” | A onda, o bronze, Varr mata a hóspede, o duelo, o eclipse, o Maior, os vivos | **O duelo**, **Erguer a espada**, **Ficar de pé**, **Contar os vivos** |
+| VI · O Dia Comido | “Dia ser comido, Maior nascer.” | A onda, o bronze, Varr mata a Nymae, o duelo, o eclipse, o Maior, os vivos | **O duelo**, **Erguer a espada**, **Ficar de pé**, **Contar os vivos** |
 
 ## 2. Decisões que vieram de você (todas aplicadas)
 
-- Laura só sabe que a hóspede fugiu; a desconfiança nasce na marcha. Por isso o Markus fica, com a Capital e com a costa (a04).
+- Laura só sabe que a Nymae fugiu; a desconfiança nasce na marcha. Por isso o Markus fica, com a Capital e com a costa (a04).
 - A sabotagem é real e lenta: cochos secos, barril salgado, odres dos feridos **secos por dentro e sem furo**, tinas da forja. A pista de que “não é gente” é essa.
 - A desconfiança da Madrinha começa na Parte III (noite 2: “Penso nisso pela primeira vez aqui, com areia nos dentes”; noite 3: o livro de lendas, “nunca tem o mesmo rosto duas vezes”).
 - Nas Goelas: o Ansel em pessoa (ou um soldado do posto, se a Laura o matou no Cap. VII) e o túmulo no alto do muro velho dos Grakh, de onde se vê a roda. O gesto dos dois dedos é no túmulo, não contra o Kronk.
@@ -81,15 +81,15 @@ O codex do Cap. V diz que a Boca Seca é o deserto **do sul**; o Cap. VII manda 
 | Pior muleta | ninguém 5 | ninguém 4 |
 | Grupos de molde ACIMA | 17 | **2** (ver D1 e D2) |
 
-O relatório final está em `checagem_cap8.md`. O que foi cortado ou reescrito nesta passada (resumo): “o Grakh grande” de 12 para 4 linhas; “a Boca Seca” no texto de 9 para 3 (e os verbetes de Queimados e Tacets saíram do codex, porque nenhuma palavra do capítulo leva a eles); “os dois mil”, “cela da Ala Funda”, “diante da coluna”, “porta da cerca”, “desde a notícia”, “homens/soldado da Terceira”, “moça da cozinha”, “tenda dos feridos”, “o pulso desce” abaixo do limite; as três falas do Varr com a mesma abertura viraram uma linha fixa + a variante; “Aos dezesseis você” não aparece mais duas vezes na mesma tela; “as orelhas não mudam” virou cinco jeitos diferentes; a epígrafe da Parte VI deixou de antecipar a fala da hóspede (“…e a Boca Seca bebe todos” só aparece na boca dela).
+O relatório final está em `checagem_cap8.md`. O que foi cortado ou reescrito nesta passada (resumo): “o Grakh grande” de 12 para 4 linhas; “a Boca Seca” no texto de 9 para 3 (e os verbetes de Queimados e Tacets saíram do codex, porque nenhuma palavra do capítulo leva a eles); “os dois mil”, “cela da Ala Funda”, “diante da coluna”, “porta da cerca”, “desde a notícia”, “homens/soldado da Terceira”, “moça da cozinha”, “tenda dos feridos”, “o pulso desce” abaixo do limite; as três falas do Varr com a mesma abertura viraram uma linha fixa + a variante; “Aos dezesseis você” não aparece mais duas vezes na mesma tela; “as orelhas não mudam” virou cinco jeitos diferentes; a epígrafe da Parte VI deixou de antecipar a fala da Nymae (“…e a Boca Seca bebe todos” só aparece na boca dela).
 
 ### 6.2 Decisões para você (D)
-- **D1 · “da Boca Seca”.** Nome próprio do lugar. No texto do capítulo sobraram 3 linhas (o cartão da Parte III virou “A Areia”), abaixo do limite. O grupo que ainda trava está **só nos verbetes de codex herdados dos Caps. V a VII** (Goelas, Boca Seca, Grakh), sem mudança. Proposta: declarar no bloco `motivos cap08` → `Boca Seca | nome do lugar; a fala da hóspede (f01a) e o eco “A Boca Seca bebeu a dela também” (f05)`.
+- **D1 · “da Boca Seca”.** Nome próprio do lugar. No texto do capítulo sobraram 3 linhas (o cartão da Parte III virou “A Areia”), abaixo do limite. O grupo que ainda trava está **só nos verbetes de codex herdados dos Caps. V a VII** (Goelas, Boca Seca, Grakh), sem mudança. Proposta: declarar no bloco `motivos cap08` → `Boca Seca | nome do lugar; a fala da Nymae (f01a) e o eco “A Boca Seca bebeu a dela também” (f05)`.
 - **D2 · “o Grakh grande”.** É o nome que a Laura dá ao Kronk (ela não sabe o nome dele). Ficaram 4 linhas: a opção do templo, o reconhecimento na carga (rota B) ou na subida da duna (rota A), que nunca aparecem juntos, e o fecho “Derrubei o Grakh grande. Ou derrubei um grande, e o grande era o outro.”, que precisa da repetição. Proposta: declarar como motivo.
 
 ### 6.3 Blocos propostos para o Anexo A (só regras de escrita)
 ```motivos cap08
-Boca Seca | D1 · nome do lugar; a fala da hóspede e o eco dela
+Boca Seca | D1 · nome do lugar; a fala da Nymae e o eco dela
 o Grakh grande | D2 · o nome que a Laura dá ao Kronk; fecho em f10
 Firmes! É só o escuro! Segurem a linha! | as últimas palavras do pai (d01), gritadas pela Laura no eclipse (f07b)
 Aos dezesseis | a Laura de 16 nos Caps. II e IV (Dolores, o templo, a espada que pesa)
@@ -108,7 +108,7 @@ bate no meu ombro com o punho | Varr
 ```
 Ligação declarada: os **dois dedos no peito** são do Simon (Ansel conta, d03) e a Laura completa o gesto no túmulo (d05). É o ponto da cena.
 
-**Travas do capítulo:** “Lâmina” só na boca da tropa e no texto da Laura sobre si; “General-Rainha” na boca de quem é formal (Aubert, o padre, o Markus fora da rota de consorte). A Laura nunca diz “Kronk”, “Tacets” nem “Madrinha” como nome de quem está na frente dela: são “o Grakh grande”, “homens de bronze”, “a hóspede”. A Madrinha aparece só no livro de lendas lido aos catorze anos.
+**Travas do capítulo:** “Lâmina” só na boca da tropa e no texto da Laura sobre si; “General-Rainha” na boca de quem é formal (Aubert, o padre, o Markus fora da rota de consorte). A Laura nunca diz “Kronk”, “Tacets” nem “Madrinha” como nome de quem está na frente dela: são “o Grakh grande”, “homens de bronze”, “a Nymae”. A Madrinha aparece só no livro de lendas lido aos catorze anos.
 
 ### 6.4 Etapa 6c (jogar como jogador)
 Leitura corrida da rota B em `leitura_rota_B.md` (todo texto, na ordem, com as opções). O que a leitura achou e já foi corrigido:
@@ -139,7 +139,7 @@ Leitura corrida da rota B em `leitura_rota_B.md` (todo texto, na ordem, com as o
 2. O texto apresenta cada um: “São Nell, que serve a panela da cozinha, e Ansel, o sentinela, que fazia a ronda daquele lado.” Ela pergunta, dura, o que aconteceu, e ninguém responde.
 3. **Ler o corpo:** todos os suspeitos da noite lado a lado, seis olhares para dividir entre eles.
 4. **A Lei:** a Laura resume o que viu de cada um (“Em Nell, o que eu vi não é de gente.” / “Tasso mentiu sobre a água.”) e o jogador escolhe quem executar, ou põe guardas e espera.
-- Quem são: em cada noite vem o servo que dorme naquele lugar (Wil na estrebaria, Nell na cozinha, Ilse com os feridos, Bram na forja) e um engano (Tasso, que vende água de verdade; o Ansel; a Nymae, se ela veio). **Um dos quatro servos é a hóspede disfarçada**: é o rosto que ela roubou no Cap. VII. Só ela mostra o que não é de gente (testa seca, sal na boca, escama no pescoço, pulso rachado).
+- Quem são: em cada noite vem o servo que dorme naquele lugar (Wil na estrebaria, Nell na cozinha, Ilse com os feridos, Bram na forja) e um engano (Tasso, que vende água de verdade; o Ansel; a Nymae, se ela veio). **Um dos quatro servos é a Nymae disfarçada**: é o rosto que ela roubou no Cap. VII. Só ela mostra o que não é de gente (testa seca, sal na boca, escama no pescoço, pulso rachado).
 - A Nymae do Cap. VII (a lavadeira com argola) e a Nell são pessoas diferentes. A Nymae só aparece se ela veio na coluna no Cap. VII.
 
 **Justine:** a cena dela existe (a capela, a vírgula “e voltar”, as duas velas) e só aparece quando ela é a Consorte. A leitura que você recebeu era da rota com o Markus.
@@ -155,3 +155,66 @@ Leitura corrida da rota B em `leitura_rota_B.md` (todo texto, na ordem, com as o
 **“Oprato”:** no jogo, o “O” é a letra capitular grande, desenhada separada do resto. Na leitura corrida que eu extraí da tela ela saiu colada. Na tela está certo.
 
 **Os números [1], [2], [3]…:** são as posições internas das páginas na rota jogada. Páginas que a rota pula (a Justine, na rota do Markus) não aparecem, por isso saltou do [1] para o [3].
+
+---
+
+## v3 · 13/11/2026 · o feedback das Partes IV a VI e a cena da Justine
+
+### O que entrou do seu texto (com ajuste de português)
+- **Justine (a02/a02b), reescrita inteira:** a poeta mais famosa de Redom; "Veio fazer as pazes com a sua fé?" / "Vim te ver" / ela franze a testa; o polegar nos calos; "Tenho saudade"; "Você sabe por que estive distante"; **"Você ama mais a mim ou o seu título?"**. Três respostas (você / uma coisa não tem a ver com a outra / o dever primeiro). Nas duas primeiras ela pede "promete que vai sossegar?" e vem a segunda escolha: **Prometo** → o beijo longo, "Eu te amo, Laura" / "Sempre te amei, minha Justine", e ela sai querendo olhar para trás; **Não prometo** ou **o dever** → "Ótimo… boa viagem, Lâmina", e ela vai embora. Grava `cap8.justine` = `prometeu` / `naoPrometeu` / `dever`.
+- **d01:** "num dia de eclipse"; "A notícia levou oito dias até a Capital, e eu levei noventa e dois para chegar aqui. Parece que tudo aconteceu na mesma semana."
+- **d03:** a variante para quando, no Cap. VI, o Kronk **não esperou** (rangido `acabar`): "o grande desceu a maça antes de ele bater. Nem isso deixaram ele pedir."
+- **d04 (a roda):** foi para montar esta roda que o Simon veio às Goelas. Depois do jogo, o mundo fica em silêncio, o laranjal, os olhos molhados (a última vez foi antes do Torneio), e "Chorar na frente dos meus homens… seria trair a Juíza e o Cavaleiro. Me recomponho."
+- **d06 (Joseph):** saiu a linha "Naquele tempo eu estava no seu caminho"; ele gira o anel e espera a resposta.
+- **d07:** três dias, se forem rápidos; depois do poço o chão vira rocha vulcânica, até os picos onde dorme **Azrahekt, o Sol Faminto** (nome da Bíblia); "Nem os Grakh vivem lá"; a corneta toca e a coluna marcha forçada.
+- **Epígrafe da Parte V:** "A última chance de beber água para quem segue adiante. E ela tem gosto de ovo podre." · *Teodric Vane, explorador de Redom* (nome inventado; troque se quiser).
+- **e01:** 34 fogos para a Laura, 37 para o Varr, "Não faz diferença", e os mais de trezentos de vinte anos atrás.
+- **e03 (Varr):** a mão no ombro dela como num soldado dele; "Eu queria uma canção"; três respostas (canção e vingança / não existe canção para dois mil / foco). As linhas do Merrow ("Amanhã eu pago, Laus da Casa Merrow") **só se, no Cap. IV, a Laura deixou o Varr copiar**. Nova página e03b: ele vai dormir com a Terceira.
+- **f01b:** "Não só mais alto: mais musculoso também. O tipo de desvantagem que nunca foi desvantagem para mim. É por você, Simon" (+ "E por você, pai" se ela visitou o túmulo). Na rota A a mesma ideia vem em f04, com "O líder deles".
+- **f02b:** "É ela." + a ordem de matá-la antes de tudo.
+- **f03:** atordoada; "Dez. Vinte. Cem? Mais."; saiu "A água não derruba bronze"; entrou **"Que merda está acontecendo?!"**.
+- **f05 (a Madrinha), como você escreveu:** o chicote de água gigante, dez homens por chicotada, a água acaba depois de umas dez; o Varr chega com seis (o primeiro morre, o segundo some na lama); a espada dele entra embaixo do braço, nas costelas; ela corta a garganta do soldado que tentava degolá-la; ferida, dança e corta homens como papel; o Varr abre o crânio dela de cima. **A luta acontece no caos do bronze:** "Só não somos mais porque metade da coluna está de frente para o bronze, e de costas para ela."
+- **f06/f07:** "e porque eles sabem que eu quero ele"; nos olhos dele, a vontade de matar; "finalmente cai"; mais sangue dentro da armadura amassada; "Odeio mentir… quase fui derrotada. Mas venci."; o alívio que ela não sentia desde o Joseph no Torneio Real. "Foi um excelente adversário…"; "Ergo a espada, ainda olhando para ele"; o chão escurece como se um dragão passasse, mas a sombra não passa; **"— Eclipse! Eclipse!"**.
+- **f08/f09 (o Maior):** "o dia que virou noite" (o "dia comido" ficou para a boca dos Grakh); "Uma aberração"; "muito maior"; músculos onde nenhum Grakh tem; a flecha entra e "Os olhos dele estão em mim"; **o Joseph partido ao meio com o cavalo** pela mão-garra (só se ele veio); centenas de flechas, ele ri e tenta levantar, o corpo cede devagar, a luz fraca por dentro que desfaz a carne; **"Essa besta não era do nosso mundo."**
+- **f10 (o campo):** o último bronze se arrastando até ser desmontado; **nenhum Tacet e nenhum Grakh recuou**; bronze espatifado de ponta a ponta, os nossos e os deles uns sobre os outros, **quase dois mil dos nossos**; o corpo da Madrinha se desfazendo na mesma luz do Maior; o Kronk caído, virado para os acampamentos.
+- **f12:** sem a cena do Kronk. A luta termina com ele ainda caído onde está (f10), e o capítulo volta para as Goelas sem mostrar ninguém levá-lo. Fica em aberto para o Cap. IX.
+
+### Ajustes meus
+- **A luta de três lados (nova página f03b, entre f04 e f05):** a Terceira contra o bronze ("— Nas juntas! Martelos nas juntas!"), os Grakh chegando por trás, e a água dela por cima. Deixa evidente que tudo acontece ao mesmo tempo, como você pediu.
+- **"Madrinha" ou "a Nymae":** se no Cap. VII a Madrinha contou à Laura como a chamam na Orla, o capítulo inteiro diz **"a Madrinha"**; senão, "a Nymae" (e "a Nymae conjuradora" na batalha). A palavra "hóspede" saiu do capítulo inteiro, incluindo as falas do Aubert e do padre e as notas do resumo. Para isso o Cap. VII ganhou uma marca nova (`interrogatorio.nome`): **é preciso subir o patch do Cap. VII** (comandos no fim da resposta).
+- **Efeitos de tela (novo, `livro8.js` + `cap8.css`):** tremor, clarão, água varrendo a tela, sangue pulsando na borda, bronze (tremor em quatro), apagão, e o **eclipse que escurece a tela e só sai quando o sol volta** (páginas `escuro: true`). Disparam no parágrafo certo, junto com os sons. Vibram o celular no tremor e na onda.
+- **Vídeo de fundo:** todas as páginas grandes aceitam um `.mp4` (com `.webm` reserva). Sem o arquivo, fica a imagem. As rotas foram corrigidas para `.mp4`.
+- **Dublagem:** de 9 para **31 falas da Laura** (todas as escolhas faladas, os gritos da batalha, os pensamentos do pico). O motor agora aceita voz que muda com a rota ("É por você, Simon" com ou sem o pai).
+- **Quantos voltam:** `26 + 14 (rota A) + {8, 4, 0} (moral) + 6 (vigia) + 6 (água guardada)`, de 26 a 60. Rajadas do Maior: 48+ → 3; 36+ → 4; menos → 5.
+- **Repetições:** o checador passou com zero grupo acima no texto do capítulo. Variei "a cela da Ala Funda" (agora três jeitos: a tocha da Ala Funda, a tarde inteira na Ala Funda, a cara atrás das grades), "olha para mim", "a minha mãe", "dedos no peito", "tem gosto de", "o Grakh grande" (o fecho de f10 virou "Derrubei o líder deles. Ou derrubei um grande, e o grande era o outro.").
+
+### Decisões que continuam com você
+- **D1 · "da Boca Seca"**: o único grupo que ainda trava o checador, **só nos verbetes de codex herdados dos Caps. V a VII**. Proposta: declarar como motivo (é o nome do lugar).
+- **D2 · resolvido.** "O Grakh grande" caiu para o limite; não precisa mais de motivo.
+- **Teodric Vane:** o explorador da epígrafe é invenção minha. Se a Bíblia tiver um explorador de Redom, troco.
+
+### Blocos para o Anexo A (substituem os da v1)
+```motivos cap08
+Boca Seca | D1 · nome do lugar; a fala da Madrinha e o eco dela (f05)
+Firmes! É só o escuro! Segurem a linha! | as últimas palavras do pai (d01), gritadas pela Laura no eclipse (f07b)
+Aos dezesseis | a Laura de 16 nos Caps. II e IV (Dolores, o templo, a espada que pesa)
+É por você, Simon | aparece em f01b (rota B) ou f04 (rota A), nunca nas duas
+```
+```gestos cap08
+nomes: Markus, Joseph, Simon, Justine, Dolores, Varr, Ansel, Aubert, Nell, Wil, Bram, Ilse, Tasso
+pelo nariz | Markus
+dois dedos | Simon, Laura
+pena entre os dentes | Justine
+polegar pelos calos | Justine, Dolores
+gira o anel | Joseph
+mão no ombro | Varr
+```
+**Travas atualizadas:** a Laura chama a conjuradora de "a Madrinha" só se ouviu o nome no Cap. VII; senão "a Nymae"/"a conjuradora". Nunca diz "Kronk" nem "Tacets": "o Grakh grande"/"o líder deles", "homens de bronze".
+
+### Testes
+Três rotas jogadas do começo ao fim no navegador, sem erro de JavaScript: **A** (Justine, Prometo, executa a pessoa certa, ela foge) → 60 voltam; **B** (guarda tudo, ninguém apontado, Redom ataca) → 42; **C** (EN, aponta a pessoa certa na fila, Joseph fica) → 56. Leituras corridas em `leitura_rota_A/B/C.md`.
+
+### Pendências
+- Toda a mídia nova: ver **MIDIAS_CAP8.md** (fichas, imagens, 15 vídeos, 22 sons novos, 31 falas).
+- Sprites da Laura aos 36 e do Maior: quando chegarem, eu acerto o eixo e a base das poses no `duelo8.js`.
+- **Cap. IX:** o botão do fim continua sem link.
