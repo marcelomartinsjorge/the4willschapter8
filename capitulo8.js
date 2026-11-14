@@ -490,7 +490,7 @@ window.LIVRO = {
     { id: 'parte-IV', parte: 'IV', zona: 'goelas', fundo: { img: IMG('d01-goelas'), kb: 'in', dim: .6, clima: 'poeira' },
       cartao: { num: 'IV', nome: T('As Goelas', 'The Gullets'), epigrafe: T('O posto das Goelas não tem muralha. Tem um poço e uma roda.', 'The Gullets post has no wall. It has a well and a wheel.'), fonte: T('Relatório ao Conselho de Redom', 'Report to the Council of Redom') } },
 
-    { id: 'd01', zona: 'goelas', fundo: { img: IMG('d01-goelas'), video: 'assets/video/d01-goelas.mp4', kb: 'in', foco: '50% 50%', dim: .45, clima: 'poeira' }, sons: [{ s: SFX('rangido-roda'), ms: 1800, v: .45 }],
+    { id: 'd01', zona: 'goelas', fundo: { img: IMG('d01-goelas'), kb: 'in', foco: '50% 50%', dim: .45, clima: 'poeira' }, sons: [{ s: SFX('rangido-roda'), ms: 1800, v: .45 }],
       texto: [
         T('As Goelas aparecem no fim do décimo primeiro dia: a cerca de estacas, o muro velho dos Grakh em volta do poço mais fundo, a roda em cima do poço e o estandarte vermelho com a balança, que alguém lavou.', 'The Gullets appear at the end of the eleventh day: the stake fence, the Grakh’s old wall around the deepest well, the wheel above the well and the red banner with the scales, which someone has washed.'), // N
         T('Dos cento e vinte homens do posto, sobraram trinta e um. Estão em fila na porta da cerca. O mais velho mal tem barba.', 'Of the hundred and twenty men of the post, thirty-one are left. They are lined up at the fence gate. The oldest barely has a beard.'), // N
@@ -544,7 +544,7 @@ window.LIVRO = {
       ].filter(Boolean) },
 
     // o túmulo: o segundo disparo. A primeira vez que o nome sai em voz alta.
-    { id: 'd05', zona: 'goelas', fundo: { img: IMG('d05-tumulo'), video: 'assets/video/d05-tumulo.mp4', kb: 'in', foco: '50% 40%', dim: .5 }, pico: { bpm: 116, ms: 0 },
+    { id: 'd05', zona: 'goelas', fundo: { img: IMG('d05-tumulo'), kb: 'in', foco: '50% 40%', dim: .5 }, pico: { bpm: 116, ms: 0 },
       texto: [
         T('Enterraram meu irmão em cima do muro velho dos Grakh, no lugar mais alto do posto, de onde se vê a roda. Uma pilha de pedras e o estandarte dele no alto do cabo, enterrado de pé. O vento já rasgou a ponta.', 'They buried my brother on top of the Grakh’s old wall, at the highest point of the post, where you can see the wheel. A pile of stones and his banner high on its staff, buried standing. The wind has already torn its edge.'), // N
         T('Ajoelho ao lado das pedras.', 'I kneel beside the stones.'), // N
@@ -606,7 +606,7 @@ window.LIVRO = {
     { id: 'parte-V', parte: 'V', zona: 'deserto-noite', fundo: { img: IMG('e01-fogos'), kb: 'in', dim: .62 },
       cartao: { num: 'V', nome: T('O Último Gole', 'The Last Swallow'), epigrafe: T('A última chance de beber água para quem segue adiante. E ela tem gosto de ovo podre.', 'The last chance to drink water for anyone going on. And it tastes of rotten eggs.'), fonte: T('Teodric Vane, explorador de Redom', 'Teodric Vane, explorer of Redom') } },
 
-    { id: 'e01', zona: 'deserto-noite', fundo: { img: IMG('e01-fogos'), video: 'assets/video/e01-fogos.mp4', kb: 'in', foco: '50% 55%', dim: .45 }, sons: [{ s: SFX('pedra-poco'), p: 5, v: .7 }],
+    { id: 'e01', zona: 'deserto-noite', fundo: { img: IMG('e01-fogos'), kb: 'in', foco: '50% 55%', dim: .45 }, sons: [{ s: SFX('pedra-poco'), p: 5, v: .7 }],
       texto: [
         T('Do alto da duna, no fim do terceiro dia, o Último Gole: um vale raso de pedra com sete poços cavados na rocha, e só um brilhando.', 'From the top of the dune, at the end of the third day, the Last Swallow: a shallow stone valley with seven wells cut into the rock, and only one of them shining.'), // N
         T('Em volta do que brilha, os fogos do Pira.', 'Around the one that shines, the Pyre’s fires.'), // N
@@ -754,7 +754,7 @@ window.LIVRO = {
         T('Que merda está acontecendo?!', 'What the hell is happening?!'), // N
       ] },
 
-    { id: 'f04', zona: 'batalha', fundo: { img: IMG('f-pira'), video: 'assets/video/f-pira.mp4', kb: 'in', foco: '65% 40%', dim: .45 }, sons: [{ s: SFX('tambores-guerra'), p: 0, v: .9 }, { s: SFX('grakh-grito'), p: 1, v: .8 }, { voz: (st) => (!rotaA(st) ? null : st.escolhas.pai === 'visitar' ? 'L17b' : 'L17a'), p: 2 }],
+    { id: 'f04', zona: 'batalha', fundo: { img: IMG('f-pira'), kb: 'in', foco: '65% 40%', dim: .45 }, sons: [{ s: SFX('tambores-guerra'), p: 0, v: .9 }, { s: SFX('grakh-grito'), p: 1, v: .8 }, { voz: (st) => (!rotaA(st) ? null : st.escolhas.pai === 'visitar' ? 'L17b' : 'L17a'), p: 2 }],
       texto: [
         (st) => (rotaA(st)
           ? [T('Lá embaixo, o Pira viu a água bater em nós e o bronze descer do poente. Os Grakh sobem a duna. Na frente deles, um mais alto que todos, com uma maça.', 'Down below, the Pyre saw the water hit us and the bronze come down from the west. The Grakh climb the dune. In front of them, one taller than all the rest, with a mace.'),
@@ -766,7 +766,7 @@ window.LIVRO = {
       ] },
 
     // a batalha de três lados: o bronze, os Grakh e a água dela, tudo ao mesmo tempo
-    { id: 'f03b', zona: 'batalha', fundo: { img: IMG('f-linha'), video: 'assets/video/f-linha.mp4', kb: 'in', foco: '50% 45%', dim: .45 },
+    { id: 'f03b', zona: 'batalha', fundo: { img: IMG('f-linha'), kb: 'in', foco: '50% 45%', dim: .45 },
       sons: [{ s: SFX('bronze-impacto'), p: 0, v: .9 }, { fx: 'tremor', p: 0, dur: 700, forca: .8 }, { voz: 'L16', p: 1 }, { s: SFX('martelo-pedra'), p: 2, v: .9 }, { fx: 'tremor', p: 2, dur: 500, forca: .6 }, { s: SFX('tambores-guerra'), p: 4, v: .9 }, { s: SFX('chicote-agua'), p: 6, v: .8 }],
       texto: [
         T('O bronze bate na linha da Terceira como uma porta fechando. A lança entra e não sai. O escudo segura um golpe, e o segundo afunda o escudo para dentro do braço de quem segura.', 'The bronze hits the Third’s line like a door slamming. The spear goes in and won’t come out. A shield holds one blow, and the second drives the shield into the arm holding it.'), // N
@@ -779,7 +779,7 @@ window.LIVRO = {
       ] },
 
     // a conjuradora: o Varr
-    { id: 'f05', zona: 'batalha', fundo: { img: IMG('f-varr'), video: 'assets/video/f-varr.mp4', kb: 'in', foco: '80% 35%', dim: .45 },
+    { id: 'f05', zona: 'batalha', fundo: { img: IMG('f-varr'), kb: 'in', foco: '80% 35%', dim: .45 },
       sons: [{ s: SFX('chicote-agua'), p: 0, v: .9 }, { fx: 'clarao', p: 0, dur: 400 }, { s: SFX('chicote-agua'), p: 1, v: .9 }, { s: SFX('golpe'), p: 4, v: .9 }, { s: SFX('golpe'), p: 6, v: 1 }, { fx: 'tremor', p: 6, dur: 600, forca: .9 }, { s: SFX('varr-grito'), p: 7, v: .8 }],
       texto: [
         (st) => {
@@ -872,7 +872,7 @@ window.LIVRO = {
       ] },
 
     // depois: o vale. Ninguém fugiu, de lado nenhum.
-    { id: 'f10', zona: 'depois', fundo: { img: IMG('f-depois'), video: 'assets/video/f-depois.mp4', kb: 'out', foco: '50% 50%', dim: .45, clima: 'poeira' }, sons: [{ s: SFX('bronze-arrasta'), p: 0, v: .8 }, { s: SFX('martelo-pedra'), p: 1, v: .8 }, { s: SFX('vento-campo'), p: 2, v: .6 }],
+    { id: 'f10', zona: 'depois', fundo: { img: IMG('f-depois'), kb: 'out', foco: '50% 50%', dim: .45, clima: 'poeira' }, sons: [{ s: SFX('bronze-arrasta'), p: 0, v: .8 }, { s: SFX('martelo-pedra'), p: 1, v: .8 }, { s: SFX('vento-campo'), p: 2, v: .6 }],
       texto: [
         T('Com o sol, o vale aparece.', 'With the sun, the valley appears.'), // N
         T('O último homem de bronze ainda anda, com uma perna só, se arrastando pelo braço que sobrou, no mesmo compasso. Três da Terceira desmontam ele no chão, a martelo. Depois disso, o compasso para.', 'The last man of bronze is still walking, on one leg, dragging itself by the arm it has left, in the same beat. Three men of the Third take it apart on the ground, with hammers. After that, the beat stops.'), // N
@@ -896,7 +896,7 @@ window.LIVRO = {
           T('O Varr, com a cabeça enfaixada num pedaço da própria capa, conta a morte da bruxa a quem quiser ouvir. Quando acaba, começa outra vez. Ninguém ri.', 'Varr, his head bound in a strip of his own cloak, tells the death of the witch to anyone who will listen. When he finishes, he starts again. Nobody laughs.')]; // N
       } },
 
-    { id: 'f12', zona: 'goelas', fundo: { img: IMG('f-recuo'), video: 'assets/video/f-recuo.mp4', kb: 'out', foco: '50% 50%', dim: .5 },
+    { id: 'f12', zona: 'goelas', fundo: { img: IMG('f-recuo'), kb: 'out', foco: '50% 50%', dim: .5 },
       texto: [
         T('Voltamos para as Goelas a pé. Os cavalos que sobraram carregam os que não andam. Do caminho, só lembro do sol e da areia.', 'We go back to the Gullets on foot. The horses that are left carry those who can’t walk. Of the way, I only remember the sun and the sand.'), // N
       ] },

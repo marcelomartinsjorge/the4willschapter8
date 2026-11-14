@@ -251,3 +251,6 @@ Total: **18 imagens novas** (todas no `MIDIAS_CAP8.md`, com personagem entre par
 - **Pistas:** mantidas. A pergunta do jogo não é "Madrinha ou Nymae", é "qual destes humanos tem corpo de Nymae". As pistas fortes (testa, boca, pescoço, pulso) são justamente as que nos humanos mostram gente (suor, lábio rachado, queimadura, pulso rápido). A aguadeira Nymae da noite 3 é a armadilha: mostra o que é ser Nymae, mas é inocente, e nunca conta para `sabeOnde`.
 - **Cisterna:** a laje agora mostra uma boca de pedra na parede do fundo, por onde a água escorre com cheiro de esgoto.
 - **Polimentos:** "Ele vai me mostrar o lugar."; "Li aos catorze anos. Na página seguinte vinha o dragão do norte."
+
+## Vídeos cortados de 16 para 8 · 14/11/2026
+Vídeo é para cena impactante; paisagem e momento parado ficam com a imagem. **Ficam (8):** f-rosto, f-carga, f-onda, f-bronze, f-kronk, f-eclipse, f-eclipse-luta, f-maior. **Saem (8):** d01-goelas, d05-tumulo, e01-fogos, f-pira, f-linha, f-varr, f-depois, f-recuo. As páginas deles continuam com a imagem e o zoom lento.
