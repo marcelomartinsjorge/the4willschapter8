@@ -272,3 +272,6 @@ Vídeo é para cena impactante; paisagem e momento parado ficam com a imagem. **
   - os finais (o corte na coxa do Kronk e a última rajada no Maior) entram em câmera lenta, com faixas de cinema e a cor sumindo; quando o corpo cai, a areia sobe;
   - no celular em pé, o palco vira uma faixa onde os dois aparecem inteiros (antes cortava os dois).
 - **MIDIAS_CAP8.md** agora tem só som: 19 efeitos novos, 4 upgrades, 7 ambientes (com prompt) e a dublagem.
+
+## v7 · 14/11/2026 · 24 falas novas da Laura
+L21–L40d (ver MIDIAS §4). O livro ganhou `vozes` por página (`em: [trecho PT, trecho EN]` toca quando o parágrafo que contém o trecho aparece, e só nas partidas em que ele aparece) e voz de opção em lista (`voz: [{ voz, em }]`, para falas que estão no resultado da escolha). Testado nas três rotas: 23 das 24 tocaram nos pontos certos; a L27 (espada no túmulo do Simon) só toca se a Laura levou a espada, ramo que as rotas de teste não percorrem.

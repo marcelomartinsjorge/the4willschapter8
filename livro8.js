@@ -319,9 +319,12 @@ const FX = {
 function agendaItens(itens, els, base = 0) {
   (itens || []).forEach((it) => {
     const c = { done: false, fim: !!it.fim };
-    c.tocar = () => { if (c.done) return; c.done = true; if (it.fx) FX.go(it.fx, it.dur, it.forca); if (!A.ctx || !A.on) return; const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz; if (vz) A.narrate(vozUrl(vz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .7); };
+    c.tocar = () => { if (c.done) return; c.done = true; if (it.fx) FX.go(it.fx, it.dur, it.forca); if (window.__VOZLOG && it.voz) window.__VOZLOG.push(typeof it.voz === 'function' ? it.voz(st) : it.voz); if (!A.ctx || !A.on) return; const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz; if (vz) A.narrate(vozUrl(vz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .7); };
     if (c.fim) cuesPend.push(c);
-    later(c.tocar, base + (it.p != null ? msAte(els, it.p) : (it.ms != null ? it.ms : 900)));
+    let alvo = it.p;
+    if (it.em) { const ks = [].concat(it.em); alvo = els.findIndex((e) => ks.some((k) => (e.textContent || '').includes(k))); if (alvo < 0) return; }   // em: toca quando o parágrafo que contém o trecho (PT ou EN) aparece
+    if (it.se && !it.se(st)) return;
+    later(c.tocar, base + (alvo != null ? msAte(els, alvo) : (it.ms != null ? it.ms : 900)));
   });
 }
 function vozesDe(p) {
@@ -333,7 +336,7 @@ function vozesDe(p) {
 const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3';
 const vozDeOpcao = (o, cid) => { const v = nervosa(o, cid) ? o.vozNervosa : o.voz; return typeof v === 'function' ? v(st) : v; };
 const ABAFA = /^$/;   // o elmo já vem gravado nos arquivos (efeito aplicado na edição)
-const fala = (nome, ms = 0) => { if (!nome) return; later(() => { if (A.ctx && A.on) A.narrate(vozUrl(nome), null, ABAFA.test(nome)); }, ms); };
+const fala = (nome, ms = 0) => { if (!nome || typeof nome !== 'string') return; later(() => { if (A.ctx && A.on) A.narrate(vozUrl(nome), null, ABAFA.test(nome)); }, ms); };
 
 function render(dir = 1) {
   clearTimers(); cuesPend = []; A.stopNarr(); linkUsados.clear();
@@ -376,6 +379,7 @@ function render(dir = 1) {
     if (A.ctx && A.on && dir >= 0) later(() => { const b = $('#narr'); if (b && P[st.i] === p && !A.narr) b.click(); }, 700);
   } else if (p.vozAuto && dir >= 0) agendaItens(vozesDe(p), [...txt.children]);
   if (p.sons && dir >= 0) agendaItens(p.sons, [...txt.children]);
+  if (p.vozes && dir >= 0) agendaItens(p.vozes, [...txt.children]);
   if (cena) $('#cena').onclick = () => verCena(cena);
   const efP = valP(p.efeito); if (efP && !st.feitos['ef:' + p.id]) { st.feitos['ef:' + p.id] = 1; const ef = efP; if (ef.flag) st.f[ef.flag] = true; if (ef.peso) later(() => mudaPeso(ef.peso), 1200); }
   if (p.quieto) renderQuieto(p);

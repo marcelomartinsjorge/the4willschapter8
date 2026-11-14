@@ -4,7 +4,7 @@
 
 1. **Efeitos sonoros** (§2): 19 novos e 4 upgrades opcionais.
 2. **Ambientes** (§3): 7 loops de zona (5 para refazer, 2 novos).
-3. **Dublagem da Laura** (§4): as falas com as tags do Eleven v4.
+3. **Dublagem da Laura** (§4): 31 falas (L01–L20) mais 24 novas (L21–L40d), com as tags do Eleven v4.
 
 Para trocar uma peça: gere, salve com o **nome exato** na pasta indicada, por cima do provisório. Não precisa mexer em código (só os dois ambientes novos, que eu ligo).
 
@@ -119,6 +119,35 @@ A woman in her mid-thirties, a seasoned military commander and queen. Low, stead
 | `L18` | f09 | O Maior vem. Ela chama os arqueiros para perto dela. | `[shouts, fierce] ARCHERS! [shouts] On me!` | — Arqueiros! Comigo! |
 | `L19` | f06 (depois) | O Kronk caiu. Ela sangra por dentro da armadura e admite para si. Pensamento, ofegante. | `[breathing hard, quiet] I hate lying... [pause] to myself most of all. [exhales] I was nearly beaten. [pause] [a hard, quiet relief] But I won.` | Odeio mentir, mais ainda para mim mesma: quase fui derrotada. Mas venci. |
 | `L20` | f07 | Em pé sobre o Kronk caído, antes do golpe final. Respeito e ódio na mesma frase. Pensamento. | `[low, cold respect] He was an excellent opponent. [pause] [hard, quiet] But now the Grakh end. No one else of my family... no one else of Redom... dies at the hands of these savages, in the sand of this desert.` | Foi um excelente adversário. Mas agora os Grakh acabam. Mais ninguém da minha família, mais ninguém de Redom, morre na mão desses selvagens, na areia deste deserto. |
+
+**Falas novas (14/11/2026)**: 24 arquivos extras, já ligados no livro. Cada um toca no momento certo da página, quando o leitor chega no parágrafo (e só se aquela cena aparecer na partida dele). Mesmas regras: texto em inglês com tags do Eleven v4, só a Laura. Os ⭐ são os que eu mais gravaria.
+
+| Arquivo | Página | Contexto (para quem atua) | Texto para o ElevenLabs (EN, com tags) | Fala (PT) |
+|---|---|---|---|---|
+| `L21` ⭐ | a01 | Tobias leva a bandeja pela octogésima primeira vez e avisa que amanhã tem cordeiro. Ela nem tira os olhos da janela. | `[flat, tired, not looking up] Tomorrow I eat on the road.` | — Amanhã eu como na estrada. |
+| `L22` ⭐ | a03 | A mãe conta as saídas do pai, do irmão e dela mesma, e deixa a conta no ar. Laura completa. É a mesma conta da última linha do capítulo. | `[quiet, steady] This is the twenty-first time.` | — Esta é a vigésima primeira vez. |
+| `L23` ⭐ | a05 | Markus reclama de ficar vigiando uma Nymae que já sumiu. Ela responde com carinho de comandante. | `[warm, a little amused] I leave the best I have... [softer] where I won’t be.` | — Deixo o melhor que eu tenho no lugar onde eu não vou estar. |
+| `L24` ⭐ | a05 | Markus cobra o duelo que ela adia há anos. Brincadeira de dois que se conhecem. | `[playful, a half-smile in her voice] When I’m back. I promise. [teasing] But you don’t stand a chance.` | — Na volta. Prometo. Mas você não tem chance. |
+| `L25` ⭐ | a05 (levar ou deixar a espada) | Ela se despede dele. Mesma fala nos dois ramos. | `[tender, low] Stay with the Knight, Markus. [pause] [softly] I love you.` | — Fique com o Cavaleiro, Markus. Eu te amo. |
+| `L26` ⭐ 🔀 | a02b (se prometeu à Justine) | Justine acabou de dizer "Eu te amo, Laura". É o fecho do ramo da promessa. | `[tender, a breath of relief] I’ve always loved you... [softly] my Justine.` | — Sempre te amei, minha Justine. |
+| `L27` ⭐ | d05 | Ajoelhada no túmulo do Simon, encosta o cabo da espada dele nas pedras. Se ela levou a espada. | `[low, gentle, speaking to the stones] It’s coming back dirty... [pause] brother.` | — Ela volta suja, irmão. |
+| `L28` ⭐ | d05b | Diante do túmulo do pai, que ela mal conheceu. Não sabe o que se diz a um pai assim. Sai desajeitado. | `[quiet, hesitant, a little awkward] Simon is up there, Father. [pause] [softly] On the side where you can see the wheel.` | — O Simon está lá em cima, pai. Do lado de onde se vê a roda. |
+| `L29` ⭐ | e04 | Noite antes da batalha, sozinha na tenda, o dedo no mapa. Pensamento, quase sem voz. | `[barely audible, cold, resolved] Tomorrow I see the face of whoever killed Simon.` | Amanhã eu vejo a cara de quem matou o Simon. |
+| `L30` ⭐ | e05 | Diante da fila dos servos, só se a caça deu certo. A virada da investigação. | `[very low, certain] I know where to look.` | Sei onde olhar. |
+| `L31` ⭐ | f10 | Depois da vitória, no campo. Olha o corpo do grande e a dúvida aparece. | `[exhausted, uncertain, to herself] I brought down their leader. [pause] [uneasy] Or I brought down a big one... and the big one was the other.` | Derrubei o líder deles. Ou derrubei um grande, e o grande era o outro. |
+| `L32` | d06 | Joseph pede para ficar no posto. Ela responde com uma frase só, sem peso. | `[gentle, a little rueful] You wanted one last campaign.` | — Você quis uma última campanha. |
+| `L33` 🔀 | d06 (deixar Joseph no posto) | A despedida, cobrando a promessa do brinde. | `[warm, a half-smile] And keep the wine, Joseph. [softly] When I’m back, I’ll drink with you.` | — E guarda o vinho, Joseph. Na volta, eu bebo com você. |
+| `L34` | d03 | No lugar onde o Simon caiu, o soldado conta que ele bateu no peito com dois dedos, uma vez. | `[quiet, hoarse] Once?` | — Uma vez? |
+| `L35` | b03 | O intendente diz água para onze dias. Ela completa a conta de sempre. | `[dry, steady] With six to spare.` | — Com seis de folga. |
+| `L36a` | a04 | Ordem seca de comandante, antes de partir. (Se Markus está na Capital.) | `[firm, calm] Markus stays. [pause] With the Capital and the coast.` | — Markus fica. Com a Capital e com a costa. |
+| `L36b` 🔀 | a04 | O mesmo, se o marechal ficou no lugar do Markus. | `[firm, calm] The marshal stays. [pause] With the Capital and the coast.` | — O marechal fica. Com a Capital e com a costa. |
+| `L37` 🔀 | a02a | Despedida da Justine, se ela foi vê-la. | `[softly, a little rushed] I’ll be back soon. [pause] I promise.` | — Eu volto logo. Prometo. |
+| `L38` | e03 | Varr diz "Amanhã, Lâmina". Ela repete, baixo. | `[low] Tomorrow.` | — Amanhã. |
+| `L39` | caça, 1ª noite | Pensamento ao mandar chamar os servos. Ela percebe que nunca soube o nome de nenhum. | `[flat, a little ashamed] Servants aren’t counted, and I have never known any of their names. [pause] [low, resolved] Today, I ask.` | Servo não se conta, e eu nunca soube o nome de nenhum. Hoje, pergunto. |
+| `L40a` | caça (estrebaria) | Interrogatório. Dura, sem levantar a voz. | `[hard, cold] Who emptied the troughs?` | — Quem esvaziou os cochos? |
+| `L40b` | caça (cozinha) | Idem. | `[hard, cold] How did the barrel water turn salty?` | — Como a água do barril ficou salgada? |
+| `L40c` | caça (feridos) | Idem. | `[hard, cold] Who dried out the wounded men’s waterskins?` | — Quem secou os odres dos feridos? |
+| `L40d` | caça (forja) | Idem. | `[hard, cold] Who emptied the tubs?` | — Quem esvaziou as tinas? |
 
 *Dica para as falas gritadas (L04, L14, L16, L18): baixe a Stability, gere 3 ou 4 takes e escolha a que não estoura. Se `[shouts]` não pegar, escreva a fala em MAIÚSCULAS com exclamação, ou descreva a voz (*a hoarse, commanding voice*).*
 
