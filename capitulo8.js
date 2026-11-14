@@ -18,6 +18,7 @@ window.LIVRO_EN = window.LIVRO_EN || {};
 const T = (pt, en) => { if (en != null) window.LIVRO_EN[pt] = en; return pt; };
 const se = (cond, t) => ({ se: cond, t });
 const IMG = (n) => 'assets/images/' + n + '.jpg';
+const FD = (n, foco, clima) => Object.assign({ img: IMG(n), kb: 'in', foco: foco || '50% 45%', dim: .5 }, clima ? { clima: clima } : {});
 const SFX = (n) => 'assets/audio/sfx/' + n + '.mp3';
 
 // ---------------------------------------------------------------- o que os capítulos anteriores deixaram
@@ -168,9 +169,9 @@ const numPT = ['zero', 'um', 'dois', 'três', 'quatro', 'cinco', 'seis', 'sete',
 // o quarto da Nymae, embaixo do templo (minijogo O quarto dela)
 const SALA = {
   intro: T('O quarto está como a varredura deixou.', 'The room is as the sweep left it.'),
-  rot: { esteira: T('A esteira', 'The mat'), bacia: T('A bacia', 'The basin'), janela: T('A janela', 'The window'), laje: T('A laje', 'The flagstone') },
+  rot: { esteira: T('O catre', 'The cot'), bacia: T('A bacia', 'The basin'), janela: T('A janela', 'The window'), laje: T('A laje', 'The flagstone') },
   txt: {
-    esteira: T('Fria e lisa, sem marca de corpo. Três noites aqui, e a palha nem amassou.', 'Cold and smooth, with no mark of a body. Three nights here, and the straw isn’t even flattened.'),
+    esteira: T('O cobertor está dobrado do jeito que deixaram, e o travesseiro não tem marca de cabeça. Três noites aqui, e a palha do colchão nem amassou.', 'The blanket is folded the way they left it, and the pillow has no mark of a head. Three nights here, and the straw of the mattress isn’t even flattened.'),
     bacia: T('Seca. No fundo, uma crosta branca. Passo o dedo e levo à língua: sal.', 'Dry. At the bottom, a white crust. I run a finger through it and touch it to my tongue: salt.'),
     janela: T('Alta demais para alcançar sem banco, e dá para o muro cego da casa ao lado, a um braço de distância. Daqui não se vê a Capital, e a Capital não vê esta janela.', 'Too high to reach without a stool, and it faces the blind wall of the house next door, an arm’s length away. You can’t see the Capital from here, and the Capital can’t see this window.'),
     laje: T('A junta de cal em volta dela é mais clara que as outras. Mais nova. Piso em cima, e a laje balança como uma tampa.', 'The lime joint around it is paler than the others. Newer. I step on it, and the flagstone rocks like a lid.'),
@@ -232,7 +233,7 @@ window.LIVRO = {
       ] },
 
     // Justine, só se houve o beijo do Cap. IV (é a Consorte)
-    { id: 'a02', se: () => comJustine(), zona: 'capela', fundo: { img: IMG('a02-capela'), kb: 'in', foco: '50% 40%', dim: .5, clima: 'velas' }, sons: [{ voz: 'L13', p: 4 }],
+    { id: 'a02', se: () => comJustine(), zona: 'capela', fundo: { img: IMG('a02-capela'), kb: 'in', foco: '60% 45%', dim: .5, clima: 'velas' }, sons: [{ voz: 'L13', p: 4 }],
       texto: [
         T('A capela da Juíza ainda tem vela acesa. Justine está no último banco, com um papel no colo e a pena entre os dentes. Ela vem aqui toda noite. Sozinha, porque eu não venho desde o Simon.', 'The Judge’s chapel still has a candle lit. Justine is in the last pew, a paper on her lap and the quill between her teeth. She comes here every night. Alone, because I haven’t come since Simon.'), // N
         T('Ela escreve poemas para mim desde o nosso primeiro beijo. Os poemas fizeram dela uma escritora famosa em Redom. Talvez a mais famosa.', 'She has written poems for me since our first kiss. The poems made her a famous writer in Redom. Maybe the most famous.'), // N
@@ -240,6 +241,11 @@ window.LIVRO = {
         T('— Veio fazer as pazes com a sua fé, Laura?', '— Did you come to make peace with your faith, Laura?'), // N
         T('— Vim te ver.', '— I came to see you.'), // N
         T('— Não estou escrevendo sobre você desta vez. — Ela franze a testa. Só franze assim quando está irritada.', '— I’m not writing about you this time. — She frowns. She only frowns like that when she’s angry.'), // N
+      ],
+    },
+
+    { id: 'a02a', se: () => comJustine(), zona: 'capela', fundo: FD('a02-lado', '50% 40%', 'velas'),
+      texto: [
         T('— Eu volto logo. Prometo.', '— I’ll be back soon. I promise.'), // N
         T('Ela pega a minha mão e passa o polegar nos calos, um por um, como faz quando vai me dizer uma coisa difícil.', 'She takes my hand and runs her thumb over the calluses, one by one, the way she does when she is about to tell me something hard.'), // N
         T('— Tenho saudade de você, sabia?', '— I miss you, you know?'), // N
@@ -251,23 +257,25 @@ window.LIVRO = {
           resultado: [T('— Então, quando voltar, promete que vai sossegar?', '— Then, when you’re back, promise you’ll settle down?')] }, // N
         { id: 'nada', voz: 'L08b', aviso: T('Justine vai lembrar disso.', 'Justine will remember that.'), txt: T('— Uma coisa não tem nada a ver com a outra.', '— One thing has nothing to do with the other.'),
           resultado: [T('— É claro que tem. Não posso viver assim, Laura, amando uma pessoa que passa mais tempo no deserto e no mar do que comigo. Quando voltar, promete que vai sossegar?', '— Of course it does. I can’t live like this, Laura, loving someone who spends more time in the desert and at sea than with me. When you’re back, promise you’ll settle down?')] }, // N
-        { id: 'dever', voz: 'L08c', aviso: T('Justine vai lembrar disso.', 'Justine will remember that.'), txt: T('— O meu dever com Redom vem em primeiro lugar. Sempre.', '— My duty to Redom comes first. Always.'),
+        { id: 'dever', voz: 'L08c', fundo: FD('a02-saida', '55% 45%', 'velas'), aviso: T('Justine vai lembrar disso.', 'Justine will remember that.'), txt: T('— O meu dever com Redom vem em primeiro lugar. Sempre.', '— My duty to Redom comes first. Always.'),
           resultado: [T('— Ótimo. Obrigada por esclarecer as coisas. Boa viagem, Lâmina.', '— Fine. Thank you for making things clear. Safe travels, Blade.'), T('Ela levanta de uma vez e sai da capela sem olhar para trás.', 'She gets up all at once and walks out of the chapel without looking back.')] }, // N
       ] } },
 
-    { id: 'a02b', se: (st) => comJustine() && ['voce', 'nada'].includes(st.escolhas.justine), zona: 'capela', fundo: { img: IMG('a02-capela'), kb: 'in', foco: '50% 40%', dim: .5, clima: 'velas' },
+    { id: 'a02b', se: (st) => comJustine() && ['voce', 'nada'].includes(st.escolhas.justine), zona: 'capela', fundo: FD('a02-lado', '50% 40%', 'velas'),
       texto: [T('Ela espera, com a pena parada na mão.', 'She waits, the quill still in her hand.')], // N
       escolha: { id: 'sossegar', pergunta: T('Sossegar', 'Settle down'), opcoes: [
-        { id: 'prometo', voz: 'L09a', aviso: T('Justine vai lembrar disso.', 'Justine will remember that.'), txt: T('— Prometo.', '— I promise.'),
+        { id: 'prometo', voz: 'L09a', fundo: FD('a02-beijo', '45% 40%', 'velas'), aviso: T('Justine vai lembrar disso.', 'Justine will remember that.'), txt: T('— Prometo.', '— I promise.'),
           resultado: [T('Ela fecha as mãos em volta das minhas e me beija, longo.', 'She closes her hands around mine and kisses me, long.'),
-            T('— Eu te amo, Laura.', '— I love you, Laura.'), T('— Sempre te amei, minha Justine.', '— I’ve always loved you, my Justine.'),
-            T('Levanto e vou para a porta. O peito aperta por deixar a Justine outra vez. Quero olhar para ela mais uma vez antes de ir. Saio sem me virar.', 'I get up and go to the door. It tightens my chest to leave her again. I want to look at her one more time before I go. I leave without turning round.')] }, // N
-        { id: 'naoPrometo', voz: 'L09b', aviso: T('Justine vai lembrar disso.', 'Justine will remember that.'), txt: T('— Não prometo.', '— I won’t promise.'),
+            T('— Eu te amo, Laura.', '— I love you, Laura.'), T('— Sempre te amei, minha Justine.', '— I’ve always loved you, my Justine.')] }, // N
+        { id: 'naoPrometo', voz: 'L09b', fundo: FD('a02-saida', '55% 45%', 'velas'), aviso: T('Justine vai lembrar disso.', 'Justine will remember that.'), txt: T('— Não prometo.', '— I won’t promise.'),
           resultado: [T('— Ótimo. Obrigada por esclarecer as coisas. Boa viagem, Lâmina.', '— Fine. Thank you for making things clear. Safe travels, Blade.'), T('Ela levanta de uma vez e sai da capela. A porta bate atrás dela, e as velas tremem.', 'She gets up all at once and walks out of the chapel. The door bangs behind her, and the candles shiver.')] }, // N
       ] } },
 
+    { id: 'a02c', se: (st) => comJustine() && st.escolhas.sossegar === 'prometo', zona: 'capela', fundo: FD('a02-porta', '62% 50%', 'velas'),
+      texto: [T('Levanto e vou para a porta. O peito aperta por deixar a Justine outra vez. Quero olhar para ela mais uma vez antes de ir. Saio sem me virar.', 'I get up and go to the door. It tightens my chest to leave Justine again. I want to look at her one more time before I go. I leave without turning round.')] }, // N
+
     // a mãe: o primeiro disparo
-    { id: 'a03', zona: 'aposentos', fundo: { img: IMG('a03-dolores'), kb: 'in', foco: '50% 45%', dim: .55, clima: 'velas' }, pico: { bpm: 108, ms: 9000 },
+    { id: 'a03', zona: 'aposentos', fundo: { img: IMG('a03-dolores'), kb: 'in', foco: '55% 50%', dim: .55, clima: 'velas' }, pico: { bpm: 108, ms: 9000 },
       texto: [
         T('Minha mãe não sai mais da cama. As cortinas ficam fechadas dia e noite, e a criada deixa uma vela acesa ao lado dela, de dia também.', 'My mother no longer leaves her bed. The curtains stay shut day and night, and the maid keeps a candle lit beside her, in the daytime too.'), // N
         T('Ela me ouve entrar e não abre os olhos.', 'She hears me come in and doesn’t open her eyes.'), // N
@@ -283,15 +291,15 @@ window.LIVRO = {
         T('— Se você não voltar, vou amaldiçoar aquele Torneio até o último dos poucos dias que me restam. Você sabe disso, não sabe?', '— If you don’t come back, I’ll curse that Tournament until the last of the few days I have left. You know that, don’t you?'), // N
       ],
       escolha: { id: 'dolores', pergunta: T('Minha mãe', 'My mother'), opcoes: [
-        { id: 'volto', voz: 'L07a', aviso: T('Sua mãe vai lembrar disso.', 'Your mother will remember that.'), txt: T('— Não se preocupe, mãe. Estou levando os nossos melhores soldados. Eu volto.', '— Don’t worry, Mother. I’m taking our best soldiers. I’ll come back.'),
+        { id: 'volto', fundo: FD('a03-maos', '62% 40%', 'velas'), voz: 'L07a', aviso: T('Sua mãe vai lembrar disso.', 'Your mother will remember that.'), txt: T('— Não se preocupe, mãe. Estou levando os nossos melhores soldados. Eu volto.', '— Don’t worry, Mother. I’m taking our best soldiers. I’ll come back.'),
           resultado: () => [T('— Vou me preocupar sempre, Laura. Sou sua mãe.', '— I’ll always worry, Laura. I’m your mother.'), RABO_MAE()].filter(Boolean) }, // N
-        { id: 'simon', voz: 'L07b', aviso: T('Sua mãe vai lembrar disso.', 'Your mother will remember that.'), txt: T('— Estou fazendo isso pelo Simon, mãe. Sobraram poucos Grakh. Vai ser mais massacre que batalha.', '— I’m doing this for Simon, Mother. There are few Grakh left. It will be more slaughter than battle.'),
+        { id: 'simon', fundo: FD('a03-maos', '62% 40%', 'velas'), voz: 'L07b', aviso: T('Sua mãe vai lembrar disso.', 'Your mother will remember that.'), txt: T('— Estou fazendo isso pelo Simon, mãe. Sobraram poucos Grakh. Vai ser mais massacre que batalha.', '— I’m doing this for Simon, Mother. There are few Grakh left. It will be more slaughter than battle.'),
           resultado: () => [T('— O Simon era seu irmão, mas também era meu filho. — Os dedos dela apertam os meus. — Vou me preocupar sempre, Laura. Sou sua mãe.', '— Simon was your brother, but he was my son too. — Her fingers tighten on mine. — I’ll always worry, Laura. I’m your mother.'), RABO_MAE()].filter(Boolean) }, // N
-        { id: 'torneio', voz: 'L07c', aviso: T('Sua mãe vai lembrar disso.', 'Your mother will remember that.'), txt: T('— O Torneio foi o melhor dia da minha vida, mãe. Nada vai mudar isso.', '— The Tournament was the best day of my life, Mother. Nothing will change that.'),
+        { id: 'torneio', fundo: FD('a03-maos', '62% 40%', 'velas'), voz: 'L07c', aviso: T('Sua mãe vai lembrar disso.', 'Your mother will remember that.'), txt: T('— O Torneio foi o melhor dia da minha vida, mãe. Nada vai mudar isso.', '— The Tournament was the best day of my life, Mother. Nothing will change that.'),
           resultado: [T('— Então não faça o melhor dia da sua vida virar o pior da sua mãe, filha.', '— Then don’t make the best day of your life the worst of your mother’s, daughter.')] }, // N
       ] } },
 
-    { id: 'a03b', zona: 'aposentos', fundo: { img: IMG('a03-dolores'), kb: 'in', foco: '50% 45%', dim: .55, clima: 'velas' },
+    { id: 'a03b', zona: 'aposentos', fundo: FD('a03-corredor', '55% 45%', 'velas'),
       texto: [
         T('— Tenho que ir, mãe. Fique bem.', '— I have to go, Mother. Be well.'), // N
         T('— Reze ao Cavaleiro para me dar forças, filha. E coma alguma coisa antes de ir, pela sua mãe. — Ela me solta devagar. — Te amo.', '— Pray to the Knight to give me strength, daughter. And eat something before you go, for your mother. — She lets go of me slowly. — I love you.'), // N
@@ -329,7 +337,7 @@ window.LIVRO = {
       ] },
 
     // Markus, na sala de armas, com a espada do Simon
-    { id: 'a05', zona: 'interior', fundo: { img: IMG('a05-markus'), kb: 'in', foco: '50% 38%', dim: .5 },
+    { id: 'a05', zona: 'interior', fundo: { img: IMG('a05-markus'), kb: 'in', foco: '62% 45%', dim: .5 },
       texto: [
         T('Markus anda dormindo na sala de armas. Quando entro, ele já está sentado no banco, de botas, com a espada do meu irmão atravessada nos joelhos.', 'Markus has been sleeping in the armoury. When I come in he is already sitting on the bench, boots on, my brother’s sword across his knees.'), // N
         () => (comMarkus() ? T('— Já sei, meu amor. O Aubert passou por aqui primeiro. — Ele ri pelo nariz. — Você leva os melhores de Redom e me deixa vigiando uma Nymae que já sumiu.', '— I know, my love. Aubert came by here first. — He laughs through his nose. — You take Redom’s best and leave me watching a Nymae who’s already gone.')
@@ -343,11 +351,11 @@ window.LIVRO = {
         T('— Reforjei a espada do Simon. Está impecável. — Ele ergue a lâmina contra a luz da janela. — Não seria justiça do Cavaleiro os assassinos dele caírem pela espada dele?', '— I had Simon’s sword reforged. It’s flawless. — He lifts the blade to the light from the window. — Wouldn’t it be the Knight’s justice, his killers falling to his own sword?'), // N
       ],
       escolha: { id: 'espada', pergunta: T('A espada do meu irmão', 'My brother’s sword'), opcoes: [
-        { id: 'levar', txt: T('Levar a espada.', 'Take the sword.'),
+        { id: 'levar', fundo: FD('a05-levar', '55% 40%'), txt: T('Levar a espada.', 'Take the sword.'),
           resultado: () => [T('Markus me entrega a espada pelo cabo. Prendo na cintura, no lugar da minha.', 'Markus hands me the sword hilt first. I belt it on, in place of my own.'),
             comMarkus() ? T('— Fique com o Cavaleiro, Markus. Eu te amo.', '— Stay with the Knight, Markus. I love you.') : null,
             comMarkus() ? T('— Eu também. — Ele não solta o cabo logo. — Volta com ela suja.', '— So do I. — He doesn’t let go of the hilt right away. — Bring it back dirty.') : null].filter(Boolean) }, // N
-        { id: 'deixar', txt: T('Deixar a espada com Markus. — Use-a para proteger Redom.', 'Leave the sword with Markus. — Use it to protect Redom.'),
+        { id: 'deixar', fundo: FD('a05-deixar', '45% 40%'), txt: T('Deixar a espada com Markus. — Use-a para proteger Redom.', 'Leave the sword with Markus. — Use it to protect Redom.'),
           resultado: () => [T('Ele põe a mão de volta em cima da lâmina.', 'He puts his hand back on the blade.'),
             T('— Alguém tem que dormir perto da porta.', '— Someone has to sleep near the door.'),
             comMarkus() ? T('— Fique com o Cavaleiro, Markus. Eu te amo.', '— Stay with the Knight, Markus. I love you.') : null,
@@ -378,7 +386,7 @@ window.LIVRO = {
       texto: [
         T('Na saída, o padre da guarda me acompanha até a escada do térreo.', 'On the way out, the watch priest walks me to the stairs down to the ground floor.'), // N
         T('— A Nymae da Orla dormiu aqui embaixo, General-Rainha. Três noites. Varreram o quarto depois que ela foi.', '— The Nymae from the Shore slept down here, General-Queen. Three nights. They swept the room after she left.'), // N
-        T('Desço os degraus. O quarto é pequeno: uma esteira, uma bacia, uma janela alta.', 'I go down the steps. The room is small: a mat, a basin, a high window.'), // N
+        T('Desço os degraus. O quarto é pequeno: um catre, uma bacia, uma janela alta.', 'I go down the steps. The room is small: a cot, a basin, a high window.'), // N
       ],
       minijogo: 'sala',
       depois: (st) => (st.sala && st.sala.cisterna
@@ -402,7 +410,7 @@ window.LIVRO = {
     { id: 'parte-II', parte: 'II', zona: 'estrada', fundo: { img: IMG('b03-borda'), kb: 'in', dim: .6, clima: 'poeira' },
       cartao: { num: 'II', nome: T('A Estrada', 'The Road'), epigrafe: T('Antes do deserto, o exército conta as espadas. No deserto, conta as gotas de água.', 'Before the desert, an army counts its swords. In the desert, it counts drops of water.'), fonte: T('Kassian D’Orrose, General-Rei', 'Kassian D’Orrose, General-King') } },
 
-    { id: 'b01', zona: 'acampamento', fundo: { img: IMG('b01-panela'), kb: 'in', foco: '50% 50%', dim: .5, clima: 'velas' },
+    { id: 'b01', zona: 'acampamento', fundo: { img: IMG('b01-panela'), kb: 'in', foco: '55% 45%', dim: .5, clima: 'velas' },
       texto: [
         T('Na primeira noite de estrada, a cozinha arma a panela grande no meio do acampamento, e os soldados fazem fila com a tigela na mão.', 'On the first night of the road, the kitchen sets up the big pot in the middle of the camp, and the soldiers line up with their bowls.'), // N
         T('Entro na fila. Na estrada eu como da panela dos soldados. Sempre foi assim, mas a comida nunca teve esse gosto.', 'I get in line. On the road I eat from the soldiers’ pot. It has always been that way, but the food has never tasted like this.'), // N
@@ -415,15 +423,15 @@ window.LIVRO = {
         T('A direita dele treme no couro do odre. A esquerda segura o gargalo. Os homens dele olham para mim.', 'His right hand shakes on the leather of the skin. His left holds the neck. His men look at me.'), // N
       ],
       escolha: { id: 'vinho', pergunta: T('O odre do Joseph', 'Joseph’s wineskin'), opcoes: [
-        { id: 'prometer', voz: 'L11a', aviso: T('Joseph vai lembrar disso.', 'Joseph will remember that.'), txt: T('— Na volta do deserto, eu bebo com você.', '— When we’re back from the desert, I’ll drink with you.'),
+        { id: 'prometer', voz: 'L11a', fundo: FD('b01-brinde', '45% 40%', 'velas'), aviso: T('Joseph vai lembrar disso.', 'Joseph will remember that.'), txt: T('— Na volta do deserto, eu bebo com você.', '— When we’re back from the desert, I’ll drink with you.'),
           resultado: [T('— Se sobrar até lá! — Ele ri, e a roda de soldados ri junto. O fogo fica mais barulhento.', '— If there’s any left by then! — He laughs, and the ring of soldiers laughs with him. The fire gets louder.')] }, // N
-        { id: 'recriminar', voz: 'L11b', aviso: T('Joseph vai lembrar disso.', 'Joseph will remember that.'), txt: T('— Nada de beber até cumprirmos a missão, Joseph.', '— No drinking until the mission is done, Joseph.'),
+        { id: 'recriminar', voz: 'L11b', fundo: FD('b01-recusa', '45% 40%', 'velas'), aviso: T('Joseph vai lembrar disso.', 'Joseph will remember that.'), txt: T('— Nada de beber até cumprirmos a missão, Joseph.', '— No drinking until the mission is done, Joseph.'),
           resultado: [T('— Bah! Sempre fizemos isso, Laura.', '— Bah! We’ve always done this, Laura.')] }, // N
-        { id: 'ignorar', txt: T('Não responder.', 'Say nothing.'),
+        { id: 'ignorar', fundo: FD('b01-sozinho', '82% 45%', 'velas'), txt: T('Não responder.', 'Say nothing.'),
           resultado: [T('Deixo o odre no ar. Ele bebe sozinho, e os homens voltam a falar entre eles.', 'I leave the skin hanging in the air. He drinks alone, and his men go back to talking among themselves.')] }, // N
       ] } },
 
-    { id: 'b01b', se: (st) => st.escolhas.vinho === 'recriminar', zona: 'acampamento', fundo: { img: IMG('b01-panela'), kb: 'in', foco: '50% 50%', dim: .5, clima: 'velas' },
+    { id: 'b01b', se: (st) => st.escolhas.vinho === 'recriminar', zona: 'acampamento', fundo: FD('b01-recusa', '45% 40%', 'velas'),
       texto: [T('A roda para de rir e espera a minha resposta.', 'The ring stops laughing and waits for my answer.')], // N
       escolha: { id: 'ordem', pergunta: T('Joseph', 'Joseph'), opcoes: [
         { id: 'ordem', voz: 'L11c', aviso: T('Joseph vai lembrar disso.', 'Joseph will remember that.'), txt: T('— Estou falando sério, Joseph. É uma ordem.', '— I mean it, Joseph. That’s an order.'),
@@ -433,7 +441,7 @@ window.LIVRO = {
       ] } },
 
     // a lavadeira (só se a Madrinha a mandou para a coluna no Cap. VII)
-    { id: 'b02', se: () => lavadeiraVeio(), zona: 'acampamento', fundo: { img: IMG('b02-lavadeira'), kb: 'in', foco: '50% 45%', dim: .5 },
+    { id: 'b02', se: () => lavadeiraVeio(), zona: 'acampamento', fundo: { img: IMG('b02-lavadeira'), kb: 'in', foco: '60% 40%', dim: .5 },
       texto: [
         T('Na beira do acampamento, a Nymae enche os barris da cozinha com dois baldes pendurados numa vara. A argola de cativa aparece no tornozelo cada vez que ela se abaixa.', 'At the edge of the camp, the Nymae fills the kitchen barrels from two buckets slung on a pole. The captive’s ring shows on her ankle every time she bends.'), // N
         T('Pediu para carregar água, dizem. Uma Nymae carrega água melhor que qualquer um, dizem também. Não vejo sentido: para carregar balde, basta braço forte. E uma Nymae a caminho do deserto… é suicídio.', 'She asked to carry water, they say. A Nymae carries water better than anyone, they say too. I don’t see the sense in it: carrying a bucket takes nothing but a strong arm. And a Nymae on her way into the desert… that’s suicide.'), // N
@@ -445,7 +453,7 @@ window.LIVRO = {
         { id: 'devolver', txt: T('Mandá-la de volta para a Capital na carroça do correio.', 'Send her back to the Capital on the post wagon.'), resultado: [T('De manhã ela vai na carroça do correio, de costas para o deserto, com a vara atravessada no colo.', 'In the morning she goes on the post wagon, her back to the desert, the pole across her lap.')] }, // N
       ] } },
 
-    { id: 'b03', zona: 'deserto', fundo: { img: IMG('b03-borda'), kb: 'out', foco: '50% 55%', dim: .45, clima: 'poeira' },
+    { id: 'b03', zona: 'deserto', fundo: { img: IMG('b03-laura'), kb: 'in', foco: '74% 35%', dim: .4, clima: 'poeira' },
       texto: [
         T('No sexto dia a terra vira areia, e a estrada some embaixo dela. Não faz falta. É o caminho das campanhas, de ida e volta até as Goelas, com os poços marcados por pedra empilhada.', 'On the sixth day the earth turns to sand, and the road disappears beneath it. It doesn’t matter. This is the campaign route, there and back to the Gullets, the wells marked with piled stones.'), // N
         T('Confiro os odres e os barris da carroça da frente com o intendente.', 'I check the waterskins and barrels on the lead wagon with the quartermaster.'), // N
@@ -501,7 +509,7 @@ window.LIVRO = {
       ] },
 
     // o Ansel mostra o chão (ou, se a Laura o matou, um soldado do posto que só ouviu contar)
-    { id: 'd03', zona: 'goelas', fundo: { img: IMG('d03-chao'), kb: 'in', foco: '50% 55%', dim: .5 },
+    { id: 'd03', zona: 'goelas', fundo: { img: IMG('d03-chao'), kb: 'in', foco: '60% 55%', dim: .5 },
       texto: (st) => (anselVivo(st) ? [
         T('Ansel me leva até o meio do pátio, entre o poço e a cerca. Para num lugar onde a areia é igual à do resto.', 'Ansel leads me to the middle of the yard, between the well and the fence. He stops at a place where the sand is like the sand everywhere else.'),
         T('— Aqui, senhora. — Ele aponta um palmo à frente da bota. — Ele caiu aqui. O grande ajoelhou ali. Eu estava no cavalo, perto da porta.', '— Here, my lady. — He points a hand’s width in front of his boot. — He fell here. The big one knelt there. I was on my horse, by the gate.'),
@@ -538,7 +546,7 @@ window.LIVRO = {
     // o túmulo: o segundo disparo. A primeira vez que o nome sai em voz alta.
     { id: 'd05', zona: 'goelas', fundo: { img: IMG('d05-tumulo'), video: 'assets/video/d05-tumulo.mp4', kb: 'in', foco: '50% 40%', dim: .5 }, pico: { bpm: 116, ms: 0 },
       texto: [
-        T('Enterraram meu irmão em cima do muro velho dos Grakh, no lugar mais alto do posto, de onde se vê a roda. Uma pilha de pedras, e o estandarte dele enrolado no cabo, enterrado de pé.', 'They buried my brother on top of the Grakh’s old wall, at the highest point of the post, where you can see the wheel. A pile of stones, and his banner rolled on its staff, buried standing.'), // N
+        T('Enterraram meu irmão em cima do muro velho dos Grakh, no lugar mais alto do posto, de onde se vê a roda. Uma pilha de pedras e o estandarte dele no alto do cabo, enterrado de pé. O vento já rasgou a ponta.', 'They buried my brother on top of the Grakh’s old wall, at the highest point of the post, where you can see the wheel. A pile of stones and his banner high on its staff, buried standing. The wind has already torn its edge.'), // N
         T('Ajoelho ao lado das pedras.', 'I kneel beside the stones.'), // N
         { continuar: true, voz: 'L03' },
         T('— Simon.', '— Simon.'), // N
@@ -556,7 +564,7 @@ window.LIVRO = {
       ] } },
 
     // o pai, se ela desce: Kassian, o General-Rei, que ela conheceu de costas
-    { id: 'd05b', se: (st) => st.escolhas.pai === 'visitar', zona: 'goelas', fundo: { img: IMG('d05-pai'), kb: 'in', foco: '50% 45%', dim: .5 }, sons: [{ s: SFX('vento-ferro'), p: 5, v: .5 }],
+    { id: 'd05b', se: (st) => st.escolhas.pai === 'visitar', zona: 'goelas', fundo: { img: IMG('d05-pai'), kb: 'in', foco: '55% 50%', dim: .5 }, sons: [{ s: SFX('vento-ferro'), p: 5, v: .5 }],
       texto: [
         T('As pedras perderam a cor, e do estandarte sobrou só a ponta de ferro do cabo. Numa pedra lisa, alguém riscou um nome com a ponta de uma faca: Kassian.', 'The stones have lost their colour, and nothing is left of the banner but the iron tip of its staff. On a smooth stone, someone has scratched a name with a knife point: Kassian.'), // N
         T('Redom enterra os seus guerreiros onde caem. Meu pai caiu aqui.', 'Redom buries its warriors where they fall. My father fell here.'), // N
@@ -567,7 +575,7 @@ window.LIVRO = {
       ] },
 
     // Joseph pede para ficar
-    { id: 'd06', zona: 'goelas', fundo: { img: IMG('d06-joseph'), kb: 'in', foco: '50% 40%', dim: .5 },
+    { id: 'd06', zona: 'goelas', fundo: { img: IMG('d06-joseph'), kb: 'in', foco: '65% 40%', dim: .5 },
       texto: [
         T('Joseph me espera perto da roda, de pé, com as duas mãos no cinto para elas não tremerem.', 'Joseph is waiting for me by the wheel, standing, both hands on his belt so they won’t shake.'), // N
         T('— Alteza. Me deixa aqui.', '— Highness. Leave me here.'), // N
@@ -578,14 +586,14 @@ window.LIVRO = {
         T('Ele gira o anel no dedo e espera a minha resposta.', 'He turns the ring on his finger and waits for my answer.'), // N
       ],
       escolha: { id: 'joseph', pergunta: T('Joseph', 'Joseph'), opcoes: [
-        { id: 'ficar', txt: T('Deixar Joseph no posto.', 'Leave Joseph at the post.'),
+        { id: 'ficar', fundo: FD('d06-ficar', '72% 40%'), txt: T('Deixar Joseph no posto.', 'Leave Joseph at the post.'),
           resultado: (st) => [T('— Obrigado, alteza.', '— Thank you, Highness.'), T('Ele tira as mãos do cinto. A direita treme. Ele deixa tremer.', 'He takes his hands off his belt. The right one shakes. He lets it.'),
             st.escolhas.vinho === 'prometer' ? T('— E guarda o vinho, Joseph. Na volta, eu bebo com você.', '— And keep the wine, Joseph. When I’m back, I’ll drink with you.') : null].filter(Boolean) }, // N
-        { id: 'ir', aviso: T('Joseph vai lembrar disso.', 'Joseph will remember that.'), txt: T('Mandar Joseph seguir com a coluna.', 'Order Joseph on with the column.'),
+        { id: 'ir', fundo: FD('d06-ir', '75% 40%'), aviso: T('Joseph vai lembrar disso.', 'Joseph will remember that.'), txt: T('Mandar Joseph seguir com a coluna.', 'Order Joseph on with the column.'),
           resultado: [T('— Às suas ordens, alteza.', '— At your command, Highness.'), T('Ele monta com a mão esquerda e não fala mais até o fim da tarde.', 'He mounts with his left hand and says nothing more until the end of the afternoon.')] }, // N
       ] } },
 
-    { id: 'd07', zona: 'goelas', fundo: { img: IMG('d07-batedores'), kb: 'in', foco: '50% 50%', dim: .5 }, sons: [{ s: SFX('corneta-redom'), p: 4, v: .8 }],
+    { id: 'd07', zona: 'goelas', fundo: { img: IMG('d07-batedores'), kb: 'in', foco: '72% 50%', dim: .5 }, sons: [{ s: SFX('corneta-redom'), p: 4, v: .8 }],
       texto: [
         T('Os batedores voltam no fim da tarde, com os cavalos espumando.', 'The scouts come back at the end of the afternoon, their horses lathered.'), // N
         T('— O Pira está no Último Gole, Lâmina. A três dias daqui, se formos rápidos. Todos: os que lutam, os velhos, as crias. Enchendo odre.', '— The Pyre is at the Last Swallow, Blade. Three days from here, if we’re quick. All of them: the fighters, the old ones, the young. Filling skins.'), // N
@@ -608,7 +616,7 @@ window.LIVRO = {
         T('Os outros seis poços ficam entre a duna e a água, abertos no chão. Um soldado joga uma pedra no mais perto. Ela cai, cai, e não bate em nada.', 'The other six wells lie between the dune and the water, open in the ground. A soldier drops a stone into the nearest. It falls, and falls, and hits nothing.'), // N
       ] },
 
-    { id: 'e02', zona: 'deserto-noite', fundo: { img: IMG('e02-chao'), kb: 'in', foco: '50% 55%', dim: .55 },
+    { id: 'e02', zona: 'deserto-noite', fundo: { img: IMG('e02-chao'), kb: 'in', foco: '72% 55%', dim: .55 },
       texto: [
         T('De madrugada, o guarda do flanco do poente me acorda.', 'Before dawn, the guard on the western flank wakes me.'), // N
         T('— Lâmina. O chão.', '— Blade. The ground.'), // N
@@ -619,7 +627,7 @@ window.LIVRO = {
         ? [T('Três batidas e um silêncio. Três batidas e um silêncio. Cavalo não bate assim, nem homem a pé.', 'Three beats and a silence. Three beats and a silence. Horses don’t beat like that, nor men on foot.')]
         : [T('Alguma coisa bate, longe, do lado do poente. Perco o ritmo no vento.', 'Something is beating, far off, to the west. I lose the rhythm in the wind.')]) },
 
-    { id: 'e02b', zona: 'deserto-noite', fundo: { img: IMG('e02-chao'), kb: 'in', foco: '50% 55%', dim: .55 },
+    { id: 'e02b', zona: 'deserto-noite', fundo: { img: IMG('e02-chao'), kb: 'in', foco: '72% 55%', dim: .55 },
       texto: [T('Levanto a cabeça da areia. O guarda espera a ordem.', 'I lift my head from the sand. The guard waits for the order.')], // N
       escolha: { id: 'vigia', pergunta: T('O poente', 'The west'), opcoes: [
         { id: 'oeste', txt: T('Dobrar a vigia no flanco do poente.', 'Double the watch on the western flank.'), resultado: [T('Cem homens da Terceira dormem de escudo no braço, virados para o poente.', 'A hundred men of the Third sleep with their shields on their arms, facing west.')] }, // N
@@ -637,15 +645,15 @@ window.LIVRO = {
         se(() => varr4() === 'ajudar', T('— Escreveu a resposta no canto da folha para eu copiar. Um Varr paga o que deve. — Ele aperta o meu ombro. — Amanhã eu pago, Laus da Casa Merrow.', '— He wrote the answer in the corner of the page for me to copy. A Varr pays what he owes. — He squeezes my shoulder. — Tomorrow I pay, Laus of House Merrow.')), // N
       ],
       escolha: { id: 'varr8', pergunta: T('O Varr', 'Varr'), opcoes: [
-        { id: 'cancao', voz: 'L12a', txt: T('— Você vai ter a sua canção, e eu vou ter a minha vingança.', '— You’ll have your song, and I’ll have my revenge.'),
+        { id: 'cancao', voz: 'L12a', fundo: FD('e03-cancao', '50% 40%', 'velas'), txt: T('— Você vai ter a sua canção, e eu vou ter a minha vingança.', '— You’ll have your song, and I’ll have my revenge.'),
           resultado: [T('— Então amanhã cada um busca o seu. — Ele ri baixo, para não acordar os cavalos.', '— Then tomorrow we each go get ours. — He laughs low, so as not to wake the horses.')] }, // N
-        { id: 'dois-mil', voz: 'L12b', txt: T('— Não existe canção para dois mil homens, Varr.', '— There’s no song for two thousand men, Varr.'),
+        { id: 'dois-mil', voz: 'L12b', fundo: FD('e03-mao-solta', '60% 40%', 'velas'), txt: T('— Não existe canção para dois mil homens, Varr.', '— There’s no song for two thousand men, Varr.'),
           resultado: [T('— Para dois mil, não. — Ele tira a mão do meu ombro. — Para um Varr, cabe.', '— Not for two thousand. — He takes his hand off my shoulder. — For one Varr, there’s room.')] }, // N
-        { id: 'foco', voz: 'L12c', txt: T('— Concentre-se na batalha.', '— Keep your mind on the battle.'),
+        { id: 'foco', voz: 'L12c', fundo: FD('e03-mao-solta', '60% 40%', 'velas'), txt: T('— Concentre-se na batalha.', '— Keep your mind on the battle.'),
           resultado: [T('— Sim, Lâmina.', '— Yes, Blade.'), T('Ele bate no peito uma vez, com o punho fechado.', 'He strikes his chest once, with a closed fist.')] }, // N
       ] } },
 
-    { id: 'e03b', zona: 'deserto-noite', fundo: { img: IMG('e03-varr'), kb: 'in', foco: '50% 40%', dim: .5, clima: 'velas' },
+    { id: 'e03b', zona: 'deserto-noite', fundo: FD('e03b-terceira', '65% 55%', 'velas'),
       texto: [T('Ele levanta, bate a areia da roupa e vai dormir com a Terceira, no chão, do jeito deles.', 'He gets up, beats the sand off his clothes and goes to sleep with the Third, on the ground, their way.')] }, // N
 
     { id: 'e04', zona: 'tenda', fundo: { img: IMG('e04-tenda'), kb: 'in', foco: '50% 50%', dim: .5, clima: 'velas' },
@@ -660,7 +668,7 @@ window.LIVRO = {
       ] },
 
     // o amanhecer: apontar alguém na fila. Se ela já fugiu da corrente, sobe de dentro de um poço seco.
-    { id: 'e05', se: (st) => !fugiu(st), zona: 'amanhecer', fundo: { img: IMG('e05-fila'), kb: 'in', foco: '50% 45%', dim: .45 },
+    { id: 'e05', se: (st) => !fugiu(st), zona: 'amanhecer', fundo: { img: IMG('e05-fila'), kb: 'in', foco: '55% 45%', dim: .45 },
       texto: [
         T('Antes da carga, mando a coluna formar na crista da duna, de frente para o vale. Os servos, na frente da coluna, numa fila só, de costas para o Pira.', 'Before the charge, I order the column to form up on the crest of the dune, facing the valley. The servants in front of the column, in a single line, their backs to the Pyre.'), // N
         (st) => T('Ando diante da fila. Os moços da estrebaria. O ferreiro e o ajudante. As moças da cozinha. As ajudantes do curandeiro.', 'I walk along the line. The stable boys. The smith and his boy. The kitchen girls. The healer’s helpers.') + (lavNaColuna(st) ? T(' A Nymae, no fim.', ' The Nymae, at the end.') : ''), // N
@@ -669,7 +677,7 @@ window.LIVRO = {
       ],
       escolha: { id: 'desmascarar', pergunta: T('A fila', 'The line'), opcoes: (st) => opcoesFila(st) } },
 
-    { id: 'e05f', se: (st) => fugiu(st), zona: 'amanhecer', fundo: { img: IMG('e05-fila'), kb: 'in', foco: '50% 45%', dim: .45 },
+    { id: 'e05f', se: (st) => fugiu(st), zona: 'amanhecer', fundo: { img: IMG('e05-fila'), kb: 'in', foco: '55% 45%', dim: .45 },
       texto: [
         T('Antes da carga, mando a coluna formar na crista da duna, de frente para o vale.', 'Before the charge, I order the column to form up on the crest of the dune, facing the valley.'), // N
         T('Lá embaixo, entre a duna e o Pira, uma coisa pequena sobe de dentro de um dos poços secos. Não está com a roupa que deixou na corrente: arrumou outra. Fica de pé na borda, de frente para nós, e abre as mãos.', 'Down below, between the dune and the Pyre, something small climbs out of one of the dry wells. It isn’t wearing the clothes it left in the chain: it found others. It stands on the rim, facing us, and opens its hands.'), // N
@@ -682,7 +690,7 @@ window.LIVRO = {
       cartao: { num: 'VI', nome: T('O Dia Comido', 'The Eaten Day'), epigrafe: T('Dia ser comido, Maior nascer.', 'Day be eaten, Biggest be born.'), fonte: T('Dito dos velhos Grakh', 'Saying of the old Grakh') } },
 
     // ---------- rota A: desmascarada ao amanhecer
-    { id: 'f01a', se: (st) => st.f.desmascarou === 'certo', zona: 'amanhecer', fundo: { img: IMG('f-rosto'), video: 'assets/video/f-rosto.mp4', kb: 'in', foco: '50% 40%', dim: .45 }, sons: [{ s: SFX('rosto-escorrega'), p: 0, v: .8 }],
+    { id: 'f01a', se: (st) => st.f.desmascarou === 'certo', zona: 'amanhecer', fundo: { img: IMG('f-rosto'), video: 'assets/video/f-rosto.mp4', kb: 'in', foco: '48% 35%', dim: .45 }, sons: [{ s: SFX('rosto-escorrega'), p: 0, v: .8 }],
       texto: [
         T('O rosto escorrega.', 'The face slips.'), // N
         T('Primeiro a pele do pescoço, em placas finas, azul-cinza. Depois as orelhas, que descolam da cabeça e abrem em nadadeira. O corpo encolhe dentro da roupa de servo até a manga cobrir a mão. Os dois soldados soltam os braços ao mesmo tempo.', 'First the skin of the neck, in thin blue-grey plates. Then the ears, which peel away from the head and open into fins. The body shrinks inside the servant’s clothes until the sleeve covers the hand. The two soldiers let go of the arms at the same moment.'), // N
@@ -695,7 +703,7 @@ window.LIVRO = {
         T('— E a Boca Seca bebe todos.', '— And the Dry Mouth drinks them all.'), // N
       ] },
 
-    { id: 'f02a', se: (st) => rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), video: 'assets/video/f-onda.mp4', kb: 'in', foco: '50% 45%', dim: .4 },
+    { id: 'f02a', se: (st) => rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), video: 'assets/video/f-onda.mp4', kb: 'in', foco: '78% 45%', dim: .4 },
       sons: [{ s: SFX('onda-gigante'), ms: 400, v: 1 }, { fx: 'tremor', ms: 900, dur: 2400, forca: 1.4 }, { voz: 'L14', p: 2 }, { fx: 'agua', p: 4, dur: 2600 }, { s: SFX('gritos-longe'), p: 6, v: .6 }],
       texto: [
         T('No vale, o poço que brilhava apaga.', 'In the valley, the well that was shining goes dark.'), // N
@@ -708,7 +716,7 @@ window.LIVRO = {
       ] },
 
     // ---------- rota B: Redom ataca, e a água vem no meio da carga
-    { id: 'f01b', se: (st) => !rotaA(st), zona: 'batalha', fundo: { img: IMG('f-carga'), video: 'assets/video/f-carga.mp4', kb: 'in', foco: '50% 50%', dim: .45 },
+    { id: 'f01b', se: (st) => !rotaA(st), zona: 'batalha', fundo: { img: IMG('f-carga'), video: 'assets/video/f-carga.mp4', kb: 'in', foco: '72% 40%', dim: .45 },
       sons: [{ s: SFX('corneta-redom'), ms: 300, v: .9 }, { s: SFX('carga-cavalaria'), ms: 1200, v: .9 }, { fx: 'tremor', ms: 1400, dur: 3000, forca: .5 }, { voz: (st) => (st.escolhas.pai === 'visitar' ? 'L17b' : 'L17a'), p: 3 }],
       texto: [
         T('Dou a ordem. A coluna desce a duna, a cavalaria pelos flancos e a Terceira pelo meio, entre os poços secos, na direção da água.', 'I give the order. The column goes down the dune, the cavalry on the flanks and the Third through the middle, between the dry wells, toward the water.'), // N
@@ -718,7 +726,7 @@ window.LIVRO = {
         T('Estamos a cem passos do poço quando a água dele se levanta.', 'We are a hundred paces from the well when its water stands up.'), // N
       ] },
 
-    { id: 'f02b', se: (st) => !rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), video: 'assets/video/f-onda.mp4', kb: 'in', foco: '50% 45%', dim: .4 },
+    { id: 'f02b', se: (st) => !rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), video: 'assets/video/f-onda.mp4', kb: 'in', foco: '78% 45%', dim: .4 },
       sons: [{ s: SFX('onda-gigante'), p: 0, v: 1 }, { fx: 'agua', p: 1, dur: 2600 }, { fx: 'tremor', p: 1, dur: 2400, forca: 1.5 }, { s: SFX('gritos-longe'), p: 2, v: .6 }],
       texto: [
         T('A água sai do poço em pé, mais alta que a duna, e cai sobre a carga.', 'The water comes out of the well standing up, taller than the dune, and falls on the charge.'), // N
@@ -746,7 +754,7 @@ window.LIVRO = {
         T('Que merda está acontecendo?!', 'What the hell is happening?!'), // N
       ] },
 
-    { id: 'f04', zona: 'batalha', fundo: { img: IMG('f-pira'), video: 'assets/video/f-pira.mp4', kb: 'in', foco: '50% 50%', dim: .45 }, sons: [{ s: SFX('tambores-guerra'), p: 0, v: .9 }, { s: SFX('grakh-grito'), p: 1, v: .8 }, { voz: (st) => (!rotaA(st) ? null : st.escolhas.pai === 'visitar' ? 'L17b' : 'L17a'), p: 2 }],
+    { id: 'f04', zona: 'batalha', fundo: { img: IMG('f-pira'), video: 'assets/video/f-pira.mp4', kb: 'in', foco: '65% 40%', dim: .45 }, sons: [{ s: SFX('tambores-guerra'), p: 0, v: .9 }, { s: SFX('grakh-grito'), p: 1, v: .8 }, { voz: (st) => (!rotaA(st) ? null : st.escolhas.pai === 'visitar' ? 'L17b' : 'L17a'), p: 2 }],
       texto: [
         (st) => (rotaA(st)
           ? [T('Lá embaixo, o Pira viu a água bater em nós e o bronze descer do poente. Os Grakh sobem a duna. Na frente deles, um mais alto que todos, com uma maça.', 'Down below, the Pyre saw the water hit us and the bronze come down from the west. The Grakh climb the dune. In front of them, one taller than all the rest, with a mace.'),
@@ -771,7 +779,7 @@ window.LIVRO = {
       ] },
 
     // a conjuradora: o Varr
-    { id: 'f05', zona: 'batalha', fundo: { img: IMG('f-varr'), video: 'assets/video/f-varr.mp4', kb: 'in', foco: '50% 50%', dim: .45 },
+    { id: 'f05', zona: 'batalha', fundo: { img: IMG('f-varr'), video: 'assets/video/f-varr.mp4', kb: 'in', foco: '80% 35%', dim: .45 },
       sons: [{ s: SFX('chicote-agua'), p: 0, v: .9 }, { fx: 'clarao', p: 0, dur: 400 }, { s: SFX('chicote-agua'), p: 1, v: .9 }, { s: SFX('golpe'), p: 4, v: .9 }, { s: SFX('golpe'), p: 6, v: 1 }, { fx: 'tremor', p: 6, dur: 600, forca: .9 }, { s: SFX('varr-grito'), p: 7, v: .8 }],
       texto: [
         (st) => {
@@ -788,7 +796,7 @@ window.LIVRO = {
         T('O Varr ergue a espada e grita o próprio nome para um lado do vale, depois para o outro.', 'Varr raises his sword and shouts his own name to one side of the valley, then to the other.'), // N
       ] },
 
-    { id: 'f06', zona: 'duelo', fundo: { img: IMG('f-kronk'), video: 'assets/video/f-kronk.mp4', kb: 'in', foco: '50% 40%', dim: .45 }, sons: [{ s: SFX('passos-pesados'), p: 0, v: .9 }, { fx: 'tremor', p: 3, dur: 500, forca: .4 }, { s: SFX('espada-desembainha'), p: 5, v: .9 }],
+    { id: 'f06', zona: 'duelo', fundo: { img: IMG('f-kronk'), video: 'assets/video/f-kronk.mp4', kb: 'in', foco: '52% 40%', dim: .45 }, sons: [{ s: SFX('passos-pesados'), p: 0, v: .9 }, { fx: 'tremor', p: 3, dur: 500, forca: .4 }, { s: SFX('espada-desembainha'), p: 5, v: .9 }],
       texto: [
         T('Não vejo mais a conjuradora. Vejo o grande vindo na minha direção, e os meus homens saindo do caminho dele, porque quem não sai cai. E porque eles sabem que eu quero ele.', 'I can’t see the conjurer any more. I see the big one coming my way, and my men getting out of his path, because whoever doesn’t, falls. And because they know I want him.'), // N
         T('Desço do cinzento e dou um tapa na anca dele. Ele corre para trás da duna. A pé eu leio melhor.', 'I get down from the grey and slap his haunch. He runs for the back of the dune. On foot I read better.'), // N
@@ -823,7 +831,7 @@ window.LIVRO = {
         T('— Eclipse! Eclipse!', '— Eclipse! Eclipse!'), // N
       ] },
 
-    { id: 'f07b', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-eclipse'), video: 'assets/video/f-eclipse.mp4', kb: 'in', foco: '50% 40%', dim: .55 },
+    { id: 'f07b', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-eclipse-luta'), video: 'assets/video/f-eclipse-luta.mp4', kb: 'in', foco: '50% 40%', dim: .55 },
       texto: [
         T('Me viro para eles com a espada no alto.', 'I turn toward them with my sword held high.'), // N
         { continuar: true, voz: 'L04', fx: [{ fx: 'clarao', ms: 200, dur: 500 }] },
@@ -833,7 +841,7 @@ window.LIVRO = {
       ] },
 
     // o Maior: o terceiro disparo
-    { id: 'f08', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-maior'), video: 'assets/video/f-maior.mp4', kb: 'in', foco: '50% 40%', dim: .5 }, pico: { bpm: 166, ms: 0 },
+    { id: 'f08', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-maior'), video: 'assets/video/f-maior.mp4', kb: 'in', foco: '55% 40%', dim: .5 }, pico: { bpm: 166, ms: 0 },
       sons: [{ fx: 'tremor', p: 0, dur: 1600, forca: 1.3 }, { s: SFX('maior-chega'), p: 0, v: 1 }, { s: SFX('maior-riso'), p: 3, v: 1 }],
       texto: [
         T('Em pé, entre mim e o Grakh caído, no escuro do dia que virou noite, tem um Grakh que eu nunca vi. Uma aberração.', 'Standing between me and the fallen Grakh, in the dark of the day turned to night, is a Grakh I have never seen. An abomination.'), // N
@@ -846,7 +854,7 @@ window.LIVRO = {
         T('Os Grakh param de lutar. Olham para ele, batem no peito e gritam uma palavra que eu conheço dos prisioneiros: o Maior.', 'The Grakh stop fighting. They look at him, beat their chests and shout a word I know from prisoners: the Biggest.'), // N
       ] },
 
-    { id: 'f09', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-maior'), video: 'assets/video/f-maior.mp4', kb: 'in', foco: '50% 40%', dim: .55 }, sons: [{ voz: 'L18', p: 1 }],
+    { id: 'f09', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-maior'), video: 'assets/video/f-maior.mp4', kb: 'in', foco: '55% 40%', dim: .55 }, sons: [{ voz: 'L18', p: 1 }],
       texto: [
         (st) => (rotaA(st) ? T('Na crista, os arcos ainda são muitos.', 'On the crest, there are still many bows.') : T('Na crista, sobraram poucos arcos.', 'On the crest, few bows are left.')), // N
         T('— Arqueiros! Comigo!', '— Archers! On me!'), // N
@@ -877,7 +885,7 @@ window.LIVRO = {
         T('No chão, o meu sangue e o dele secam juntos.', 'On the ground, my blood and his are drying together.'), // N
       ] },
 
-    { id: 'f11', zona: 'depois', fundo: { img: IMG('f-conta'), kb: 'in', foco: '50% 50%', dim: .5 },
+    { id: 'f11', zona: 'depois', fundo: { img: IMG('f-conta'), kb: 'in', foco: '55% 40%', dim: .5 },
       texto: [
         T('Os que conseguem levantar, levantam. Ando entre eles e encosto a mão em cada um.', 'Those who can get up, get up. I walk among them and put my hand on each one.'), // N
       ],
@@ -888,12 +896,17 @@ window.LIVRO = {
           T('O Varr, com a cabeça enfaixada num pedaço da própria capa, conta a morte da bruxa a quem quiser ouvir. Quando acaba, começa outra vez. Ninguém ri.', 'Varr, his head bound in a strip of his own cloak, tells the death of the witch to anyone who will listen. When he finishes, he starts again. Nobody laughs.')]; // N
       } },
 
-    { id: 'f12', zona: 'goelas', fundo: { img: IMG('f-recuo'), video: 'assets/video/f-recuo.mp4', kb: 'out', foco: '50% 50%', dim: .5 }, fim: true,
+    { id: 'f12', zona: 'goelas', fundo: { img: IMG('f-recuo'), video: 'assets/video/f-recuo.mp4', kb: 'out', foco: '50% 50%', dim: .5 },
       texto: [
         T('Voltamos para as Goelas a pé. Os cavalos que sobraram carregam os que não andam. Do caminho, só lembro do sol e da areia.', 'We go back to the Gullets on foot. The horses that are left carry those who can’t walk. Of the way, I only remember the sun and the sand.'), // N
+      ] },
+
+    { id: 'f13', zona: 'goelas', fundo: (st) => (josephVeio(st) ? FD('f13-posto', '75% 45%') : FD('f13-joseph', '50% 45%')), fim: true,
+      texto: [
         (st) => (josephVeio(st) ? T('Na porta da cerca, os trinta e um do posto esperam os que voltam.', 'At the fence gate, the thirty-one of the post wait for those who come back.')
           : T('Joseph está na porta da cerca, com as duas mãos no cinto. Olha cada um que entra. Quando passa o último, ele continua esperando mais um, que não vem.', 'Joseph is at the fence gate, both hands on his belt. He looks at each man who comes in. When the last one has passed, he keeps waiting for one more, who doesn’t come.')), // N
-        T('Alguém põe uma tigela na minha mão. Está cheia.', 'Someone puts a bowl in my hand. It’s full.'), // N
+        (st) => (josephVeio(st) ? T('Alguém põe uma tigela na minha mão. Está cheia.', 'Someone puts a bowl in my hand. It’s full.')
+          : T('Ele vem até mim e põe uma tigela na minha mão, sem dizer nada. Está cheia.', 'He comes to me and puts a bowl in my hand without a word. It’s full.')), // N
         { continuar: true, voz: 'L06' },
         T('Seguro a tigela. Na Capital, minha mãe vai contar vinte e uma.', 'I hold the bowl. In the Capital, my mother will count twenty-one.'), // N
       ] },

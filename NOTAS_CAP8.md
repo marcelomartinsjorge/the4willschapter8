@@ -218,3 +218,27 @@ Três rotas jogadas do começo ao fim no navegador, sem erro de JavaScript: **A*
 - Toda a mídia nova: ver **MIDIAS_CAP8.md** (fichas, imagens, 15 vídeos, 22 sons novos, 31 falas).
 - Sprites da Laura aos 36 e do Maior: quando chegarem, eu acerto o eixo e a base das poses no `duelo8.js`.
 - **Cap. IX:** o botão do fim continua sem link.
+
+### Atualização das ferramentas (13/11/2026, mais tarde)
+O `MIDIAS_CAP8.md` foi refeito com as ferramentas atuais: **Flow com Personagens (`@nome`) + Nano Banana** para imagens, **Omni Flash (Frames/Ingredientes)** para vídeo, **ElevenLabs Eleven v4** para as falas (tags livres, sem SSML, dá para gerar direto em pt-BR) e **Sound Effects v3** para os sons. A pesquisa anterior estava desatualizada (Veo 3.1, Eleven v3).
+
+### Mais imagens nos ramos (13/11/2026)
+Você apontou, com razão, que a conversa da Justine ficava presa numa imagem só. Agora **cada ramo que muda a cena tem a sua imagem**, e o jogo troca sozinho no momento da escolha (as imagens de ramo aparecem na hora em que o jogador responde):
+- **Justine:** a cena virou 4 páginas (a02 ela sozinha escrevendo → a02a as duas lado a lado, de mãos dadas → a02b a promessa → a02c a porta) mais as imagens dos finais: o **beijo** (Prometo) e a **saída fria** (Não prometo ou o dever).
+- **Mãe:** mãos dadas (qualquer resposta) e o corredor (a promessa de comer ou rezar).
+- **Markus:** levar a espada (ele entrega a lâmina) × deixar (ele a segura como numa vigília).
+- **Joseph na estrada:** brinde × recusa × bebe sozinho. **Joseph no posto:** fica × vai.
+- **Varr:** a canção e a vingança × a mão que se solta; e ele indo dormir com a Terceira (e03b).
+- **O fim:** a página final (f12) virou duas: a volta (f12, com vídeo) e o portão com a tigela (f13), com uma imagem se o Joseph voltou e outra se ele ficou.
+Total: **18 imagens novas** (todas no `MIDIAS_CAP8.md`, com personagem entre parênteses e o `@` do Flow). Até chegarem, o jogo mostra uma tela escura com o nome do arquivo. Rotas A, B e C jogadas de novo sem erro.
+
+### As imagens chegaram (13/11/2026, noite)
+64 imagens instaladas, em 1920 px. O que mudou por causa delas:
+- **b03** usa a Laura diante das dunas (`b03-laura`). **f07b** usa a luta no eclipse (`f-eclipse-luta`, com vídeo opcional novo). `og-cover` virou a capa.
+- **Texto ajustado à imagem:**
+  - O quarto da Nymae tem **um catre**, não uma esteira (texto da página e do minijogo).
+  - No túmulo do Simon, o estandarte está **no alto do cabo, com a ponta rasgada pelo vento**, não enrolado.
+  - No fim, na rota em que o Joseph ficou no posto, é **ele** quem põe a tigela na mão dela ("Ele vem até mim e põe uma tigela na minha mão, sem dizer nada").
+- **Minijogo "O quarto dela":** os pontos foram reposicionados em cima do catre, da bacia, da janela e da laje iluminada. O palco agora tem a proporção da imagem: no computador cobre a tela, no celular em pé aparece inteiro, e os pontos não saem do lugar.
+- **Enquadramento:** o ponto de foco de cada imagem foi acertado para o personagem não ser cortado no celular.
+- **Faltam:** `duelo-fundo` (a atual é do Cap. VI), `codex-picos-de-cinza` (hoje é cópia), os sprites, os vídeos, os sons e as falas. Opcionais: refazer `f-eclipse` (inimigos em fila no meio de Redom) e a maça do Kronk (de ferro em vez de pedra).

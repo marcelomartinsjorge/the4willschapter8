@@ -6,28 +6,54 @@ Este é o capítulo-auge. Tudo aqui foi pensado para parecer cinema: a imagem pa
 
 ---
 
+## ✅ Situação em 13/11/2026 (o que já está no livro e o que falta)
+
+**Imagens das páginas: prontas e já instaladas (64).** Todas as imagens da §2 que você gerou estão no pacote, em 1920 px. O texto foi ajustado onde a imagem pedia (ver as notas). Duas extras entraram:
+- `b03-laura.jpg` (a sua Laura parada diante das dunas): virou a imagem da página **b03**, "No sexto dia a terra vira areia". A `b03-borda` continua no cartão da Parte II.
+- `f-eclipse-luta.jpg` (a luta continuando no escuro): virou a imagem da página **f07b**, "Firmes! É só o escuro! Segurem a linha!". A `f-eclipse` ficou só no **f07**, o instante em que todo mundo olha para cima.
+- `og-cover.jpg` (a imagem que aparece quando alguém compartilha o link) agora é a sua capa.
+
+**Imagens que ainda faltam** (todas com prompt neste arquivo):
+| Arquivo | Onde | Por quê |
+|---|---|---|
+| `duelo-fundo.jpg` ⭐ | fundo do duelo contra o Kronk | a atual é a do Cap. VI (o pé gigante e o jarro). Prompt na §2, "Fundos dos minijogos". |
+| `codex-picos-de-cinza.jpg` ◻ | verbete novo do codex | hoje é uma cópia da imagem das Goelas. Prompt na §2, "Codex". |
+| Sprites da Laura aos 36 ⭐ | duelo e Maior | §4.1. Hoje são poses provisórias. |
+| Sprites do Maior ⭐ | luta contra o Maior | §4.3. Hoje é o Kronk pintado de cinza. |
+O resto do codex, os retratos de `rostos/` e o `maior-fundo` vêm dos capítulos anteriores e servem.
+
+**Refazer só se você quiser (◻, nada quebra):**
+- `f-eclipse.jpg`: os Grakh e os homens de bronze aparecem de pé, em fila, no meio dos soldados de Redom, todos de costas e calmos, como se fossem um exército só. Como agora é só o instante em que todos olham o céu, passa. Se refizer, peça só soldados de Redom, ou os três grupos separados olhando para cima.
+- `f-pira.jpg` e `f-kronk.jpg`: a maça do Kronk saiu de ferro com espetos. No Cap. VI (e nos sprites do duelo) ela é de **pedra escura enrolada em couro**. Quem jogou o VI pode notar.
+- `a05-markus`, `a05-levar`, `a05-deixar`: o peito do Markus tem a balança com espada. Na ficha do Cap. VII ele usa a **estrela de oito pontas dourada** da Cavalaria. Está coerente entre as três imagens, então só mude se quiser alinhar com o VII.
+
+**Ainda por fazer:** os 16 vídeos (§5, agora com o `f-eclipse-luta`), os sons novos (§6) e as 31 falas da Laura (§7).
+
+---
+
 ## 0. Como usar este arquivo
 
 ### 0.1 Que ferramenta para quê
 | O quê | Ferramenta | Por quê |
 |---|---|---|
 | Imagem **sem** personagem importante (lugar, objeto, figurante) | **GPT (ChatGPT Images)** | segue texto longo muito bem, ótimo em cenário |
-| Imagem **com** Laura, Justine, Markus, Joseph, Varr, Dolores, a Madrinha, o Kronk ou o Maior | **Flow** (Nano Banana + **Ingredientes**) | segura o rosto e o corpo pela ficha |
-| Vídeo de fundo | **Flow · Veo 3.1 · Frames to Video** | o primeiro quadro é a imagem da página: o vídeo nasce colado nela |
-| Efeitos sonoros e loops | **ElevenLabs · Sound Effects** | duração, loop e "prompt influence" controláveis |
-| Dublagem da Laura | **ElevenLabs · Eleven v3** com tags de áudio | emoção por tag, como no seu exemplo |
+| Imagem **com** Laura, Justine, Markus, Joseph, Varr, Dolores, a Madrinha, o Kronk ou o Maior | **Flow · Nano Banana** (o mais novo que o seu Flow oferecer) com **Personagens** (`@nome`) | segura o rosto e o corpo pela ficha cadastrada |
+| Vídeo de fundo | **Flow · Omni Flash** (modo Frames; Ingredientes/Personagens quando precisar) | o primeiro quadro é a imagem da página: o vídeo nasce colado nela |
+| Efeitos sonoros e loops | **ElevenLabs · Sound Effects v3** | duração, loop e "prompt influence" controláveis |
+| Dublagem da Laura | **ElevenLabs · Eleven v4** com tags de áudio | emoção por tag, como no seu exemplo |
 
 ### 0.2 As regras deste capítulo
 - **No máximo 3 personagens nítidos por imagem ou vídeo.** Exército, fila, multidão: sempre ao longe, pequenos, sem rosto, em poeira ou contraluz. Todo prompt abaixo já respeita isso.
 - **Sem violência explícita.** Nada de sangue jorrando, corte aberto, corpo partido ou cabeça aberta na tela. A violência fica no texto e no som; a imagem mostra o antes, o depois e o rosto de quem vê. Onde a cena é pesada (Joseph, a morte da Madrinha), a imagem mostra outra coisa de propósito.
 - **Quem está na imagem** vem marcado na linha **Personagens:** e, dentro do prompt, cada um aparece com o nome e a descrição completa entre parênteses. Não corte a descrição: é ela que segura o rosto, junto com o ingrediente.
 - **O lado do texto:** o painel de texto fica à **esquerda**. O assunto vai no **centro-direita**, salvo nota.
+- **Regra do capítulo:** se uma escolha muda o que acontece na cena, ela tem a **sua própria imagem**. Não se reaproveita a mesma imagem para ramos diferentes.
 - ⭐ = o capítulo perde muito sem isto · ◻ = melhora, mas a provisória segura · 🔀 = só aparece em algumas rotas.
 
 ### 0.3 Como o prompt de imagem foi montado (o que a pesquisa recomenda)
 **GPT:** cena e lugar → sujeito → detalhe e textura → linguagem de câmera (lente, ângulo, profundidade de campo) → luz → a palavra *photorealistic* → as proibições no fim (*no text, no watermark*). Frases completas funcionam melhor que lista de palavras-chave.
 
-**Flow (Nano Banana com Ingredientes):** anexe as fichas da §1 como ingredientes (até 3). O prompt descreve **o que acontece entre eles e onde**, não a aparência (a aparência vem da ficha). Mesmo assim, a descrição curta entre parênteses ajuda a não trocar um pelo outro.
+**Flow (Nano Banana + Personagens):** cadastre as fichas da §1 como **Personagens** no Flow, com o nome indicado (`Laura`, `LauraArmor`, `Varr`, `Maior`…). No prompt, digite `@` e escolha o personagem **no lugar do nome** (`@Laura` onde o texto diz *Laura D’Orrose*), e **mantenha a descrição entre parênteses**: ela ajuda a não trocar um pelo outro. O prompt descreve **o que acontece entre eles e onde**. Cena com dois personagens: dois `@`. Fundo liso nas fichas ajuda.
 
 **Formato:** 16:9, 1920×1080, `.jpg`. Retratos `rostos/` em 3:4 (900×1200). Codex em 16:9.
 
@@ -36,25 +62,30 @@ Este é o capítulo-auge. Tudo aqui foi pensado para parecer cinema: a imagem pa
 text, subtitles, captions, watermark, logo, signature, cartoon, anime, painting, illustration, 3d render, plastic skin, extra fingers, deformed hands, fused fingers, modern objects, electric light, glasses, zippers, gore, open wounds, dismemberment, blood spray, duplicate person, crowd of detailed faces
 ```
 
-### 0.4 Como o prompt de vídeo foi montado (Veo 3.1)
-Fórmula do guia do Google: **[câmera e movimento] + [sujeito] + [ação] + [lugar e luz] + [estilo] + [áudio]**. No livro o vídeo toca **mudo e em loop** (o som é do jogo), então:
-1. No Flow, escolha **Frames to Video**. **Primeiro quadro = a imagem `.jpg` da mesma página.** Para um loop limpo, use **a mesma imagem como último quadro** quando o prompt diz "loop".
-2. 16:9, **8 s**, qualidade máxima. Se o resultado for melhor que 8 s de material, use **Extend**.
-3. Todo prompt termina com o mesmo bloco de proibição (já incluído): *no dialogue, no music, no subtitles, no on-screen text, no cuts*.
-4. Exporte `.mp4` (H.264) **e** `.webm` com o mesmo nome. O código usa o `.mp4` e cai para o `.webm` sozinho. Pasta: `assets/video/`.
-5. **Movimento lento é o que vende.** Push-in, dolly lateral, paralaxe de poeira. Câmera nervosa fica só nas cenas de batalha marcadas.
+### 0.4 Como o prompt de vídeo foi montado (Omni Flash no Flow)
+Fórmula: **[câmera e movimento] + [sujeito] + [ação] + [lugar e luz] + [estilo]**, em frases completas. O Omni Flash gera **o som junto** com o vídeo, mas no livro o vídeo toca **mudo e em loop** (o som é do jogo), então os prompts não descrevem áudio. O guia do Google para o Omni Flash recomenda:
+1. **Uma tomada só.** O modelo pode inventar vários planos por conta própria; por isso todo prompt termina com *Single continuous shot, no scene cuts.* O negativo é uma frase simples no próprio prompt (*no dialogue, no music, no subtitles, no on-screen text*); não existe campo de negativo.
+2. **Modo Frames:** no Flow, **Vídeo → Frames**, ponha a **imagem `.jpg` da página** em *Add start frame* e descreva a ação. Como a imagem já nasceu com o personagem (Nano Banana + `@Personagem`), o rosto vem preso no primeiro quadro. **Para loop limpo**, ponha **a mesma imagem também em *Add end frame***. (Frames não combina com Personagens: é um ou outro.)
+3. **Modo Ingredientes (só se o personagem se mexer muito, virar de costas ou o rosto derivar no Frames):** **Vídeo → Ingredientes**, adicione a imagem da página e digite `@Personagem` no prompt, dizendo como ele aparece. Ingredientes e Personagens dividem o limite de referências (7 no Omni 1.1, 10 no 1.2).
+4. **Duração:** o Omni 1.1 gera 4, 6, 8 ou 10 s; o Omni 1.2 gera de 3 a 15 s. Use **8 s** (10 s nos de câmera lenta). Para mais, use **Extend** (cerca de 10 s por vez, até 40 s).
+5. 16:9, na resolução mais alta que o seu plano der (720p é o padrão).
+6. Para marcar o tempo, o modelo entende *"after 3 seconds, …"* ou *[0-3s] …*.
+7. Exporte `.mp4` (H.264) **e** `.webm` com o mesmo nome. O código usa o `.mp4` e cai para o `.webm` sozinho. Pasta: `assets/video/`.
+8. **Movimento lento é o que vende.** Push-in, dolly lateral, paralaxe de poeira. Câmera nervosa só nas cenas de batalha marcadas.
+*Os nomes dos modelos mudam depressa: se o seu menu mostrar uma versão mais nova do Omni Flash, use a mais nova.*
 
-### 0.5 Como o prompt de som foi montado (ElevenLabs Sound Effects)
-Diga **a ação, o lugar e o "desempenho"** (peso, distância, textura). Use os termos que o modelo conhece: *impact, whoosh, braam, drone, ambience, riser, sub-bass, debris, tail*. Cada item traz **duração**, **loop** (sim/não) e **prompt influence** (alta = segue o texto à risca; baixa = mais criativo). Gere 4 variações e escolha a melhor. Exporte `.mp3`, normalize em -14 LUFS para os loops e -10 LUFS para os impactos.
+### 0.5 Como o prompt de som foi montado (ElevenLabs Sound Effects v3)
+Diga **a ação, o lugar, a atmosfera e o "desempenho"** (peso, distância, textura), e descreva os eventos **em ordem**. A escolha das palavras importa. **Contagens exatas** ("bata 4 vezes") nem sempre são seguidas. Termos que o modelo conhece: *impact, whoosh, braam, drone, ambience, riser, sub-bass, debris, tail, loop*. Cada item traz **duração** (0,1 a 30 s), **loop** (sim/não) e **prompt influence** (alta = segue o texto à risca; baixa = mais criativo). Fixe o modelo em **SFX v3** (o v2 sai do ar em março de 2027). Gere 4 variações e escolha a melhor. Exporte `.mp3`, normalize em -14 LUFS para os loops e -10 LUFS para os impactos.
 
-### 0.6 Como a dublagem foi montada (Eleven v3)
-Só a **Laura** é dublada. As tags entre colchetes vêm **antes** do trecho que elas colorem. Reticências viram pausa; MAIÚSCULAS viram ênfase. Gere com **Stability: Creative** para as falas emocionais e **Natural** para as de comando. Um arquivo por fala, `assets/audio/voz/<código>.mp3`. A versão em português usa o mesmo código com sufixo `-pt` (ex.: `L08a-pt.mp3`) se você fizer as duas línguas.
+### 0.6 Como a dublagem foi montada (Eleven v4)
+Só a **Laura** é dublada. No Eleven v4 as **tags entre colchetes são texto livre** e vão **antes ou logo depois** do trecho que colorem; use **uma emoção por frase** (emoções opostas na mesma frase perdem precisão). Famílias que funcionam: **emoção** (`[sad]`, `[furious]`, `[tired]`), **entrega** (`[whispers]`, `[shouts]`, `[rushed]`, `[slowly]`), **reações** (`[sighs]`, `[gasps]`), **pausas** (`[pause]`, `[long pause]`). Não existe SSML nem controle de velocidade: o ritmo vem de **reticências** (batida curta), **tags de pausa** e **MAIÚSCULAS** para ênfase; um hífen corta a fala. Se uma tag virar som em vez de interpretação, descreva a voz em palavras (*a low, gravelly voice*). Tags são orientação, não garantia: gere 2 ou 3 takes e fique com o melhor. Os controles são **Stability** (menor = mais alcance emocional, bom para os gritos e o choro; maior = mais fiel ao texto, bom para L01 e L02) e **Resemblance**. Rascunhe no **v4 Turbo** (mais rápido e barato) e renderize o final no **v4**. Um arquivo por fala, `assets/audio/voz/<código>.mp3`.
+**Português:** o v4 aceita mais de 90 idiomas com sotaque nativo, e o guia recomenda **escrever o roteiro direto no idioma de destino**. Se quiser a voz em pt-BR, cole a coluna "Fala (PT)" **com as mesmas tags em inglês** e salve como `<código>-pt.mp3` (ex.: `L08a-pt.mp3`). Teste uma fala antes de fazer todas.
 
 ---
 
-## 1. Fichas de personagem (Flow · Ingredientes)
+## 1. Fichas de personagem (Flow · Personagens)
 
-Gere cada ficha de corpo inteiro, de frente, luz neutra, fundo cinza-escuro liso, e salve no Flow como **ingrediente** com o código. As que já existem do Cap. VII: **reaproveite** (Laura 36, Justine 36, Markus 48, Joseph 61, Varr 38, Madrinha). Do Cap. VI: **REF-K21** (Kronk).
+Gere cada ficha de corpo inteiro, de frente, luz neutra, fundo cinza-escuro liso, e cadastre no Flow como **Personagem** (o nome entre crases abaixo é o que você digita depois com `@`). As que já existem do Cap. VII: **reaproveite** (Laura 36, Justine 36, Markus 48, Joseph 61, Varr 38, Madrinha). Do Cap. VI: **REF-K21** (Kronk).
 
 ### REF-LAURA36 ⭐ (já existe, Cap. VII)
 Personagens: **(Laura)**
@@ -63,7 +94,7 @@ Full-body character reference, front view, neutral studio light, plain dark grey
 ```
 
 ### REF-LAURA36-ARMOR ⭐ (nova: da estrada até o fim)
-Personagens: **(Laura, de armadura)** · use a REF-LAURA36 como ingrediente de rosto.
+Personagens: **(Laura, de armadura)** · use a REF-LAURA36 como referência de rosto ao gerar.
 ```
 Full-body character reference, front view, neutral studio light, plain dark grey background, photorealistic, cinematic. Laura D’Orrose (36-year-old woman, the General-Queen of Redom; tall, lean and athletic with a fencer’s shoulders; long wavy golden-blonde hair the color of ripe wheat, braided tight down the back; green eyes; a strong, tired face; no helmet) in worn field armor of Redom: a steel breastplate scratched and dulled by sand over a dark crimson padded gambeson, steel pauldrons, vambraces and gauntlets, mail skirt at the hips, steel greaves over brown leather boots, a black mourning band tied around her left upper arm over the gambeson sleeve; a plain, well-used longsword with a worn leather grip in her right hand and a round steel-rimmed wooden shield painted dark crimson with a white sword on her left arm. Fine dust on the steel. She stands in guard, weight low, eyes forward.
 ```
@@ -74,7 +105,7 @@ Personagens: **(Justine)** · Guardiã da Lei, poeta famosa de Redom.
 Full-body character reference, front view, neutral light, plain dark grey background, photorealistic, cinematic. Justine Avellan (36-year-old woman, Keeper of the Law of Redom and the most famous poet of the realm; slim, about 1.65 m; dark brown hair pinned in a low, severe bun with a few grey threads; pale skin, sharp intelligent dark eyes, a thin mouth that almost smiles; a high-collared slate-blue dress under a dark charcoal over-robe, ink stains on her fingers, a goose quill held between her teeth).
 ```
 
-### REF-DOLORES ⭐ (se já houver ficha dela dos Caps. II/IV, use-a como ingrediente e só acrescente a idade)
+### REF-DOLORES ⭐ (se já houver ficha dela dos Caps. II/IV, use-a como referência e só acrescente a idade)
 Personagens: **(Dolores, a mãe)**
 ```
 Full-body character reference, front view, neutral soft light, plain dark grey background, photorealistic, cinematic. Dolores D’Orrose (the queen mother of Redom, about 62, gravely ill; once tall and proud, now frail and gaunt; long thin silver hair loose over the shoulders; pale papery skin, sunken cheeks, the same green eyes as her daughter, now dulled; a plain white linen nightgown and a dark wool shawl; a thin gold wedding band loose on her finger). She stands with one hand on a bedpost, tired but upright.
@@ -124,7 +155,7 @@ Ansel, Tasso, o intendente, Tobias, o padre, os batedores, a lavadeira Nymae, Wi
 ### Capa
 
 #### `capa.jpg` ⭐ · Flow
-Personagens: **(Laura, de armadura)** · Ingredientes: REF-LAURA36-ARMOR
+Personagens: **(Laura, de armadura)** · Personagens no Flow: @LauraArmor
 **Contexto:** a capa e o cartão de abertura. O título fica à esquerda.
 ```
 Photorealistic cinematic portrait at dawn on the edge of a great desert. Laura D’Orrose (36-year-old woman, General-Queen of Redom; long wavy golden-blonde hair braided down the back, loose strands whipped by the wind; green eyes; strong, tired face; worn steel field armor over a dark crimson gambeson, black mourning band on her left upper arm) stands alone, the point of her longsword resting on the sand, both gauntleted hands on the pommel, looking out over endless dunes. Framed from the knees up in the right third of the frame, shot on an 85mm lens at eye level, shallow depth of field. Low warm sun raking across the dunes, cold blue shadows, fine sand blowing past her in the light, film grain. Mood: grief turned into resolve.
@@ -140,14 +171,146 @@ Photorealistic cinematic still life inside a royal bedchamber of white limestone
 ```
 
 #### `a02-capela.jpg` 🔀 ⭐ (rota Justine) · Flow
-Personagens: **(Justine)** · Ingredientes: REF-JUSTINE36
+Personagens: **(Justine)** · Personagens no Flow: @Justine
 **Contexto:** a capela da Juíza, à noite. Justine escreve um poema no último banco.
 ```
 Photorealistic cinematic shot inside a small stone chapel of the Judge at night. Two tall white candles burn side by side on a plain altar under a weathered stone statue of a blindfolded woman holding a pair of scales. Justine Avellan (36-year-old woman, Keeper of the Law and famous poet of Redom; slim, dark brown hair in a low severe bun with a few grey threads, pale skin, sharp dark eyes; slate-blue high-collared dress under a charcoal over-robe, ink-stained fingers) sits alone on the last wooden pew with a sheet of paper on her lap, a goose quill held between her teeth, frowning at the page. She is center-right, framed from the waist up, 50mm lens, shallow depth of field, the altar glowing behind her. Warm amber candlelight on her face, cold grey stone, floating dust in the light, film grain. No text, no watermark.
 ```
 
+#### Cena da Justine (rota Justine) · 5 imagens, uma por momento 🔀
+A conversa tem cinco momentos e cada um tem a sua imagem: ela sozinha escrevendo (`a02-capela`, acima), as duas lado a lado de mãos dadas, o beijo, a porta, e a saída fria. O jogo troca sozinho de uma para a outra. Todas em **Flow · Personagens `@Laura` e `@Justine`** (use a ficha de Laura sem armadura, com o gibão carmesim, porque ela ainda está na capital).
+
+#### `a02-lado.jpg` ⭐ 🔀 · Flow
+Personagens: **(Laura)** e **(Justine)** · Personagens no Flow: @Laura, @Justine
+**Contexto:** as duas sentadas lado a lado no último banco. Justine passa o polegar nos calos da mão da Laura, "como faz quando vai me dizer uma coisa difícil". É a pergunta "você ama mais a mim ou ao seu título?". **Só as duas, juntas no centro-direita.**
+```
+Photorealistic cinematic shot inside a small stone chapel at night, two white candles burning on the altar behind. Laura D’Orrose (36-year-old woman, General-Queen of Redom; long wavy golden-blonde hair tied back at the nape, green eyes, strong tired face; plain high-collared dark crimson wool doublet, black mourning band on her left arm) sits shoulder to shoulder with Justine Avellan (36-year-old woman, Keeper of the Law and famous poet; slim, dark brown hair in a low severe bun with a few grey threads, pale skin, sharp dark eyes; slate-blue high-collared dress under a charcoal over-robe, ink-stained fingers) on the last wooden pew. Justine holds Laura’s calloused hand in both of hers, her thumb slowly tracing the calluses one by one, her eyes on the hand, a folded poem forgotten on her lap; Laura looks at Justine’s face, her jaw tight, her fingers about to squeeze. They are center-right, framed from the waist up, 50mm lens, shallow depth of field, the altar softly glowing behind them. Warm amber candlelight on both faces, cold grey stone, floating dust in the light, film grain. Intimate, heavy with what is not said. Two people only, no text, no watermark.
+```
+
+#### `a02-beijo.jpg` ⭐ 🔀 · Flow
+Personagens: **(Laura)** e **(Justine)** · Personagens no Flow: @Laura, @Justine
+**Contexto:** ela promete sossegar. Justine fecha as mãos em volta das da Laura e a beija, longo. "Eu te amo, Laura." / "Sempre te amei, minha Justine."
+```
+Photorealistic cinematic shot inside a small stone chapel at night. Laura D’Orrose (36-year-old woman, long wavy golden-blonde hair, tired strong face, dark crimson wool doublet, black mourning band on her left arm) and Justine Avellan (36-year-old woman, dark brown hair in a low bun with a few grey threads, slate-blue dress under a charcoal over-robe) share a long, slow kiss on the pew, Justine’s two hands wrapped around both of Laura’s hands in Laura’s lap, their foreheads almost touching, eyes closed; a quill and a sheet of paper have slipped to the stone floor beside the pew. They are center-right, framed from the chest up, seen from the side at eye level, 85mm lens, very shallow depth of field, the candles behind them turned into soft golden orbs. Warm candlelight wrapping both faces, deep blue shadows, film grain. Tender, chaste, cinematic romance. Two people only, no text, no watermark.
+```
+
+#### `a02-porta.jpg` ⭐ 🔀 · Flow
+Personagens: **(Laura)** (de costas, na porta) e **(Justine)** (pequena, ao fundo) · Personagens no Flow: @Laura, @Justine
+**Contexto:** depois da promessa. Laura sai sem se virar, querendo olhar. Justine continua no banco. **A Laura é o assunto; a Justine é pequena, no fundo.**
+```
+Photorealistic cinematic wide shot from inside a small stone chapel at night, looking down the center aisle toward the open heavy wooden door. Laura D’Orrose (36-year-old woman, long golden-blonde hair tied back, dark crimson wool doublet, black mourning band on her left arm), seen from behind, stands in the doorway as a dark silhouette against cold blue pre-dawn light, one hand on the door frame, her head slightly turned as if she is fighting the urge to look back, and not doing it. Far behind her, small in the empty chapel, Justine Avellan (slate-blue dress, dark bun) sits alone on the last pew in the glow of two candles, her hands folded on her lap, watching her go. Laura is center-right, 35mm lens, deep focus, strong depth, symmetrical aisle. Warm candlelight inside, cold blue outside, dust in the air, film grain. Quiet longing. Two people only, no text, no watermark.
+```
+
+#### `a02-saida.jpg` ⭐ 🔀 · Flow
+Personagens: **(Justine)** (saindo) e **(Laura)** (sentada, sozinha) · Personagens no Flow: @Justine, @Laura
+**Contexto:** quando a Laura diz "uma coisa não tem a ver com a outra" (e não promete) ou escolhe o dever. "Ótimo. Obrigada por esclarecer as coisas… e boa viagem, Lâmina." Ela sai sem olhar para trás.
+```
+Photorealistic cinematic shot inside a small stone chapel at night. Justine Avellan (36-year-old woman, dark brown hair in a low severe bun, pale face set hard, eyes wet but dry-cheeked; slate-blue dress under a charcoal over-robe) walks away from the camera down the aisle toward the heavy wooden door with quick, stiff steps, her over-robe swinging, a sheet of paper crushed in her fist, not looking back; the door is swinging open ahead of her and the candle flames all bend sideways in the draft. In the foreground at the left, out of focus, Laura D’Orrose (36-year-old woman, golden-blonde hair tied back, dark crimson doublet, black mourning band) sits alone on the pew with her empty hand still open on her knee, staring at the place where Justine was. Justine is center-right, 35mm lens, deep focus. Warm candle glow against cold blue night in the doorway, film grain. Cold, abrupt, aching. Two people only, no text, no watermark.
+```
+
+### Os ramos que mudam a cena (uma imagem por escolha) · mãe, Markus, Joseph, Varr e o fim
+*Estas 14 imagens estão agrupadas aqui, fora da ordem do livro (as páginas são a03, a05, b01, d06, e03 e a última, f13).* Cada escolha abaixo mostra a **sua** imagem assim que o jogador responde. Todas em Flow, com os personagens indicados.
+
+#### `a03-maos.jpg` ⭐ · Flow
+Personagens: **(Laura)** e **(Dolores, a mãe)** · Personagens no Flow: @Laura, @Dolores
+**Contexto:** qualquer resposta à mãe. Ela pega a mão da filha: "Senta, Laura… Esta é a vigésima primeira vez."
+```
+Photorealistic cinematic shot of a dim royal bedchamber, heavy dark-red curtains drawn, one candle burning on the bedside table. Dolores D’Orrose (queen mother, about 62, frail and gaunt, long thin silver hair, pale papery skin, sunken cheeks, the same green eyes as her daughter, white linen nightgown and dark wool shawl) lies propped on pillows and holds both of the hands of Laura D’Orrose (36-year-old woman, golden-blonde hair tied back, dark crimson doublet, black mourning band on her left arm), who sits on the edge of the bed leaning in, her head bowed over their joined hands. They are center-right, framed from the chest up, seen from the side at eye level, 50mm lens, shallow depth of field. A thin blade of daylight between the curtains and warm candlelight on their hands, film grain. Tender and heavy. Two people only, no text, no watermark.
+```
+
+#### `a03-corredor.jpg` ⭐ · Flow
+Personagens: **(Laura)** (de costas, saindo) e **(Dolores, a mãe)** (pequena, ao fundo) · Personagens no Flow: @Laura, @Dolores
+**Contexto:** "Beijo a mão dela e saio." A promessa de comer ou de rezar. Cheiro de pão subindo a escada.
+```
+Photorealistic cinematic shot from the dim corridor looking back through the open door of a royal bedchamber. Laura D’Orrose (36-year-old woman, golden-blonde hair tied back, dark crimson doublet, black mourning band), seen from behind in the doorway with a hand on the frame, looks back at the bed; across the room, small and frail in the big carved bed, Dolores D’Orrose (queen mother, silver hair, white nightgown, dark shawl) raises one thin hand in a small wave, a candle by her side. Laura is center-right, 35mm lens, deep focus, long perspective down the corridor. Warm candle glow in the bedroom, a cold blue stone corridor in the foreground, film grain. Quiet goodbye. Two people only, no text, no watermark.
+```
+
+#### `a05-levar.jpg` ⭐ · Flow
+Personagens: **(Laura)** e **(Markus)** · Personagens no Flow: @Laura, @Markus
+**Contexto:** ela leva a espada do Simon. "Fique com o Cavaleiro, Markus. Eu te amo." Markus entrega a lâmina reforjada.
+```
+Photorealistic cinematic shot inside a royal armory before dawn. Markus (48-year-old man, Marshal of the Cavalry of Redom; broad-shouldered, short dark brown hair greying at the temples, short greying beard, red surcoat with a gold eight-pointed star) holds out a fine, freshly reforged longsword across both palms, the blade catching the lantern light; Laura D’Orrose (36-year-old woman, golden-blonde hair tied back, dark crimson doublet, black mourning band on her left arm) takes it by the grip with her right hand, her eyes on his face, a faint warmth in her tired expression; his jaw is set and his eyes are wet. They are center-right, framed from the chest up, 50mm lens at eye level, shallow depth of field. One hanging lantern, cold blue light from a high window, racks of spears behind, film grain. Two people only, no text, no watermark.
+```
+
+#### `a05-deixar.jpg` ⭐ · Flow
+Personagens: **(Markus)** e **(Laura)** (de costas, saindo) · Personagens no Flow: @Markus, @Laura
+**Contexto:** ela deixa a espada com ele: "Use-a para proteger Redom."
+```
+Photorealistic cinematic shot inside a royal armory before dawn. Markus (48-year-old man, short dark brown hair greying at the temples, short greying beard, red surcoat with a gold eight-pointed star over a padded doublet) stands in the foreground holding a fine longsword upright in front of him with both hands, the point resting on the stone floor like a knight at vigil, looking toward the door; in the background, Laura D’Orrose (golden-blonde hair tied back, dark crimson doublet, black mourning band), seen from behind, walks out through the arched doorway into pale dawn light. Markus is center-right, 50mm lens, shallow depth of field, Laura soft in the background. Lantern light on his face, cold blue dawn at the door, film grain. Two people only, no text, no watermark.
+```
+
+#### `b01-brinde.jpg` ⭐ · Flow
+Personagens: **(Joseph)** e **(Laura)** · Personagens no Flow: @Joseph, @Laura
+**Contexto:** "Na volta do deserto, eu bebo com você." Joseph ri, ergue o odre, e a roda de soldados ao redor do fogo aplaude. **Os soldados são só silhuetas.**
+```
+Photorealistic cinematic night shot of a military camp by a large fire. Sir Joseph (61-year-old retired general of Redom; heavy, curly iron-grey hair, full grey beard, ruddy cheeks, small shrewd eyes; faded dark-blue surcoat with white scales over mail; a heavy gold signet ring on his right hand) laughs with his whole face, lifting a leather wineskin high toward Laura D’Orrose (36-year-old woman, golden-blonde hair tied back, dark crimson gambeson, black mourning band on her left arm), who sits next to him with a wooden bowl in her hands and the first genuine half-smile of the whole chapter. They are center-right, framed from the chest up, 35mm lens, shallow depth of field. Behind them, a ring of soldiers as warm firelit silhouettes with no faces. Orange firelight, sparks rising, deep blue night, film grain. Warm and a little sad. Two people in focus, no text, no watermark.
+```
+
+#### `b01-recusa.jpg` ⭐ · Flow
+Personagens: **(Joseph)** e **(Laura)** · Personagens no Flow: @Joseph, @Laura
+**Contexto:** "Nada de beber até cumprirmos a missão" e depois "É uma ordem." A roda para de rir. Também é o fundo da página seguinte.
+```
+Photorealistic cinematic night shot of a military camp by a large fire. Laura D’Orrose (36-year-old woman, golden-blonde hair tied back, strong tired face, dark crimson gambeson, black mourning band on her left arm) stands, one open palm held out flat in front of her in a firm "no", her eyes level on Sir Joseph (61-year-old retired general; curly iron-grey hair, full grey beard, ruddy cheeks; faded dark-blue surcoat with white scales over mail), who sits with the wineskin lowered halfway, his smile frozen, his eyes dropping to the fire. They are center-right, framed from the knees up, 35mm lens. Behind them, a ring of soldiers as still firelit silhouettes, no faces, the laughter gone. Harsh orange firelight on one side of their faces, deep blue night, film grain. Two people in focus, no text, no watermark.
+```
+
+#### `b01-sozinho.jpg` ◻ · Flow
+Personagens: **(Joseph)** · Personagens no Flow: @Joseph
+**Contexto:** ela não responde. Joseph bebe sozinho e os homens voltam a falar entre eles.
+```
+Photorealistic cinematic night shot of a military camp. Sir Joseph (61-year-old retired general of Redom; heavy, curly iron-grey hair, full grey beard, ruddy cheeks, small shrewd eyes; faded dark-blue surcoat with white scales over mail) sits alone on a log at the edge of the firelight, drinking from a leather wineskin, his eyes on the ground; behind him, soldiers have turned their backs and talk among themselves in small groups, only blurred silhouettes. Joseph is center-right, framed from the waist up, 50mm lens, shallow depth of field. Orange firelight on one side of his face, deep blue night, film grain. Lonely. One person in focus, no text, no watermark.
+```
+
+#### `d06-ficar.jpg` ⭐ · Flow
+Personagens: **(Joseph)** · Personagens no Flow: @Joseph
+**Contexto:** ela deixa o Joseph no posto. Ele fica na cerca, com as mãos no cinto, vendo a coluna partir.
+```
+Photorealistic cinematic shot at the stake-fence gate of a desert outpost at sunset. Sir Joseph (61-year-old retired general of Redom; heavy, curly iron-grey hair, full grey beard, ruddy cheeks; faded dark-blue surcoat with white scales over mail) stands at the gate with both hands tucked into his sword belt so they will not tremble, watching, with a quiet proud smile that does not reach his eyes; far beyond him, a long column of soldiers and wagons marches away across the dunes as tiny silhouettes in orange dust. Joseph is center-right, framed from the waist up, 50mm lens, the column soft in the distance. Long golden light, purple shadows, film grain. One person in focus, no text, no watermark.
+```
+
+#### `d06-ir.jpg` ⭐ · Flow
+Personagens: **(Joseph)** · Personagens no Flow: @Joseph
+**Contexto:** ela manda o Joseph seguir. "Ele monta com a mão esquerda e não fala mais até o fim da tarde."
+```
+Photorealistic cinematic shot at dusk beside a well in a desert outpost. Sir Joseph (61-year-old retired general; heavy, curly iron-grey hair, full grey beard, ruddy cheeks; faded dark-blue surcoat with white scales over mail; his right hand, trembling, is tucked firmly into his belt) pulls himself up into the saddle of a tall dark horse using only his left hand, his jaw set, his eyes on the road ahead and nowhere else. Center-right, framed from the knees up, 35mm lens at a slightly low angle, a few soldiers behind him as soft silhouettes. Low orange sun, long shadows, dust, film grain. One person in focus, no text, no watermark.
+```
+
+#### `e03-cancao.jpg` ⭐ · Flow
+Personagens: **(Varr)** e **(Laura)** · Personagens no Flow: @Varr, @LauraArmor
+**Contexto:** "Você vai ter a sua canção, e eu vou ter a minha vingança." Ele ri baixo, para não acordar os cavalos.
+```
+Photorealistic cinematic night shot by a horse line in a desert camp. Lord Varr (38-year-old man, big, thick-necked, close-cropped dark blond hair, broken nose, stubble; dented steel breastplate over a red-brown gambeson) laughs low, his heavy hand still on the shoulder of Laura D’Orrose (36-year-old woman, golden-blonde braided hair, green eyes, tired strong face; worn steel armor over a crimson gambeson, black mourning band on her left arm), who looks straight ahead into the dark with a hard, quiet, determined face. They are center-right, framed from the waist up, 50mm lens. Moonlight from above, a distant orange campfire on one side, horses as dark shapes behind, film grain. Two people only, no text, no watermark.
+```
+
+#### `e03-mao-solta.jpg` ⭐ · Flow
+Personagens: **(Varr)** e **(Laura)** · Personagens no Flow: @Varr, @LauraArmor
+**Contexto:** "Para dois mil, não." / "Concentre-se na batalha." Ele tira a mão do ombro dela.
+```
+Photorealistic cinematic night shot by a horse line in a desert camp. Lord Varr (38-year-old man, big, thick-necked, close-cropped dark blond hair, broken nose, stubble; dented steel breastplate over a red-brown gambeson) lifts his hand away from the shoulder of Laura D’Orrose (36-year-old woman, golden-blonde braided hair, worn steel armor over a crimson gambeson, black mourning band on her left arm), his face turning serious, a hint of respect; she keeps her eyes front, unreadable, arms crossed. They are center-right, framed from the waist up, 50mm lens. Cold moonlight, a distant orange campfire, horses behind, film grain. Two people only, no text, no watermark.
+```
+
+#### `e03b-terceira.jpg` ⭐ · Flow
+Personagens: **(Varr)** · Personagens no Flow: @Varr
+**Contexto:** "Ele levanta, bate a areia da roupa e vai dormir com a Terceira, no chão, do jeito deles." **Os outros são vultos adormecidos.**
+```
+Photorealistic cinematic night shot of a desert camp. Lord Varr (38-year-old man, big, thick-necked, close-cropped dark blond hair, broken nose; dented steel breastplate) lies back on the bare sand in the middle of rows of sleeping infantrymen, his cloak balled up as a pillow, one forearm across his eyes; the sleeping soldiers of the Third around him are only dark bundles and blurred shapes under blankets, no faces; a few low embers glow beyond them. Varr is center-right, framed from the knees up, 35mm lens at ground level. Cold silver moonlight, warm embers, stars overhead, film grain. Peaceful, a little ominous. One person in focus, no text, no watermark.
+```
+
+#### `f13-joseph.jpg` ⭐ · Flow (rota em que o Joseph ficou)
+Personagens: **(Joseph)** e **(Laura)** · Personagens no Flow: @Joseph, @LauraArmor
+**Contexto:** a última imagem do capítulo. Alguém põe uma tigela cheia na mão dela. "Na Capital, minha mãe vai contar vinte e uma."
+```
+Photorealistic cinematic shot at the stake-fence gate of a desert outpost at dusk. Sir Joseph (61-year-old retired general; heavy, curly iron-grey hair, full grey beard, ruddy cheeks, small shrewd eyes; faded dark-blue surcoat with white scales over mail), his eyes wet, presses a full wooden bowl of steaming stew into the hands of Laura D’Orrose (36-year-old woman, golden-blonde braid half undone, dented and dusty steel armor over a crimson gambeson, a dark bruise on her cheek, black mourning band on her left arm), who is swaying with exhaustion and looks at the bowl as if she has forgotten what it is. They are center-right, framed from the waist up, 50mm lens at eye level, shallow depth of field. Behind them, out of focus, the first of the battered returning soldiers pass through the gate. Last red light of dusk, warm lantern glow at the gate, film grain. Exhausted, quiet, grieving. Two people in focus, no blood, no text, no watermark.
+```
+
+#### `f13-posto.jpg` ⭐ · Flow (rota em que o Joseph morreu)
+Personagens: **(Laura)** · Personagens no Flow: @LauraArmor
+**Contexto:** igual, mas sem o Joseph: na porta, os trinta e um do posto esperam os que voltam, e alguém dá a tigela. **A mão que oferece é de um soldado sem rosto.**
+```
+Photorealistic cinematic shot at the stake-fence gate of a desert outpost at dusk. Laura D’Orrose (36-year-old woman, golden-blonde braid half undone, dented and dusty steel armor over a crimson gambeson, a dark bruise on her cheek, black mourning band on her left arm), swaying with exhaustion, takes a full wooden bowl of steaming stew from an outstretched hand that enters the frame from the left (the person offering it is out of frame, only a rough soldier’s sleeve is visible); she looks down at the bowl as if she has forgotten what it is. Behind her, a line of thirty-one small, dim figures of the post stands along the fence as silhouettes, waiting for those who come back. Laura is center-right, framed from the waist up, 50mm lens, shallow depth of field. Last red light of dusk, warm lantern glow, film grain. One person in focus, no blood, no text, no watermark.
+```
+
 #### `a03-dolores.jpg` ⭐ · Flow
-Personagens: **(Dolores, a mãe)** · Ingredientes: REF-DOLORES
+Personagens: **(Dolores, a mãe)** · Personagens no Flow: @Dolores
 **Contexto:** a mãe doente, cortinas fechadas, uma vela acesa de dia.
 ```
 Photorealistic cinematic shot of a dim royal bedchamber with heavy dark-red curtains drawn closed against the daylight; a thin blade of sun leaks between them. Dolores D’Orrose (queen mother of Redom, about 62, frail and gaunt, long thin silver hair loose on the pillow, pale papery skin, sunken cheeks, eyes closed; white linen nightgown, dark wool shawl) lies propped on pillows in a large carved wooden bed, one thin hand open on the coverlet, palm up, as if waiting for another hand. A single candle burns on the bedside table. She is center-right, shot from the foot of the bed at a slight high angle, 35mm lens. Warm candlelight on one side of her face, the rest of the room in soft shadow, film grain. No text, no watermark.
@@ -156,7 +319,7 @@ Photorealistic cinematic shot of a dim royal bedchamber with heavy dark-red curt
 #### `a04-aubert.jpg` ⭐ · reaproveite `aubert` do Cap. VII
 
 #### `a05-markus.jpg` ⭐ · Flow
-Personagens: **(Markus)** · Ingredientes: REF-MARKUS48
+Personagens: **(Markus)** · Personagens no Flow: @Markus
 **Contexto:** a sala de armas antes do sol. Ele dorme ali, com a espada do Simon nos joelhos.
 ```
 Photorealistic cinematic shot inside a royal armory of grey stone before dawn: racks of spears and round shields along the walls, an unmade soldier’s cot pushed into a corner. Markus (48-year-old man, Marshal of the Cavalry of Redom; broad-shouldered, short dark brown hair greying at the temples, short greying beard, square jaw, deep lines around the eyes; red surcoat with a gold eight-pointed star over a padded doublet, sleeves rolled up) sits on a wooden bench in his boots with a fine longsword lying across his knees, both hands resting on the blade, looking down at it. He is center-right, framed from the knees up, 50mm lens at seated eye level. One hanging lantern, cold blue light from a high window, film grain. No text, no watermark.
@@ -247,7 +410,7 @@ Photorealistic cinematic shot of an old, weathered soldier’s grave at the foot
 ```
 
 #### `d06-joseph.jpg` ⭐ · Flow
-Personagens: **(Joseph)** · Ingredientes: REF-JOSEPH61
+Personagens: **(Joseph)** · Personagens no Flow: @Joseph
 **Contexto:** ele pede para ficar no posto. Gira o anel e espera a resposta.
 ```
 Photorealistic cinematic shot by a desert well at dusk. Sir Joseph (61-year-old retired general of Redom; heavy, curly iron-grey hair, full grey beard, ruddy cheeks, small shrewd eyes; faded dark-blue surcoat with white scales over mail; a heavy gold signet ring on his right hand) stands beside the well wheel with both hands tucked into his sword belt so they will not tremble, his thumb turning the gold ring, looking straight at the camera, waiting for an answer. He is center-right, framed from the waist up, 50mm lens at eye level. Warm low sun on his face, the outpost blurred behind, film grain. No text, no watermark.
@@ -266,13 +429,13 @@ Photorealistic cinematic night shot from the top of a dune looking down into a s
 ```
 
 #### `e02-chao.jpg` ⭐ · Flow
-Personagens: **(Laura)** (só a mão e o rosto de perfil) · Ingredientes: REF-LAURA36-ARMOR
+Personagens: **(Laura)** (só a mão e o rosto de perfil) · Personagens no Flow: @LauraArmor
 ```
 Photorealistic cinematic close night shot at ground level: Laura D’Orrose (36-year-old woman, golden-blonde braided hair, green eyes, worn steel armor over a crimson gambeson) lies with her ear pressed to rippled desert sand, eyes open and listening, one gauntleted hand flat on the sand beside her face. Her face is center-right, 85mm lens, extremely shallow depth of field, the sand grains sharp in front of her eye. Cold silver moonlight, film grain. No text, no watermark.
 ```
 
 #### `e03-varr.jpg` ⭐ · Flow
-Personagens: **(Laura)** e **(Varr)** · Ingredientes: REF-LAURA36-ARMOR, REF-VARR38
+Personagens: **(Laura)** e **(Varr)** · Personagens no Flow: @LauraArmor, @Varr
 **Contexto:** a véspera. Ele põe a mão no ombro dela como faz com os soldados dele.
 ```
 Photorealistic cinematic night shot by a horse line in a desert camp. Lord Varr (38-year-old man, big, thick-necked, close-cropped dark blond hair, broken nose, stubble; dented steel breastplate over a red-brown gambeson) stands beside Laura D’Orrose (36-year-old woman, General-Queen of Redom; golden-blonde braided hair, green eyes, tired strong face; worn steel armor over a crimson gambeson, black mourning band on her left arm) and rests one heavy hand on her shoulder, the way a commander touches his soldiers. He looks at the dark valley with a half-grin; she keeps her eyes ahead, unreadable. They are center-right, framed from the waist up, 50mm lens. Moonlight from above, a distant campfire glowing orange on one side of their faces, horses as dark shapes behind, film grain. Two people only, no text, no watermark.
@@ -284,7 +447,7 @@ Photorealistic cinematic interior of a command tent before dawn: a hand-drawn ma
 ```
 
 #### `e05-fila.jpg` ⭐ · Flow
-Personagens: **(Laura)** (de costas) · Ingredientes: REF-LAURA36-ARMOR
+Personagens: **(Laura)** (de costas) · Personagens no Flow: @LauraArmor
 **Contexto:** ela passa diante da fila de servos procurando quem roubou a água. Três servos em foco; o resto vira silhueta.
 ```
 Photorealistic cinematic dawn shot on a dune crest. Laura D’Orrose (36-year-old woman, golden-blonde hair braided down her back, worn steel armor over a crimson gambeson, black mourning band on her left arm), seen from behind over her shoulder, walks slowly past a single line of camp servants who stand with their backs to a valley; the three nearest servants are in focus (a stable boy with straw in his hair, a kitchen girl gripping her apron, a soot-stained smith’s boy), the rest of the line fades into soft silhouettes. Far below, small smoke columns rise from a nomad camp. Center-right, 50mm lens at shoulder height. Cold pink dawn, long shadows on the sand, film grain. No more than three faces in focus, no text, no watermark.
@@ -293,7 +456,7 @@ Photorealistic cinematic dawn shot on a dune crest. Laura D’Orrose (36-year-ol
 ### Parte VI · O Dia Comido
 
 #### `f-rosto.jpg` 🔀 ⭐ (rota A: ela é desmascarada ou foge) · Flow
-Personagens: **(a Madrinha)** · Ingredientes: REF-MADRINHA
+Personagens: **(a Madrinha)** · Personagens no Flow: @Madrinha
 **Contexto:** o rosto falso escorrega. A forma verdadeira aparece dentro da roupa de servo.
 ```
 Photorealistic cinematic close shot at dawn. The Godmother (a petite Nymae woman, blue-grey skin of fine iridescent scales, translucent fin-shaped ears opening like fans, long wet dark navy hair, molten-gold eyes with no pupils, glowing) stands half emerged from an oversized grey servant’s tunic whose sleeves hang past her hands; the last of a borrowed human face is sliding off her cheek like wet sand, dissolving into fine grains in the air and revealing the scales beneath. She opens her webbed hands toward the camera with a calm, amused half-smile. Center-right, 85mm lens, shallow depth of field, sand and droplets suspended in the light. Cold pink dawn from behind, a faint gold glow from her eyes on her cheekbones, film grain. Elegant and eerie, not gory. No text, no watermark.
@@ -305,7 +468,7 @@ Photorealistic cinematic wide shot of an impossible wall of water rising straigh
 ```
 
 #### `f-carga.jpg` 🔀 ⭐ (rota B: Redom ataca) · Flow
-Personagens: **(Laura)** · Ingredientes: REF-LAURA36-ARMOR
+Personagens: **(Laura)** · Personagens no Flow: @LauraArmor
 ```
 Photorealistic cinematic action shot of a cavalry charge pouring down a dune at dawn. In the foreground, Laura D’Orrose (36-year-old woman, golden-blonde braid flying, green eyes narrowed, worn steel armor over a crimson gambeson, black mourning band on her left arm, longsword raised) rides a tall grey warhorse at full gallop toward the camera’s right; behind and below her, the charge is a wave of dust, red banners and glints of steel with no detailed faces, racing toward a stone valley where a single well glints and a nomad camp waits. She is center-right, 35mm lens at a low angle, slight motion blur on the hooves. Golden dawn backlight, sand thrown into the air, film grain. One person in focus, no text, no watermark.
 ```
@@ -317,7 +480,7 @@ Photorealistic cinematic wide shot of a line of tall bronze automatons with grey
 ```
 
 #### `f-pira.jpg` ⭐ · Flow
-Personagens: **(Kronk)** · Ingredientes: REF-K21
+Personagens: **(Kronk)** · Personagens no Flow: @Kronk
 **Contexto:** os Grakh sobem para a batalha, com o grande na frente.
 ```
 Photorealistic cinematic shot of Grakh warriors charging up a dune at dawn. In front, Kronk (a giant Grakh warrior about 2.3 m tall, massive muscle, ash-grey skin, scar across the left eye, black dreadlocks with bone beads, two big lower canines over the lip, a big animal tooth hanging on a cord at his throat, white clay war stripes on his shoulders, leather loincloth, a huge stone mace in his right hand) leads the charge, roaring; behind him, two more grey-skinned Grakh warriors with clubs and spears, the rest only dust and silhouettes. Kronk is center-right, 35mm lens from low on the slope, looking up at him. Golden backlight, sand thrown up, film grain. No more than three warriors in focus, no text, no watermark.
@@ -330,14 +493,14 @@ Photorealistic cinematic battle shot in a muddy stone valley: a soldier of Redom
 ```
 
 #### `f-varr.jpg` ⭐ · Flow
-Personagens: **(Varr)** · Ingredientes: REF-VARR38
+Personagens: **(Varr)** · Personagens no Flow: @Varr
 **Contexto:** a luta contra a Madrinha acabou. Ele grita para o céu. **Não mostrar o corpo dela.**
 ```
 Photorealistic cinematic shot in a muddy stone valley after a brutal fight. Lord Varr (38-year-old man, big, thick-necked, close-cropped dark blond hair, broken nose; dented steel breastplate over a red-brown gambeson, mud to the chest, a strip of torn cloak wrapped around his forehead) stands with his heavy longsword raised high in both hands and roars at the sky; at his feet, a puddle of strange water glows faintly gold and drains into the mud. He is center-right, 35mm lens from a low angle. Smoke and spray in the air, cold dawn light, film grain. One person, no blood, no corpse, no text, no watermark.
 ```
 
 #### `f-kronk.jpg` ⭐ · Flow
-Personagens: **(Kronk)** · Ingredientes: REF-K21
+Personagens: **(Kronk)** · Personagens no Flow: @Kronk
 **Contexto:** ele vem na direção da Laura. Os homens saem do caminho dele.
 ```
 Photorealistic cinematic shot of Kronk (a giant Grakh warrior about 2.3 m tall, massive muscle, ash-grey skin, scar across the left eye, black dreadlocks with bone beads, two big lower canines over the lip, a big animal tooth on a cord at his throat, white clay stripes on his shoulders, leather loincloth, a huge stone mace in his right hand) walking straight toward the camera through churned sand and drifting dust, eyes locked on the lens with a cold will to kill; at the frame edges, blurred shapes of soldiers stepping out of his way. He is center-right, framed from the knees up, 50mm lens at Laura’s eye level. Hard morning light, dust glowing behind him, film grain. One character in focus, no text, no watermark.
@@ -349,7 +512,7 @@ Photorealistic cinematic wide shot of a desert battlefield as a total solar ecli
 ```
 
 #### `f-maior.jpg` ⭐ · Flow
-Personagens: **(o Maior)** · Ingredientes: REF-MAIOR
+Personagens: **(o Maior)** · Personagens no Flow: @Maior
 ```
 Photorealistic cinematic low-angle shot during a total solar eclipse. The Biggest (a monstrous Grakh about 3.4 m tall, ash-grey skin cracked like a dry well floor, muscles where no creature has muscles, the right arm and shoulder much heavier than the left with the shoulder bone pushing up under the skin, hands like claws with long hooked black nails, lower canines jutting past the lip, long matted black dreadlocks) stands with his head thrown back, laughing; a few arrow shafts stick out of his chest and shoulders and he does not seem to notice. Behind him, the black sun with a blazing white corona. He is center-right, 24mm lens from the ground, looking up. Bronze half-light, deep shadows, dust hanging in the air, film grain. One character, no blood, no text, no watermark.
 ```
@@ -361,7 +524,7 @@ Photorealistic cinematic wide shot of a desert valley after a battle as the sunl
 ```
 
 #### `f-conta.jpg` ⭐ · Flow
-Personagens: **(Laura)** e **(Varr)** · Ingredientes: REF-LAURA36-ARMOR, REF-VARR38
+Personagens: **(Laura)** e **(Varr)** · Personagens no Flow: @LauraArmor, @Varr
 ```
 Photorealistic cinematic shot in a desert valley in late afternoon. Laura D’Orrose (36-year-old woman, golden-blonde braid half undone, green eyes, a dark bruise on her cheek, dented and dirty steel armor over a crimson gambeson, black mourning band on her left arm) walks slowly past a seated, exhausted soldier and rests her gauntleted hand on his shoulder; beyond them, Lord Varr (38-year-old man, big, broken nose, his head bound in a strip of his own cloak, dented breastplate) sits on a broken shield, talking with his hands. Laura is center-right, 50mm lens at eye level. Dusty amber light, film grain. Three people at most, no blood, no text, no watermark.
 ```
@@ -438,27 +601,28 @@ Full-body photorealistic creature sprite on a plain pure green background (#00FF
 
 ---
 
-## 5. Vídeos de fundo (`assets/video/`, Flow · Veo 3.1 · Frames to Video)
+## 5. Vídeos de fundo (`assets/video/`, Flow · Omni Flash)
 
-Todos: **16:9, 8 s, mudo no jogo, primeiro quadro = a imagem da página**. Os de personagem usam também os ingredientes indicados. Todo prompt termina com: *No dialogue, no music, no subtitles, no on-screen text, no cuts.*
+Todos (16 vídeos): **16:9, 8 s, mudo no jogo, primeiro quadro = a imagem da página (modo Frames)**. A coluna indica, quando houver personagem, qual `@Personagem` usar **se** você precisar do modo Ingredientes (§0.4). Todo prompt já termina com: *Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.*
 
-| Arquivo | Página | Primeiro quadro · Ingredientes | Prompt |
+| Arquivo | Página | Primeiro quadro · Personagem (se precisar) | Prompt |
 |---|---|---|---|
-| `d01-goelas.mp4` ⭐ | d01 | `d01-goelas.jpg` | `Slow aerial push-in over the dune toward a small desert outpost at sunset. The red banner with white scales snaps in a steady wind; the well wheel turns slowly, rope creaking; thin smoke rises from one tent; sand streams off the dune crest in the foreground. Golden hour light shifting slowly toward purple. Photorealistic, cinematic, 35mm. Ambient audio: desert wind, distant banner flapping, a wooden creak. Loop: end on a frame close to the first. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `d05-tumulo.mp4` ⭐ | d05 | `d05-tumulo.jpg` | `Very slow dolly-in at a low angle toward a cairn of pale stones with a rolled red banner planted in it, on top of an ancient wall at dusk. The wind tugs at the banner’s loose edge and lifts sand off the stones in thin ribbons; the sky darkens gently from orange to violet; one star appears. Photorealistic, cinematic, solemn, 50mm. Ambient audio: wind only. No people. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `e01-fogos.mp4` ⭐ | e01 | `e01-fogos.jpg` | `Locked-off telephoto shot from a dune top at night, with a very subtle drift to the right. Down in the stone valley, about thirty-five small campfires flicker and pulse; sparks rise from the bigger ones; the single water-filled well shimmers with moonlight; heat haze makes the distant volcanic peaks waver, a faint red glow breathing in a crater. Photorealistic, cinematic, deep blue night. Ambient audio: low wind, faraway crackle of fire. Loop. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-rosto.mp4` 🔀 ⭐ | f01a | `f-rosto.jpg` · REF-MADRINHA | `Close-up, slow push-in on the Godmother at dawn. The last fragments of a borrowed human face slide off her cheek and dissolve into fine glittering grains that drift away in the wind, revealing blue-grey iridescent scales; her fin-shaped ears unfold like fans; her molten-gold eyes brighten and glow; she raises her webbed hands toward camera with a calm, knowing half-smile. Droplets of water begin to float upward around her. Photorealistic, cinematic, eerie and beautiful, 85mm, shallow depth of field. Ambient audio: a soft wet hiss, a low water drone rising. No gore. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-onda.mp4` ⭐ | f02a/f02b | `f-onda.jpg` | `Epic low-angle wide shot, camera slowly tilting up as a colossal wall of water rises straight out of a desert well, climbing higher than the dunes, its crest curling forward and beginning to fall over the valley; spray and mist tear off the top; sand blasts outward at its base; dawn light glows green-gold through the water. Slight camera shake as it peaks. Photorealistic, cinematic, blockbuster scale, 24mm. Ambient audio: a deep roar of water rising, rumble of stone. No visible faces. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-carga.mp4` 🔀 ⭐ | f01b | `f-carga.jpg` · REF-LAURA36-ARMOR | `Tracking shot alongside Laura D’Orrose (36-year-old woman, golden-blonde braid flying, worn steel armor over crimson, black mourning band, longsword raised) galloping a grey warhorse down a dune at dawn; the camera runs low beside the horse, hooves throwing sand into the lens; behind her, a wave of dust, red banners and steel glints pours down the slope. Her face is set and furious. Photorealistic, cinematic, handheld energy, 35mm, slight motion blur. Ambient audio: thunder of hooves, armor rattle, a distant horn. One person in focus, no blood. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-bronze.mp4` ⭐ | f03 | `f-bronze.jpg` | `Locked-off telephoto shot of a line of faceless bronze automatons with stone joints stepping over a dune crest in perfect unison against the low sun: three heavy steps and a pause, three steps and a pause; sand pours off their feet; heat haze ripples; on the last beat the rhythm breaks into four relentless steps and the line keeps coming toward camera. Photorealistic, cinematic, ominous, 85mm compression. Ambient audio: deep metallic footfalls in a 3-beat rhythm, then 4. No humans. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-linha.mp4` ⭐ | f03b | `f-linha.jpg` | `Handheld, shaky battle shot at waist height in a muddy valley full of dust and spray: a soldier swings a war hammer into the stone knee of a bronze automaton, the joint bursts into grey dust and the machine drops to one knee, still swinging its arm; a shield buckles; more bronze shapes advance through the haze behind. Photorealistic, cinematic, chaotic, 35mm, motion blur. Ambient audio: hammer on stone, metal clangs, distant shouts. No blood, no gore. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-pira.mp4` ⭐ | f04 | `f-pira.jpg` · REF-K21 | `Low-angle slow-motion shot of Kronk (giant ash-grey Grakh warrior, scar over the left eye, black dreadlocks, big lower canines, animal tooth on a cord at his throat, white clay stripes, huge stone mace) leading a charge up a dune, roaring, the mace rising; two Grakh warriors behind him; sand exploding under their feet in the golden backlight. Photorealistic, cinematic, 35mm, 48 fps slow motion feel. Ambient audio: war drums, a guttural roar. No more than three in focus. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-varr.mp4` ⭐ | f05 | `f-varr.jpg` · REF-VARR38 | `Low-angle slow push-in on Lord Varr (big man, close-cropped dark blond hair, broken nose, cloth bound around his forehead, dented breastplate, mud to the chest) standing in a muddy valley with his longsword raised high, chest heaving; he roars at the sky; smoke drifts across; at his feet a puddle of strange water glows gold, then fades and drains into the mud. Photorealistic, cinematic, 35mm. Ambient audio: a raw roar, wind, dripping water. No blood, no corpse. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-kronk.mp4` ⭐ | f06 | `f-kronk.jpg` · REF-K21 | `Slow dolly-back as Kronk (giant ash-grey Grakh warrior, scar over the left eye, black dreadlocks with bone beads, big lower canines, animal tooth on a cord at his throat, huge stone mace) walks straight toward the camera through drifting dust, each footstep heavy, eyes locked on the lens; at the edges of frame, blurred soldiers step aside. He stops, rolls his shoulders, and lifts the mace. Photorealistic, cinematic, tense, 50mm. Ambient audio: heavy footsteps in sand, a low growl. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-eclipse.mp4` ⭐ | f07/f07b | `f-eclipse.jpg` | `Time-lapse feel, locked-off wide shot: over a desert battlefield, a black disk slides across the sun and the daylight drains into an eerie bronze dusk, then cold blue; the shadows on the sand sharpen; a line of shields and spears in silhouette all tilt their heads up; dust stops moving in the air. Photorealistic, cinematic, ominous, 24mm. Ambient audio: wind dying into silence, a low rising drone. No visible faces. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-maior.mp4` ⭐ | f08/f09 | `f-maior.jpg` · REF-MAIOR | `Very low angle, slow push-in on the Biggest (a monstrous ash-grey Grakh about 3.4 m tall, cracked skin, impossible muscles, the right arm far heavier than the left, hands like claws, jutting lower canines, matted black dreadlocks) standing under a black eclipsed sun with a blazing white corona; he throws his head back and laughs; a few arrows thud into his shoulders and he does not flinch; he lowers his head and looks straight into the lens. Photorealistic, cinematic, horror-epic, 24mm. Ambient audio: a deep booming laugh, arrows whistling. No blood. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-depois.mp4` ⭐ | f10 | `f-depois.jpg` | `Slow lateral dolly across a desert valley after a battle as the sun returns: shattered bronze plates, broken spears, dented shields, a torn red banner stirring in the wind; dust settles in the clean gold light; in the distance a faint white glow fades out of the ground like dying embers. Photorealistic, cinematic, mournful, 24mm. Ambient audio: wind, a loose banner flapping, metal ticking as it cools. No people, no bodies, no blood. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
-| `f-recuo.mp4` ⭐ | f12 | `f-recuo.jpg` | `Wide telephoto shot at dusk, camera static with a slow drift: a small battered column of soldiers and horses walks away across the desert toward a distant stake-fence outpost, heat haze softening them; the long purple shadows stretch; the red band on the horizon fades. Photorealistic, cinematic, quiet, 85mm compression. Ambient audio: wind, slow hooves, the creak of tack. No visible faces. Loop. No dialogue, no music, no subtitles, no on-screen text, no cuts.` |
+| `d01-goelas.mp4` ⭐ | d01 | `d01-goelas.jpg` | `Slow aerial push-in over the dune toward a small desert outpost at sunset. The red banner with white scales snaps in a steady wind; the well wheel turns slowly, rope creaking; thin smoke rises from one tent; sand streams off the dune crest in the foreground. Golden hour light shifting slowly toward purple. Photorealistic, cinematic, 35mm. Loop: use the same image as the end frame. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `d05-tumulo.mp4` ⭐ | d05 | `d05-tumulo.jpg` | `Very slow dolly-in at a low angle toward a cairn of pale stones with a rolled red banner planted in it, on top of an ancient wall at dusk. The wind tugs at the banner’s loose edge and lifts sand off the stones in thin ribbons; the sky darkens gently from orange to violet; one star appears. Photorealistic, cinematic, solemn, 50mm. No people. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `e01-fogos.mp4` ⭐ | e01 | `e01-fogos.jpg` | `Locked-off telephoto shot from a dune top at night, with a very subtle drift to the right. Down in the stone valley, about thirty-five small campfires flicker and pulse; sparks rise from the bigger ones; the single water-filled well shimmers with moonlight; heat haze makes the distant volcanic peaks waver, a faint red glow breathing in a crater. Photorealistic, cinematic, deep blue night. Loop: use the same image as the end frame. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-rosto.mp4` 🔀 ⭐ | f01a | `f-rosto.jpg` · @Madrinha | `Close-up, slow push-in on the Godmother at dawn. The last fragments of a borrowed human face slide off her cheek and dissolve into fine glittering grains that drift away in the wind, revealing blue-grey iridescent scales; her fin-shaped ears unfold like fans; her molten-gold eyes brighten and glow; she raises her webbed hands toward camera with a calm, knowing half-smile. Droplets of water begin to float upward around her. Photorealistic, cinematic, eerie and beautiful, 85mm, shallow depth of field. No gore. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-onda.mp4` ⭐ | f02a/f02b | `f-onda.jpg` | `Epic low-angle wide shot, camera slowly tilting up as a colossal wall of water rises straight out of a desert well, climbing higher than the dunes, its crest curling forward and beginning to fall over the valley; spray and mist tear off the top; sand blasts outward at its base; dawn light glows green-gold through the water. Slight camera shake as it peaks. Photorealistic, cinematic, blockbuster scale, 24mm. No visible faces. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-carga.mp4` 🔀 ⭐ | f01b | `f-carga.jpg` · @LauraArmor | `Tracking shot alongside Laura D’Orrose (36-year-old woman, golden-blonde braid flying, worn steel armor over crimson, black mourning band, longsword raised) galloping a grey warhorse down a dune at dawn; the camera runs low beside the horse, hooves throwing sand into the lens; behind her, a wave of dust, red banners and steel glints pours down the slope. Her face is set and furious. Photorealistic, cinematic, handheld energy, 35mm, slight motion blur. One person in focus, no blood. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-bronze.mp4` ⭐ | f03 | `f-bronze.jpg` | `Locked-off telephoto shot of a line of faceless bronze automatons with stone joints stepping over a dune crest in perfect unison against the low sun: three heavy steps and a pause, three steps and a pause; sand pours off their feet; heat haze ripples; on the last beat the rhythm breaks into four relentless steps and the line keeps coming toward camera. Photorealistic, cinematic, ominous, 85mm compression. No humans. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-linha.mp4` ⭐ | f03b | `f-linha.jpg` | `Handheld, shaky battle shot at waist height in a muddy valley full of dust and spray: a soldier swings a war hammer into the stone knee of a bronze automaton, the joint bursts into grey dust and the machine drops to one knee, still swinging its arm; a shield buckles; more bronze shapes advance through the haze behind. Photorealistic, cinematic, chaotic, 35mm, motion blur. No blood, no gore. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-pira.mp4` ⭐ | f04 | `f-pira.jpg` · @Kronk | `Low-angle slow-motion shot of Kronk (giant ash-grey Grakh warrior, scar over the left eye, black dreadlocks, big lower canines, animal tooth on a cord at his throat, white clay stripes, huge stone mace) leading a charge up a dune, roaring, the mace rising; two Grakh warriors behind him; sand exploding under their feet in the golden backlight. Photorealistic, cinematic, 35mm, 48 fps slow motion feel. No more than three in focus. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-varr.mp4` ⭐ | f05 | `f-varr.jpg` · @Varr | `Low-angle slow push-in on Lord Varr (big man, close-cropped dark blond hair, broken nose, cloth bound around his forehead, dented breastplate, mud to the chest) standing in a muddy valley with his longsword raised high, chest heaving; he roars at the sky; smoke drifts across; at his feet a puddle of strange water glows gold, then fades and drains into the mud. Photorealistic, cinematic, 35mm. No blood, no corpse. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-kronk.mp4` ⭐ | f06 | `f-kronk.jpg` · @Kronk | `Slow dolly-back as Kronk (giant ash-grey Grakh warrior, scar over the left eye, black dreadlocks with bone beads, big lower canines, animal tooth on a cord at his throat, huge stone mace) walks straight toward the camera through drifting dust, each footstep heavy, eyes locked on the lens; at the edges of frame, blurred soldiers step aside. He stops, rolls his shoulders, and lifts the mace. Photorealistic, cinematic, tense, 50mm. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-eclipse.mp4` ⭐ | f07 | `f-eclipse.jpg` | `Time-lapse feel, locked-off wide shot: over a desert battlefield, a black disk slides across the sun and the daylight drains into an eerie bronze dusk, then cold blue; the shadows on the sand sharpen; a line of shields and spears in silhouette all tilt their heads up; dust stops moving in the air. Photorealistic, cinematic, ominous, 24mm. No visible faces. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-eclipse-luta.mp4` ⭐ | f07b | `f-eclipse-luta.jpg` | `Handheld battle shot under a total solar eclipse in a desert valley, bronze half-light and dust: a soldier of Redom braces his shield as a huge ash-grey Grakh warrior swings a weapon down and a faceless bronze automaton lunges between them; all three keep fighting in the dark; dust swirls through the strange metallic light, the black sun with its white corona hangs above. The camera pushes slowly forward through the fight with a slight shake. Photorealistic, cinematic, chaotic, 35mm, motion blur. No blood, no gore. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-maior.mp4` ⭐ | f08/f09 | `f-maior.jpg` · @Maior | `Very low angle, slow push-in on the Biggest (a monstrous ash-grey Grakh about 3.4 m tall, cracked skin, impossible muscles, the right arm far heavier than the left, hands like claws, jutting lower canines, matted black dreadlocks) standing under a black eclipsed sun with a blazing white corona; he throws his head back and laughs; a few arrows thud into his shoulders and he does not flinch; he lowers his head and looks straight into the lens. Photorealistic, cinematic, horror-epic, 24mm. No blood. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-depois.mp4` ⭐ | f10 | `f-depois.jpg` | `Slow lateral dolly across a desert valley after a battle as the sun returns: shattered bronze plates, broken spears, dented shields, a torn red banner stirring in the wind; dust settles in the clean gold light; in the distance a faint white glow fades out of the ground like dying embers. Photorealistic, cinematic, mournful, 24mm. No people, no bodies, no blood. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
+| `f-recuo.mp4` ⭐ | f12 | `f-recuo.jpg` | `Wide telephoto shot at dusk, camera static with a slow drift: a small battered column of soldiers and horses walks away across the desert toward a distant stake-fence outpost, heat haze softening them; the long purple shadows stretch; the red band on the horizon fades. Photorealistic, cinematic, quiet, 85mm compression. No visible faces. Loop: use the same image as the end frame. Single continuous shot, no scene cuts. No dialogue, no music, no subtitles, no on-screen text.` |
 
 ---
 
@@ -505,7 +669,7 @@ Já existem como provisórios. Se for regravar, todos com **loop ligado, 20–30
 
 ---
 
-## 7. Dublagem da Laura (`assets/audio/voz/`, ElevenLabs · Eleven v3)
+## 7. Dublagem da Laura (`assets/audio/voz/`, ElevenLabs · Eleven v4)
 
 **Voz (Voice Design, se for criar do zero):**
 ```
@@ -547,7 +711,7 @@ A woman in her mid-thirties, a seasoned military commander and queen. Low, stead
 | `L19` | f06 (depois) | O Kronk caiu. Ela sangra por dentro da armadura e admite para si. Pensamento, ofegante. | `[breathing hard, quiet] I hate lying... [pause] to myself most of all. [exhales] I was nearly beaten. [pause] [a hard, quiet relief] But I won.` | Odeio mentir, mais ainda para mim mesma: quase fui derrotada. Mas venci. |
 | `L20` | f07 | Em pé sobre o Kronk caído, antes do golpe final. Respeito e ódio na mesma frase. Pensamento. | `[low, cold respect] He was an excellent opponent. [pause] [hard, quiet] But now the Grakh end. No one else of my family... no one else of Redom... dies at the hands of these savages, in the sand of this desert.` | Foi um excelente adversário. Mas agora os Grakh acabam. Mais ninguém da minha família, mais ninguém de Redom, morre na mão desses selvagens, na areia deste deserto. |
 
-*Dica do ElevenLabs para as falas gritadas (L04, L14, L16, L18): gere em Stability "Creative", 3–4 vezes, e escolha a que não estoura. Se a tag [shouts] não pegar, escreva a fala toda em maiúsculas e ponha um ponto de exclamação no fim.*
+*Dica para as falas gritadas (L04, L14, L16, L18): baixe a Stability, gere 3 ou 4 takes e escolha a que não estoura. Se `[shouts]` não pegar, escreva a fala em MAIÚSCULAS com exclamação, ou descreva a voz (*a hoarse, commanding voice*).*
 
 ---
 
@@ -560,12 +724,12 @@ A woman in her mid-thirties, a seasoned military commander and queen. Low, stead
 
 ---
 
-### Fontes da pesquisa
-- [Google Cloud · Ultimate prompting guide for Veo 3.1](https://cloud.google.com/blog/products/ai-machine-learning/ultimate-prompting-guide-for-veo-3-1)
-- [How to Use Veo 3.1 Ingredients to Video (Atlas Cloud)](https://www.atlascloud.ai/blog/guides/how-to-use-veo-3-1-ingredients-to-video-transforming-static-photos-into-cinematic-ai-clips)
-- [Veo 3.1 prompting guide, every feature explained (Atlabs)](https://www.atlabs.ai/blog/veo-3.1-prompting-guide-every-feature-explained-with-copy-paste-prompts)
-- [ElevenLabs · How do audio tags work with Eleven v3?](https://help.elevenlabs.io/hc/en-us/articles/35869142561297-How-do-audio-tags-work-with-Eleven-v3)
-- [ElevenLabs · Eleven v3 audio tags (blog)](https://elevenlabs.io/blog/v3-audiotags)
-- [ElevenLabs · How do I prompt for sound effects?](https://elevenlabs.io/docs/help-center/product/core-capabilities/sound-effects/how-do-i-prompt-for-sound-effects.md)
-- [ElevenLabs · Sound effects overview](https://elevenlabs.io/docs/overview/capabilities/sound-effects)
+### Fontes da pesquisa (atualizadas em 13/11/2026)
+- [Google Flow · Create videos (Ingredients, Frames, Characters com @, Omni Flash)](https://support.google.com/flow/answer/16353334?hl=en&co=GENIE.Platform%3DDesktop)
+- [Google AI for Developers · Generate and edit videos with Gemini Omni Flash](https://ai.google.dev/gemini-api/docs/omni)
+- [useapi.net · Gemini Omni Flash no Google Flow (durações e limites de referências)](https://useapi.net/docs/articles/omni-flash-bash)
+- [Google Flow guide · Images, Video & Tools](https://novarixstudio.substack.com/p/google-flow-guide)
+- [ElevenLabs · Emotional text to speech with Eleven v4](https://elevenlabs.io/blog/emotional-text-to-speech-with-eleven-v4)
+- [Morphic · Eleven v4 prompt guide](https://morphic.com/resources/how-to/eleven-v4-guide)
+- [ElevenLabs · Sound effects (SFX v3)](https://elevenlabs.io/docs/overview/capabilities/sound-effects)
 - [OpenAI Cookbook · GPT Image Generation Models Prompting Guide](https://developers.openai.com/cookbook/examples/multimodal/image-gen-models-prompting-guide)

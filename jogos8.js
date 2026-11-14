@@ -104,14 +104,20 @@ function ler(root, o) {
 function sala(root, o) {
   return new Promise((resolve) => {
     const P = o.pontos || {};
-    const POS = { esteira: [26, 60], bacia: [72, 58], janela: [72, 20], laje: [48, 54] };
+    const POS = { esteira: [24, 52], bacia: [87, 66], janela: [78, 12], laje: [52, 77] };   // em % da IMAGEM (a06-laje)
     root.innerHTML = `<div class="j8-sala">
-      <div class="j8-sala-bg" style="${o.img ? `background-image:url('${esc(o.img)}')` : ''}"></div>
-      ${Object.keys(POS).map((k) => `<button class="j8-ponto j8-sp" data-k="${k}" style="left:${POS[k][0]}%;top:${POS[k][1]}%"><i></i><span>${esc((P[k] || {}).rot || k)}</span></button>`).join('')}
+      <div class="j8-sala-palco"><div class="j8-sala-bg" style="${o.img ? `background-image:url('${esc(o.img)}')` : ''}"></div>
+      ${Object.keys(POS).map((k) => `<button class="j8-ponto j8-sp" data-k="${k}" style="left:${POS[k][0]}%;top:${POS[k][1]}%"><i></i><span>${esc((P[k] || {}).rot || k)}</span></button>`).join('')}</div>
       <div class="j8-sala-txt"><p class="j8-vazio">${esc(o.intro || '')}</p></div>
       <div class="j8-sala-pe"><button class="opt j8-levantar" hidden>${esc(o.levantar || '')}</button><button class="cta j8-subir">${esc(o.subir || '')}</button></div>
     </div>`;
     const $ = (s) => root.querySelector(s), txt = $('.j8-sala-txt'), lev = $('.j8-levantar');
+    // o palco tem a proporção da imagem (16:9): cobre a tela no paisagem, cabe inteiro no retrato; os pontos ficam colados no objeto
+    const palco = $('.j8-sala-palco'), sala = $('.j8-sala');
+    const ajusta = () => { const w = sala.clientWidth, h = sala.clientHeight; if (!w || !h) return;
+      const s = (w / h < 1.2 ? Math.min : Math.max)(w / 16, h / 9);
+      palco.style.width = (16 * s) + 'px'; palco.style.height = (9 * s) + 'px'; };
+    ajusta(); requestAnimationFrame(ajusta); window.addEventListener('resize', ajusta);
     let cisterna = false; const vistos = [];
     const diz = (s) => { txt.innerHTML = `<p>${esc(s)}</p>`; };
     root.querySelectorAll('.j8-sp').forEach((b) => b.onclick = () => {
@@ -121,7 +127,7 @@ function sala(root, o) {
       o.A && o.A.tone && o.A.tone(300, .2, 'sine', .03);
     });
     lev.onclick = () => { cisterna = true; lev.hidden = true; diz(o.cisterna || ''); o.A && o.A.sfx && o.A.sfx('pedra-arrasta', .7, () => o.A.hiss && o.A.hiss(.6, 300, 1, .08)); };
-    $('.j8-subir').onclick = () => resolve({ cisterna, vistos });
+    $('.j8-subir').onclick = () => { window.removeEventListener('resize', ajusta); resolve({ cisterna, vistos }); };
     if (BOT()) { root.querySelector('.j8-sp[data-k="laje"]').click(); if (window.__JOGO_BOT_LAJE !== false) lev.click(); setTimeout(() => $('.j8-subir').click(), 10); }
   });
 }

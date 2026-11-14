@@ -40,6 +40,7 @@ Sento ao lado dela. Ela tira a pena da boca e olha para o papel, depois para mim
 
 — Não estou escrevendo sobre você desta vez. — Ela franze a testa. Só franze assim quando está irritada.
 
+### [3]
 — Eu volto logo. Prometo.
 
 Ela pega a minha mão e passa o polegar nos calos, um por um, como faz quando vai me dizer uma coisa difícil.
@@ -50,19 +51,7 @@ Ela pega a minha mão e passa o polegar nos calos, um por um, como faz quando va
 
 — Você ama mais a mim ou ao seu título? Lâmina… General-Rainha?
 
-### [2]
-A capela da Juíza ainda tem vela acesa. Justine está no último banco, com um papel no colo e a pena entre os dentes. Ela vem aqui toda noite. Sozinha, porque eu não venho desde o Simon.
-
-Ela escreve poemas para mim desde o nosso primeiro beijo. Os poemas fizeram dela uma escritora famosa em Redom. Talvez a mais famosa.
-
-Sento ao lado dela. Ela tira a pena da boca e olha para o papel, depois para mim.
-
-— Veio fazer as pazes com a sua fé, Laura?
-
-— Vim te ver.
-
-— Não estou escrevendo sobre você desta vez. — Ela franze a testa. Só franze assim quando está irritada.
-
+### [3]
 — Eu volto logo. Prometo.
 
 Ela pega a minha mão e passa o polegar nos calos, um por um, como faz quando vai me dizer uma coisa difícil.
@@ -74,14 +63,17 @@ Ela pega a minha mão e passa o polegar nos calos, um por um, como faz quando va
 — Você ama mais a mim ou ao seu título? Lâmina… General-Rainha?
 >> JUSTINE | 1 | — Você, Justine. Te amo desde sempre, e você sabe. | 2 | — Uma coisa não tem nada a ver com a outra. | 3 | — O meu dever com Redom vem em primeiro lugar. Sempre.
 
-### [3]
+### [4]
 Ela espera, com a pena parada na mão.
 
-### [3]
+### [4]
 Ela espera, com a pena parada na mão.
 >> SOSSEGAR | 1 | — Prometo. | 2 | — Não prometo.
 
-### [4]
+### [5]
+Levanto e vou para a porta. O peito aperta por deixar a Justine outra vez. Quero olhar para ela mais uma vez antes de ir. Saio sem me virar.
+
+### [6]
 Minha mãe não sai mais da cama. As cortinas ficam fechadas dia e noite, e a criada deixa uma vela acesa ao lado dela, de dia também.
 
 Ela me ouve entrar e não abre os olhos.
@@ -104,7 +96,7 @@ Ela tosse, e a tosse dói nela. Continua mesmo assim:
 
 — Se você não voltar, vou amaldiçoar aquele Torneio até o último dos poucos dias que me restam. Você sabe disso, não sabe?
 
-### [4]
+### [6]
 Minha mãe não sai mais da cama. As cortinas ficam fechadas dia e noite, e a criada deixa uma vela acesa ao lado dela, de dia também.
 
 Ela me ouve entrar e não abre os olhos.
@@ -126,24 +118,20 @@ O pulso sobe no meu pescoço. As minhas mãos se mexem dentro da dela, e ela sen
 Ela tosse, e a tosse dói nela. Continua mesmo assim:
 
 — Se você não voltar, vou amaldiçoar aquele Torneio até o último dos poucos dias que me restam. Você sabe disso, não sabe?
-
-— Vou me preocupar sempre, Laura. Sou sua mãe.
-
-— É uma bênção e uma maldição, esse amor de mãe. Talvez você nunca descubra.
 >> MINHA MÃE | 1 | — Não se preocupe, mãe. Estou levando os nossos melhores soldados. Eu volto. | 2 | — Estou fazendo isso pelo Simon, mãe. Sobraram poucos Grakh. Vai ser mais massacre que batalha. | 3 | — O Torneio foi o melhor dia da minha vida, mãe. Nada vai mudar isso.
 
-### [5]
+### [7]
 — Tenho que ir, mãe. Fique bem.
 
 — Reze ao Cavaleiro para me dar forças, filha. E coma alguma coisa antes de ir, pela sua mãe. — Ela me solta devagar. — Te amo.
 
-### [5]
+### [7]
 — Tenho que ir, mãe. Fique bem.
 
 — Reze ao Cavaleiro para me dar forças, filha. E coma alguma coisa antes de ir, pela sua mãe. — Ela me solta devagar. — Te amo.
 >> O QUE EU PROMETO | 1 | — Prometo que vou comer. Também te amo. | 2 | — Prometo que vou rezar por você. Também te amo.
 
-### [6]
+### [8]
 Antes do sol, o comandante Aubert pede para entrar. O caderno de couro vem debaixo do braço, fechado.
 
 — A Nymae da Orla não chegou à costa, General-Rainha.
@@ -164,7 +152,7 @@ Os homens da Sentença juram que o mar se levantou contra eles. A mulher que est
 
 Aubert abre o caderno, enfim, e escreve. Antes de sair, inclina a cabeça na minha direção.
 
-### [7]
+### [9]
 Markus anda dormindo na sala de armas. Quando entro, ele já está sentado no banco, de botas, com a espada do meu irmão atravessada nos joelhos.
 
 — Já sei, Laura. O Aubert passou por aqui primeiro. — Ele ri pelo nariz. — Você leva os melhores de Redom e me deixa vigiando uma Nymae que já sumiu.
@@ -177,7 +165,7 @@ Ele olha para a espada nos joelhos.
 
 — Reforjei a espada do Simon. Está impecável. — Ele ergue a lâmina contra a luz da janela. — Não seria justiça do Cavaleiro os assassinos dele caírem pela espada dele?
 
-### [7]
+### [9]
 Markus anda dormindo na sala de armas. Quando entro, ele já está sentado no banco, de botas, com a espada do meu irmão atravessada nos joelhos.
 
 — Já sei, Laura. O Aubert passou por aqui primeiro. — Ele ri pelo nariz. — Você leva os melhores de Redom e me deixa vigiando uma Nymae que já sumiu.
@@ -191,14 +179,14 @@ Ele olha para a espada nos joelhos.
 — Reforjei a espada do Simon. Está impecável. — Ele ergue a lâmina contra a luz da janela. — Não seria justiça do Cavaleiro os assassinos dele caírem pela espada dele?
 >> A ESPADA DO MEU IRMÃO | 1 | Levar a espada. | 2 | Deixar a espada com Markus. — Use-a para proteger Redom.
 
-### [8]
+### [10]
 O templo do Cavaleiro abre antes da primeira hora para a guarda que sai. Hoje abre só para mim.
 
 Não entro aqui desde a notícia. O Cavaleiro de pedra continua olhando para a porta, de espada baixa. As velas são as mesmas, das mesmas viúvas.
 
 Ajoelho e fecho os olhos.
 
-### [8]
+### [10]
 O templo do Cavaleiro abre antes da primeira hora para a guarda que sai. Hoje abre só para mim.
 
 Não entro aqui desde a notícia. O Cavaleiro de pedra continua olhando para a porta, de espada baixa. As velas são as mesmas, das mesmas viúvas.
@@ -206,12 +194,12 @@ Não entro aqui desde a notícia. O Cavaleiro de pedra continua olhando para a p
 Ajoelho e fecho os olhos.
 >> O QUE EU PEÇO | 1 | Força para a minha mãe. | 2 | Encontrar e matar o Grakh grande. | 3 | Perdão por ter abandonado a fé desde a morte do Simon.
 
-### [9]
+### [11]
 Na saída, o padre da guarda me acompanha até a escada do térreo.
 
 — A Nymae da Orla dormiu aqui embaixo, General-Rainha. Três noites. Varreram o quarto depois que ela foi.
 
-Desço os degraus. O quarto é pequeno: uma esteira, uma bacia, uma janela alta.
+Desço os degraus. O quarto é pequeno: um catre, uma bacia, uma janela alta.
 
 Isso dá nos esgotos da Capital. Merda.
 
@@ -219,7 +207,7 @@ Mando um soldado levar a notícia ao Markus: que desça aqui com dois homens e s
 
 Subo. A coluna espera.
 
-### [10]
+### [12]
 O portão sul abre com o sol. Conto por companhia, como conto há vinte anos: vinte companhias de cem. Dois mil.
 
 A cavalaria na frente. Depois a Terceira, a infantaria pesada do Lorde Varr, com o Varr a pé no meio dela, porque um Varr anda com os seus. Joseph monta com a mão esquerda na rédea. A direita treme de manhã; tremia já no Torneio.
@@ -230,7 +218,7 @@ Atrás da coluna vêm as carroças: os barris, os odres, a cozinha, a forja sobr
 
 Monto o cinzento. Antes de eu puxar a rédea, ele vira a cabeça para a estrada do sul.
 
-### [11]
+### [13]
 PARTE II
 
 A Estrada
@@ -240,7 +228,7 @@ Antes do deserto, o exército conta as espadas. No deserto, conta as gotas de á
 
 KASSIAN D’ORROSE, GENERAL-REI
 
-### [12]
+### [14]
 Na primeira noite de estrada, a cozinha arma a panela grande no meio do acampamento, e os soldados fazem fila com a tigela na mão.
 
 Entro na fila. Na estrada eu como da panela dos soldados. Sempre foi assim, mas a comida nunca teve esse gosto.
@@ -259,7 +247,7 @@ Joseph senta perto do fogo com um odre de vinho e gira o odre na mão antes de c
 
 A direita dele treme no couro do odre. A esquerda segura o gargalo. Os homens dele olham para mim.
 
-### [12]
+### [14]
 Na primeira noite de estrada, a cozinha arma a panela grande no meio do acampamento, e os soldados fazem fila com a tigela na mão.
 
 Entro na fila. Na estrada eu como da panela dos soldados. Sempre foi assim, mas a comida nunca teve esse gosto.
@@ -279,7 +267,7 @@ Joseph senta perto do fogo com um odre de vinho e gira o odre na mão antes de c
 A direita dele treme no couro do odre. A esquerda segura o gargalo. Os homens dele olham para mim.
 >> O ODRE DO JOSEPH | 1 | — Na volta do deserto, eu bebo com você. | 2 | — Nada de beber até cumprirmos a missão, Joseph. | 3 | Não responder.
 
-### [15]
+### [17]
 No sexto dia a terra vira areia, e a estrada some embaixo dela. Não faz falta. É o caminho das campanhas, de ida e volta até as Goelas, com os poços marcados por pedra empilhada.
 
 Confiro os odres e os barris da carroça da frente com o intendente.
@@ -292,7 +280,7 @@ Confiro os odres e os barris da carroça da frente com o intendente.
 
 Nunca usei a folga toda.
 
-### [16]
+### [18]
 PARTE III
 
 A Areia
@@ -302,24 +290,24 @@ No deserto, quem carrega a água carrega o exército.
 
 DITO DOS INTENDENTES
 
-### [17]
+### [19]
 Na primeira noite de areia, alguém mexe na nossa água.
 
-De manhã, os cochos da cavalaria estão secos, e o feno embaixo deles, molhado. Dois cavalos deitados não levantam mais.
+De manhã, o barril do meio da cozinha tem gosto de mar. Meio acampamento bebe dele antes do primeiro cuspir.
 
-O intendente confere os barris da estrebaria. Falta a água de um dia.
+Joseph bebeu antes de todos. Passa a manhã de joelhos atrás de uma carroça, e à tarde monta com as mãos tremendo.
 
 No deserto, água vale mais que ouro. Isso não é descuido.
 
-Mando trazer todos os que dormiram perto da estrebaria.
+Mando trazer todos os que dormiram perto da cozinha.
 
 Servo não se conta, e eu nunca soube o nome de nenhum. Hoje, pergunto.
 
-São Wil, o moço da estrebaria, que dorme no feno, e Tasso, um soldado da Terceira que estava de guarda ali perto.
+São Nell, que serve a panela da cozinha, e Tasso, um soldado da Terceira que estava de guarda ali perto.
 
 Pergunto, dura:
 
-— Quem esvaziou os cochos?
+— Como a água do barril ficou salgada?
 
 Eles me olham, indignados, sem resposta.
 
@@ -327,31 +315,81 @@ Eu vou entender o que aconteceu. Olho um de cada vez, de perto.
 
 Mando todos de volta para o trabalho.
 
-### [18]
+### [20]
 A Lei da Lâmina é clara: em campanha, quem rouba água morre diante da coluna.
 
-Em Wil, o que eu vi não é de gente.
+Em Nell, só vi cansaço e medo de mim.
 
 Tasso mentiu sobre a água, e a boca dele não tem sede.
 
 Não tenho prova. Tenho o que vi.
 
-### [18]
+### [20]
 A Lei da Lâmina é clara: em campanha, quem rouba água morre diante da coluna.
 
-Em Wil, o que eu vi não é de gente.
+Em Nell, só vi cansaço e medo de mim.
 
 Tasso mentiu sobre a água, e a boca dele não tem sede.
 
 Não tenho prova. Tenho o que vi.
->> A LEI | 1 | Mandar executar Wil, moço da estrebaria, ao amanhecer. | 2 | Mandar executar Tasso, soldado da Terceira, ao amanhecer. | 3 | Pôr dois guardas na estrebaria e esperar.
+>> A LEI | 1 | Mandar executar Nell, moça da cozinha, ao amanhecer. | 2 | Mandar executar Tasso, soldado da Terceira, ao amanhecer. | 3 | Pôr dois guardas na cozinha e esperar.
 
-### [23]
+### [21]
+Na segunda noite, a água some outra vez.
+
+De manhã, os cochos da cavalaria estão secos, e o feno embaixo deles, molhado. Dois cavalos deitados não levantam mais.
+
+O intendente confere os barris da estrebaria. Falta a água de um dia.
+
+Antes da ração, o intendente me procura sozinho.
+
+— Na revista da Capital, Lâmina, um servo tinha a pele áspera embaixo do queixo. Passei a mão para ver se era sarna. Não era. Não lembro qual servo.
+
+Alguém tira a nossa água de propósito, uma noite por vez.
+
+Atrás das grades, a Nymae me falou do deserto sem eu perguntar.
+
+E faz nove dias que ela sumiu na estrada da costa. Penso nisso, e o coração bate mais forte. Tenho areia nos dentes.
+
+Mando trazer todos os que dormiram perto da estrebaria.
+
+São Wil, o moço da estrebaria, que dorme no feno, e Ansel, o sentinela, que fazia a ronda daquele lado.
+
+Pergunto, dura:
+
+— Quem esvaziou os cochos?
+
+Eles me olham, indignados, sem resposta.
+
+Olho um de cada vez, de perto.
+
+Observo um a um e não digo nada. Mando todos de volta para o trabalho.
+
+### [22]
+A Lei da Lâmina é clara: em campanha, quem rouba água morre diante da coluna.
+
+Em Wil, o que eu vi não é de gente.
+
+Em Ansel, só vi cansaço e medo de mim.
+
+Não tenho prova. Tenho o que vi.
+
+### [22]
+A Lei da Lâmina é clara: em campanha, quem rouba água morre diante da coluna.
+
+Em Wil, o que eu vi não é de gente.
+
+Em Ansel, só vi cansaço e medo de mim.
+
+Não tenho prova. Tenho o que vi.
+>> A LEI | 1 | Mandar executar Wil, moço da estrebaria, ao amanhecer. | 2 | Mandar executar Ansel, sentinela, ao amanhecer. | 3 | Pôr dois guardas na estrebaria e esperar.
+
+### [25]
 As noites seguintes passam sem nada. Os odres amanhecem duros de água, e os cochos, cheios.
 
 O que quer que fosse, ficou para trás, na areia, sem água.
 
-### [25]
+### [27]
 PARTE IV
 
 As Goelas
@@ -361,7 +399,7 @@ O posto das Goelas não tem muralha. Tem um poço e uma roda.
 
 RELATÓRIO AO CONSELHO DE REDOM
 
-### [26]
+### [28]
 As Goelas aparecem no fim do décimo primeiro dia: a cerca de estacas, o muro velho dos Grakh em volta do poço mais fundo, a roda em cima do poço e o estandarte vermelho com a balança, que alguém lavou.
 
 Dos cento e vinte homens do posto, sobraram trinta e um. Estão em fila na porta da cerca. O mais velho mal tem barba.
@@ -376,10 +414,10 @@ Meu pai morreu neste chão quando eu tinha quinze anos, num dia de eclipse. Os q
 
 Meu irmão morreu aqui também. A notícia levou oito dias até a Capital, e eu levei noventa e dois para chegar aqui. Parece que tudo aconteceu na mesma semana.
 
-### [27]
+### [29]
 Nas Goelas, as noites ficam como ficaram desde a corrente vazia: quietas.
 
-### [28]
+### [30]
 Ansel me leva até o meio do pátio, entre o poço e a cerca. Para num lugar onde a areia é igual à do resto.
 
 — Aqui, senhora. — Ele aponta um palmo à frente da bota. — Ele caiu aqui. O grande ajoelhou ali. Eu estava no cavalo, perto da porta.
@@ -394,7 +432,7 @@ Dois dedos no peito, duas batidas: mais uma rodada. Era o nosso sinal no laranja
 
 — Na noite antes, ele me deu metade do pão dele. Disse que o pão de amanhã era por conta dele.
 
-### [29]
+### [31]
 A roda do poço é de madeira de carroça, com uma corda grossa que desce até a água. Do lado, uma manivela gasta no meio, de tanta mão.
 
 Pego a manivela. Foi para montar esta roda que o Simon veio às Goelas.
@@ -407,8 +445,8 @@ Quando solto, os meus olhos estão molhados. A última vez que quase chorei foi 
 
 Chorar na frente dos meus homens, dos melhores, seria trair a Juíza e o Cavaleiro. Me recomponho.
 
-### [30]
-Enterraram meu irmão em cima do muro velho dos Grakh, no lugar mais alto do posto, de onde se vê a roda. Uma pilha de pedras, e o estandarte dele enrolado no cabo, enterrado de pé.
+### [32]
+Enterraram meu irmão em cima do muro velho dos Grakh, no lugar mais alto do posto, de onde se vê a roda. Uma pilha de pedras e o estandarte dele no alto do cabo, enterrado de pé. O vento já rasgou a ponta.
 
 Ajoelho ao lado das pedras.
 
@@ -424,8 +462,8 @@ O pulso bate no pescoço, alto. As mãos não param no joelho. Fico até elas pa
 
 Quando levanto, vejo lá embaixo, no pé do muro, outro túmulo. Mais velho.
 
-### [30]
-Enterraram meu irmão em cima do muro velho dos Grakh, no lugar mais alto do posto, de onde se vê a roda. Uma pilha de pedras, e o estandarte dele enrolado no cabo, enterrado de pé.
+### [32]
+Enterraram meu irmão em cima do muro velho dos Grakh, no lugar mais alto do posto, de onde se vê a roda. Uma pilha de pedras e o estandarte dele no alto do cabo, enterrado de pé. O vento já rasgou a ponta.
 
 Ajoelho ao lado das pedras.
 
@@ -442,7 +480,7 @@ O pulso bate no pescoço, alto. As mãos não param no joelho. Fico até elas pa
 Quando levanto, vejo lá embaixo, no pé do muro, outro túmulo. Mais velho.
 >> O PÉ DO MURO | 1 | Descer até o túmulo do meu pai. | 2 | Voltar para o posto.
 
-### [31]
+### [33]
 As pedras perderam a cor, e do estandarte sobrou só a ponta de ferro do cabo. Numa pedra lisa, alguém riscou um nome com a ponta de uma faca: Kassian.
 
 Redom enterra os seus guerreiros onde caem. Meu pai caiu aqui.
@@ -455,7 +493,7 @@ Fico de pé na frente das pedras. Não sei o que se diz a um pai assim.
 
 O vento passa pela ponta de ferro do estandarte e assobia fino. Fico até o vento parar.
 
-### [32]
+### [34]
 Joseph me espera perto da roda, de pé, com as duas mãos no cinto para elas não tremerem.
 
 — Alteza. Me deixa aqui.
@@ -466,7 +504,7 @@ Joseph me espera perto da roda, de pé, com as duas mãos no cinto para elas nã
 
 Ele gira o anel no dedo e espera a minha resposta.
 
-### [32]
+### [34]
 Joseph me espera perto da roda, de pé, com as duas mãos no cinto para elas não tremerem.
 
 — Alteza. Me deixa aqui.
@@ -478,7 +516,7 @@ Joseph me espera perto da roda, de pé, com as duas mãos no cinto para elas nã
 Ele gira o anel no dedo e espera a minha resposta.
 >> JOSEPH | 1 | Deixar Joseph no posto. | 2 | Mandar Joseph seguir com a coluna.
 
-### [33]
+### [35]
 Os batedores voltam no fim da tarde, com os cavalos espumando.
 
 — O Pira está no Último Gole, Lâmina. A três dias daqui, se formos rápidos. Todos: os que lutam, os velhos, as crias. Enchendo odre.
@@ -489,7 +527,7 @@ Nem os Grakh vivem lá. Pararam no poço para encher os odres e cuidar dos ferid
 
 Mando soar a corneta. Vamos marchar o mais depressa que pudermos.
 
-### [34]
+### [36]
 PARTE V
 
 O Último Gole
@@ -499,7 +537,7 @@ A última chance de beber água para quem segue adiante. E ela tem gosto de ovo 
 
 TEODRIC VANE, EXPLORADOR DE REDOM
 
-### [35]
+### [37]
 Do alto da duna, no fim do terceiro dia, o Último Gole: um vale raso de pedra com sete poços cavados na rocha, e só um brilhando.
 
 Em volta do que brilha, os fogos do Pira.
@@ -512,7 +550,7 @@ Trinta e quatro, ou trinta e sete. Vinte anos atrás, nas Goelas, contei mais de
 
 Os outros seis poços ficam entre a duna e a água, abertos no chão. Um soldado joga uma pedra no mais perto. Ela cai, cai, e não bate em nada.
 
-### [36]
+### [38]
 De madrugada, o guarda do flanco do poente me acorda.
 
 — Lâmina. O chão.
@@ -521,14 +559,14 @@ Desço a duna com ele e encosto o ouvido na areia, como os batedores ensinam a o
 
 Três batidas e um silêncio. Três batidas e um silêncio. Cavalo não bate assim, nem homem a pé.
 
-### [37]
+### [39]
 Levanto a cabeça da areia. O guarda espera a ordem.
 
-### [37]
+### [39]
 Levanto a cabeça da areia. O guarda espera a ordem.
 >> O POENTE | 1 | Dobrar a vigia no flanco do poente. | 2 | Mandar dois batedores ver o que é. | 3 | É o vento. Voltar a dormir.
 
-### [38]
+### [40]
 O Varr me acha acordada perto dos cavalos e põe a mão no meu ombro, como faz com os soldados dele.
 
 — Amanhã, Lâmina.
@@ -541,7 +579,7 @@ O Varr me acha acordada perto dos cavalos e põe a mão no meu ombro, como faz c
 
 — Escreveu a resposta no canto da folha para eu copiar. Um Varr paga o que deve. — Ele aperta o meu ombro. — Amanhã eu pago, Laus da Casa Merrow.
 
-### [38]
+### [40]
 O Varr me acha acordada perto dos cavalos e põe a mão no meu ombro, como faz com os soldados dele.
 
 — Amanhã, Lâmina.
@@ -555,10 +593,10 @@ O Varr me acha acordada perto dos cavalos e põe a mão no meu ombro, como faz c
 — Escreveu a resposta no canto da folha para eu copiar. Um Varr paga o que deve. — Ele aperta o meu ombro. — Amanhã eu pago, Laus da Casa Merrow.
 >> O VARR | 1 | — Você vai ter a sua canção, e eu vou ter a minha vingança. | 2 | — Não existe canção para dois mil homens, Varr. | 3 | — Concentre-se na batalha.
 
-### [39]
+### [41]
 Ele levanta, bate a areia da roupa e vai dormir com a Terceira, no chão, do jeito deles.
 
-### [40]
+### [42]
 Não durmo. Na tenda, passo o dedo no mapa, da duna ao poço, do poço aos acampamentos, até o caminho ficar gravado.
 
 Um moço da cozinha entra com uma tigela de ensopado frio e põe na mesa, ao lado do mapa.
@@ -569,14 +607,14 @@ Amanhã eu vejo a cara de quem matou o Simon.
 
 Lá fora, a areia começa a clarear.
 
-### [42]
+### [44]
 Antes da carga, mando a coluna formar na crista da duna, de frente para o vale.
 
 Lá embaixo, entre a duna e o Pira, uma coisa pequena sobe de dentro de um dos poços secos. Não está com a roupa que deixou na corrente: arrumou outra. Fica de pé na borda, de frente para nós, e abre as mãos.
 
 É ela. Interroguei a desgraçada por uma tarde, embaixo da tocha da Ala Funda.
 
-### [43]
+### [45]
 PARTE VI
 
 O Dia Comido
@@ -586,7 +624,7 @@ Dia ser comido, Maior nascer.
 
 DITO DOS VELHOS GRAKH
 
-### [45]
+### [47]
 No vale, o poço que brilhava apaga.
 
 A água sai dele de uma vez, em pé, mais alta que a duna, e vem pelo vale na direção das mãos dela, passando por cima dos poços secos.
@@ -601,7 +639,7 @@ Quando volta, a água leva o que arrancou encosta abaixo, e os poços secos bebe
 
 Ouço os gritos descendo para dentro da pedra, até sumirem.
 
-### [48]
+### [50]
 Depois da água, atordoada, ouço o compasso.
 
 Três batidas e um silêncio. Ouvi de noite, com o ouvido na areia. Agora não preciso encostar.
@@ -614,7 +652,7 @@ Eles atravessam o lamaçal do vale sem afundar. Um sargento enfia a lança no pe
 
 Que merda está acontecendo?!
 
-### [49]
+### [51]
 Lá embaixo, o Pira viu a água bater em nós e o bronze descer do poente. Os Grakh sobem a duna. Na frente deles, um mais alto que todos, com uma maça.
 
 O líder deles. Não só mais alto: mais musculoso também. O tipo de desvantagem que nunca foi desvantagem para mim.
@@ -625,7 +663,7 @@ Uma flecha de longe derruba o sargento ao meu lado. Lá atrás, em cima de uma p
 
 Ao lado do grande, um Grakh mais velho, com um corte antigo no braço, bate com o porrete em tudo o que se mexe.
 
-### [50]
+### [52]
 O bronze bate na linha da Terceira como uma porta fechando. A lança entra e não sai. O escudo segura um golpe, e o segundo afunda o escudo para dentro do braço de quem segura.
 
 — Nas juntas! Martelos nas juntas!
@@ -638,7 +676,7 @@ Do lado da água, os tambores do Pira. Os Grakh entram pelos buracos que o bronz
 
 E no meio de tudo, sempre que o barulho afrouxa, ouço o estalo da água dela.
 
-### [51]
+### [53]
 Perto da crista, a Nymae conjuradora luta com uma adaga numa mão e, na outra, uma corda de água do tamanho de um chicote de carroça, que estala e corta. Onde o chicote estala, são dez homens a menos.
 
 Só não somos mais porque metade da coluna está de frente para o bronze, e de costas para ela.
@@ -655,7 +693,7 @@ O Varr arranca a espada, ergue acima da cabeça e desce com toda a raiva que tem
 
 O Varr ergue a espada e grita o próprio nome para um lado do vale, depois para o outro.
 
-### [52]
+### [54]
 Não vejo mais a conjuradora. Vejo o grande vindo na minha direção, e os meus homens saindo do caminho dele, porque quem não sai cai. E porque eles sabem que eu quero ele.
 
 Desço do cinzento e dou um tapa na anca dele. Ele corre para trás da duna. A pé eu leio melhor.
@@ -680,7 +718,7 @@ Odeio mentir, mais ainda para mim mesma: quase fui derrotada. Mas venci.
 
 É um alívio que eu não sentia desde o combate contra o Joseph, no Torneio Real.
 
-### [53]
+### [55]
 Paro em cima dele. Ele respira de boca aberta, com os dentes para fora.
 
 Foi um excelente adversário. Mas agora os Grakh acabam. Mais ninguém da minha família, mais ninguém de Redom, morre na mão desses selvagens, na areia deste deserto.
@@ -695,7 +733,7 @@ Atrás de mim, Redom grita:
 
 — Eclipse! Eclipse!
 
-### [54]
+### [56]
 Me viro para eles com a espada no alto.
 
 — Firmes! É só o escuro! Segurem a linha!
@@ -704,7 +742,7 @@ As palavras são do meu pai. A linha fecha.
 
 Quando me viro de volta, o caído não está mais sozinho.
 
-### [55]
+### [57]
 Em pé, entre mim e o Grakh caído, no escuro do dia que virou noite, tem um Grakh que eu nunca vi. Uma aberração.
 
 É maior que o outro. Muito maior. Maior que qualquer um. Um braço é mais grosso que o outro, e o osso do ombro ainda está subindo embaixo da pele, uma pele cinza, rachada, com músculos onde nenhum Grakh tem músculo.
@@ -719,7 +757,7 @@ O pulso bate no pescoço. Bate na garganta. Bate nos dentes.
 
 Os Grakh param de lutar. Olham para ele, batem no peito e gritam uma palavra que eu conheço dos prisioneiros: o Maior.
 
-### [56]
+### [58]
 Na crista, os arcos ainda são muitos.
 
 — Arqueiros! Comigo!
@@ -738,7 +776,7 @@ Essa besta não era do nosso mundo.
 
 O sol volta pela borda.
 
-### [57]
+### [59]
 Com o sol, o vale aparece.
 
 O último homem de bronze ainda anda, com uma perna só, se arrastando pelo braço que sobrou, no mesmo compasso. Três da Terceira desmontam ele no chão, a martelo. Depois disso, o compasso para.
@@ -755,16 +793,17 @@ Derrubei o líder deles. Ou derrubei um grande, e o grande era o outro.
 
 No chão, o meu sangue e o dele secam juntos.
 
-### [58]
+### [60]
 Os que conseguem levantar, levantam. Ando entre eles e encosto a mão em cada um.
 
 Sessenta. De dois mil.
 
 O Varr, com a cabeça enfaixada num pedaço da própria capa, conta a morte da bruxa a quem quiser ouvir. Quando acaba, começa outra vez. Ninguém ri.
 
-### [59]
+### [61]
 Voltamos para as Goelas a pé. Os cavalos que sobraram carregam os que não andam. Do caminho, só lembro do sol e da areia.
 
+### [62]
 Na porta da cerca, os trinta e um do posto esperam os que voltam.
 
 Alguém põe uma tigela na minha mão. Está cheia.
@@ -800,14 +839,14 @@ Diante do Maior, a voz da Lâmina tremeu três vezes.
 
 PONTOS DO CAPÍTULO
 
-31.400
+43.600
 
 A caça
 10.800
 O duelo
-11.900
+18.500
 O Maior
-1.500
+7.100
 Os que voltaram
 7.200
 
