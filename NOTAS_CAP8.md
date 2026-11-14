@@ -280,3 +280,10 @@ L21–L40d (ver MIDIAS §4). O livro ganhou `vozes` por página (`em: [trecho PT
 - 53 falas da Laura instaladas (falta só a `L09b`; a `L17b` usa a `L17a` provisoriamente). Tratamento por lugar: capela com eco de pedra, palácio com sala pequena, Goelas e acampamento secos, gritos de batalha com elmo + eco do vale, pensamentos próximos e quentes, e o "Simon." da L03 voltando das paredes das Goelas. Volume nivelado (-19 LUFS falas, -20 pensamentos, -16 gritos).
 - Efeitos: 3 gerados pelo Marcelo; 16 montados com sons dos Caps. II–VII (mistura, altura, eco, recorte); 1 novo (`linha-fecha`: o exército responde ao "Segurem a linha!" e os escudos fecham).
 - Ambientes: ficam os dos capítulos anteriores.
+
+
+## v9 — som e voz só depois de um toque
+- Regra: nada de som/dublagem solto por estimativa de leitura. Todo som ou fala amarrado a um parágrafo depois do primeiro ganha um "Continuar" antes e só toca no toque do leitor. Vale para páginas (`vozes`, `sons`), resultados de escolhas (voz com `em`) e o que vem depois dos minigames (`sonsDepois` com p>0; paradas a 1 parágrafo de distância se fundem).
+- Permanecem na abertura da página (a virada é o toque): falas/sons no 1º parágrafo e a fala da própria Laura ao escolher.
+- a01: `L01` abre a página; `L01b` (resto do parágrafo da bandeja, instalado e tratado como pensamento) toca depois do Continuar; `L21` depois de outro Continuar.
+- Testes: rotas A/B/C com 0 erros (83, 82 e 79 passos).

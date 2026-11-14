@@ -219,12 +219,15 @@ window.LIVRO = {
     { id: 'parte-I', parte: 'I', zona: 'capital', fundo: { img: IMG('capa'), kb: 'in', dim: .62, clima: 'poeira' },
       cartao: { num: 'I', nome: T('O Prato Cheio', 'The Full Plate'), epigrafe: T('Redom enterra os seus onde caem.', 'Redom buries its own where they fall.'), fonte: T('Dito dos soldados', 'Soldiers’ saying') } },
 
-    { id: 'a01', vozes: [{ voz: 'L21', em: ['Amanhã eu como na estrada', 'Tomorrow I eat on the road'] }], zona: 'quarto', fundo: { img: IMG('a01-prato'), kb: 'in', foco: '55% 45%', dim: .52, clima: 'velas' }, capitular: true, vozAuto: 'L01', vozAtraso: 600,
+    { id: 'a01', zona: 'quarto', fundo: { img: IMG('a01-prato'), kb: 'in', foco: '55% 45%', dim: .52, clima: 'velas' }, capitular: true, vozAuto: 'L01', vozAtraso: 600,
       texto: [
         T('O prato volta cheio.', 'The plate goes back full.'), // N
+        { continuar: true, voz: 'L01b' },
         T('Pão, uma coxa de galinha fria, três ameixas. Tobias pega a bandeja sem pressa. Faz vinte e seis anos que ele serve a minha mesa, e faz oitenta e um dias que leva a bandeja de volta como trouxe.', 'Bread, a cold chicken leg, three plums. Tobias takes the tray without hurrying. He has served my table for twenty-six years, and for eighty-one days he has carried the tray back the way he brought it.'), // N
+        { continuar: true },
         T('Ele fala para o pão:', 'He speaks to the bread:'), // N
         T('— A cozinha manda avisar que amanhã tem cordeiro, alteza.', '— The kitchen sends word there’s lamb tomorrow, Highness.'), // N
+        { continuar: true, voz: 'L21' },
         T('— Amanhã eu como na estrada.', '— Tomorrow I eat on the road.'), // N
         T('Ele inclina a cabeça e sai. A porta fecha com o cuidado de sempre.', 'He bows his head and goes. The door closes with its usual care.'), // N
         T('A cadeira do quarto está virada para a janela. Nunca a tirei dali: é o único canto onde consigo sentar tranquila.', 'The chair in my room faces the window. I have never moved it: it is the only corner where I can sit at ease.'), // N

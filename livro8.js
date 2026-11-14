@@ -359,7 +359,26 @@ function render(dir = 1) {
       <blockquote class="ct-epi"><p>${esc(tr(c.epigrafe))}</p><cite>${esc(tr(c.fonte))}</cite></blockquote></div>`;
   } else {
     const todos = paras(p.texto), blocos = [[]];
-    todos.forEach((t) => (t === CONT ? blocos.push([]) : blocos[blocos.length - 1].push(t)));
+    // som e voz nunca saem por estimativa de leitura: cada um que mira um parágrafo depois do primeiro ganha um "Continuar" antes dele
+    const sc = itensCont(p); let si = 0;
+    const lista = todos.map((t) => (t === CONT ? { cont: sc[si++] || {} } : t));
+    p._gated = new Set();
+    [].concat(p.vozes || [], p.sons || []).forEach((it) => {
+      if (it.se && !it.se(st)) return;
+      const pos = []; lista.forEach((x, k) => { if (typeof x === 'string') pos.push(k); });
+      let k = -1;
+      if (it.em) { const ks = [].concat(it.em); k = pos.findIndex((q) => ks.some((m) => lista[q].includes(m))); }
+      else if (typeof it.p === 'number') k = it.p < 0 ? pos.length + it.p : it.p;
+      else return;
+      if (k <= 0 || k >= pos.length) return;   // 0 = toca na abertura da página (a virada é o toque do leitor)
+      const q = pos[k], dado = { voz: it.voz, s: it.s, v: it.v, fx: it.fx, dur: it.dur, forca: it.forca };
+      p._gated.add(it);
+      const ant = lista[q - 1];
+      if (ant && ant.cont && !(ant.cont.voz && dado.voz) && !(ant.cont.s && dado.s)) { Object.keys(dado).forEach((c) => { if (dado[c] != null) ant.cont[c] = dado[c]; }); }
+      else lista.splice(q, 0, { cont: dado });
+    });
+    p._itens = [];
+    lista.forEach((t) => { if (typeof t === 'string') blocos[blocos.length - 1].push(t); else { blocos.push([]); p._itens.push(t.cont); } });
     txt.innerHTML = blocos[0].map((t, k) => pHTML(t, k === 0 && p.capitular ? 'cap' : '')).join('');
     p._blocos = blocos; p._bloco = (st.feitos['cont:' + p.id] || dir < 0) ? blocos.length : 1;
     if (p._bloco > 1) for (let b = 1; b < blocos.length; b++) blocos[b].forEach((t) => txt.insertAdjacentHTML('beforeend', pHTML(t)));
@@ -378,8 +397,8 @@ function render(dir = 1) {
     ligaNarr(p, narr);
     if (A.ctx && A.on && dir >= 0) later(() => { const b = $('#narr'); if (b && P[st.i] === p && !A.narr) b.click(); }, 700);
   } else if (p.vozAuto && dir >= 0) agendaItens(vozesDe(p), [...txt.children]);
-  if (p.sons && dir >= 0) agendaItens(p.sons, [...txt.children]);
-  if (p.vozes && dir >= 0) agendaItens(p.vozes, [...txt.children]);
+  if (p.sons && dir >= 0) agendaItens(p.sons.filter((x) => !(p._gated && p._gated.has(x))), [...txt.children]);
+  if (p.vozes && dir >= 0) agendaItens(p.vozes.filter((x) => !(p._gated && p._gated.has(x))), [...txt.children]);
   if (cena) $('#cena').onclick = () => verCena(cena);
   const efP = valP(p.efeito); if (efP && !st.feitos['ef:' + p.id]) { st.feitos['ef:' + p.id] = 1; const ef = efP; if (ef.flag) st.f[ef.flag] = true; if (ef.peso) later(() => mudaPeso(ef.peso), 1200); }
   if (p.quieto) renderQuieto(p);
@@ -397,12 +416,14 @@ function render(dir = 1) {
 function renderContinuar(p) {
   box.innerHTML = `<button class="opt cont" id="contBtn"><span class="k">›</span>${U('continuar')}</button>`;
   $('#contBtn').onclick = () => {
-    const it = itensCont(p)[p._bloco - 1] || {};
+    const it = (p._itens || itensCont(p))[p._bloco - 1] || {};
     const novos = p._blocos[p._bloco]; p._bloco++;
     box.innerHTML = '';
     novos.forEach((t, k) => { txt.insertAdjacentHTML('beforeend', pHTML(t, 'novo')); txt.lastElementChild.style.animationDelay = (k * .35) + 's'; });
-    if (A.ctx && A.on) { if (it.voz) A.narrate(vozUrl(it.voz), null, false); if (it.s) A.once(it.s, it.v != null ? it.v : .8); }
-    if (it.fx) [].concat(it.fx).forEach((f) => (typeof f === 'string' ? FX.go(f) : later(() => FX.go(f.fx, f.dur, f.forca), f.ms || 0)));
+    const vzc = typeof it.voz === 'function' ? it.voz(st) : it.voz;
+    if (window.__VOZLOG && vzc) window.__VOZLOG.push(vzc);
+    if (A.ctx && A.on) { if (vzc) A.narrate(vozUrl(vzc), null, false); if (it.s) A.once(it.s, it.v != null ? it.v : .8); }
+    if (it.fx) [].concat(it.fx).forEach((f) => (typeof f === 'string' ? FX.go(f, it.dur, it.forca) : later(() => FX.go(f.fx, f.dur, f.forca), f.ms || 0)));
     const pico = valP(p.pico); if (pico && p._bloco === 2) later(() => { if (P[st.i] === p) Coracao.alvo(pico.bpm); }, 300);
     if (p._bloco < p._blocos.length) return renderContinuar(p);
     st.feitos['cont:' + p.id] = 1; salvar();
@@ -483,6 +504,27 @@ function aplicar(o) {
   if (o.lagrimas) later(() => Sensa.lagrimas(), 900);
   if (o.quente) Sensa.pulsoQuente();
 }
+// revela parágrafos com paradas: cada parada é um "Continuar" e as falas/sons dela só tocam no toque do leitor
+function toca(it) {
+  if (it.fx) FX.go(it.fx, it.dur, it.forca);
+  const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz;
+  if (window.__VOZLOG && vz) window.__VOZLOG.push(vz);
+  if (!A.ctx || !A.on) return;
+  if (vz) A.narrate(vozUrl(vz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .8);
+}
+function revelaGateado(res, cortes, fim) {
+  let ini = 0;
+  const passo = (k) => {
+    const f = k < cortes.length ? cortes[k].i : res.length;
+    res.slice(ini, f).forEach((t, j) => { txt.insertAdjacentHTML('beforeend', pHTML(t, 'novo')); txt.lastElementChild.style.animationDelay = (j * .35) + 's'; });
+    ini = f;
+    if (k >= cortes.length) { fim(); return; }
+    setNext(false);
+    box.insertAdjacentHTML('beforeend', `<button class="opt cont" id="contRes"><span class="k">›</span>${U('continuar')}</button>`);
+    $('#contRes').onclick = () => { $('#contRes').remove(); cortes[k].itens.forEach(toca); passo(k + 1); };
+  };
+  passo(0);
+}
 function escolher(p, id) {
   const e = p.escolha; if (st.escolhas[e.id]) return;
   const o = (p._ops || opsDe(e)).find((x) => x.id === id); marcaNervosa(o, e.id); if (o.efeito) o.efeito(st); st.escolhas[e.id] = id;
@@ -495,7 +537,14 @@ function escolher(p, id) {
   if (o.pico) Coracao.alvo(o.pico);
   aplicar(o); A.escolha(); registrar(e.id, id); salvar();
   const vo = vozDeOpcao(o, e.id);
-  later(() => { const n0 = txt.children.length; appendParas(resultadoDe(o, e.id)); setNext(true); if (Array.isArray(vo)) agendaItens(vo, [...txt.children].slice(n0)); }, 450);
+  later(() => {
+    const n0 = txt.children.length, res = paras(resultadoDe(o, e.id)).filter((t) => t !== CONT);
+    const arr = Array.isArray(vo) ? vo : [];
+    const cortes = arr.filter((it) => it.em && !(it.se && !it.se(st))).map((it) => ({ i: res.findIndex((t) => [].concat(it.em).some((m) => t.includes(m))), itens: [it] })).filter((c) => c.i > 0).sort((a, b) => a.i - b.i);
+    const gat = new Set(cortes.map((c) => c.itens[0]));
+    revelaGateado(res, cortes, () => setNext(true));
+    agendaItens(arr.filter((it) => !gat.has(it)), [...txt.children].slice(n0));
+  }, 450);
   if (typeof vo === 'string') fala(vo, o.vozAtraso || 900);
 }
 
@@ -569,8 +618,17 @@ function renderMinijogo(p) {
   $('#mgGo').onclick = () => { box.innerHTML = ''; MG[tipo](p).then(() => {
     st.feitos['mg:' + p.id] = 1; salvar();
     if (p.avancaDepois) return irProxima();
-    const dep = paras(typeof p.depois === 'function' ? p.depois(st) : p.depois); appendParas(dep); setNext(true); mostraNumeral(p);
-    if (p.sonsDepois) agendaItens(p.sonsDepois, [...txt.children].slice(-dep.length));
+    const dep = paras(typeof p.depois === 'function' ? p.depois(st) : p.depois).filter((t) => t !== CONT); mostraNumeral(p);
+    // o que cai depois do 1º parágrafo espera um "Continuar"; paradas a 1 parágrafo de distância se fundem numa só
+    const sd = p.sonsDepois || [], grupos = [];
+    sd.filter((it) => !(it.se && !it.se(st)) && typeof it.p === 'number' && it.p > 0).sort((a, b) => a.p - b.p).forEach((it) => {
+      const i = Math.min(it.p, dep.length - 1), g = grupos[grupos.length - 1];
+      if (g && i - g.i <= 1) g.itens.push(it); else grupos.push({ i, itens: [it] });
+    });
+    const gat = new Set(); grupos.forEach((g) => g.itens.forEach((it) => gat.add(it)));
+    const n0 = txt.children.length;
+    revelaGateado(dep, grupos.filter((g) => g.i > 0), () => setNext(true));
+    agendaItens(sd.filter((it) => !gat.has(it)), [...txt.children].slice(n0));
     if (p.vozDepois) fala(p.vozDepois(st), (dep.length * .35 + 1.5) * 1000);
   }); };
   return false;

@@ -93,7 +93,7 @@ A woman in her mid-thirties, a seasoned military commander and queen. Low, stead
 
 | Arquivo | Página | Contexto (para quem atua) | Texto para o ElevenLabs (EN, com tags) | Fala (PT) |
 |---|---|---|---|---|
-| `L01` | a01 | Primeira linha. Oitenta e um dias de prato devolvido desde a notícia da morte do irmão. Nenhuma cor. | `[flat, tired] The plate goes back full.` | O prato volta cheio. |
+| `L01` + `L01b` | a01 | Primeira linha. Oitenta e um dias de prato devolvido desde a notícia da morte do irmão. Nenhuma cor. | `[flat, tired] The plate goes back full.` | O prato volta cheio. |
 | `L02` | a07 | No portão sul, ao nascer do sol, contando a coluna como faz há vinte anos. Ritmo de contagem, quase uma oração militar. | `[calm, measured] The south gate opens with the sun. [slowly] I count by company, as I have for twenty years... twenty companies of a hundred. [pause] Two thousand.` | O portão sul abre com o sol. Conto por companhia, como conto há vinte anos: vinte companhias de cem. Dois mil. |
 | `L03` | d05 | Ajoelhada no túmulo do irmão. A primeira vez que diz o nome dele em voz alta desde a notícia. | `[whispers, voice breaking] ...Simon.` | — Simon. |
 | `L04` | f07b | No eclipse, virada para o exército em pânico, espada no alto. São as últimas palavras do pai, que ela só conhece por quem voltou. | `[shouts, commanding] STEADY! [shouts] It’s only the dark! [shouts, fierce] HOLD THE LINE!` | — Firmes! É só o escuro! Segurem a linha! |
