@@ -178,7 +178,7 @@ The south gate opens with the sun. I count by company, as I have for twenty year
 
 The cavalry in front. Then the Third, Lord Varr’s heavy foot, with Varr walking in the middle of it, because a Varr marches with his own. Joseph rides with his left hand on the reins. His right shakes in the mornings; it already shook at the Tournament.
 
-Ansel rides in the last row of the cavalry. He was a sentry at the Gullets, and he saw my brother fall. He asked to stay in the Capital. I ordered him to come. He is going to show me where it happened.
+Ansel rides in the last row of the cavalry. He was a sentry at the Gullets, and he saw my brother fall. He asked to stay in the Capital. I ordered him to come. He is going to show me the place.
 
 Behind the column come the wagons: the barrels, the waterskins, the kitchen, the forge on wheels, the stable boys leading the spare horses, the healer’s helpers sitting on the canvas. Those don’t go into my count. Servants aren’t counted.
 
@@ -361,7 +361,7 @@ Three nights, three places. A water thief leaves a wet trail. This one leaves no
 
 And a skin someone has drunk from stays damp inside. That one was dry.
 
-In the book of legends in the library, the Godmother of the Shore never wears the same face twice. I read it at fourteen, beside the page on the dragon of the north.
+In the book of legends in the library, the Godmother of the Shore never wears the same face twice. I read it at fourteen. The next page was the dragon of the north.
 
 I have everyone who slept near the wounded tent brought to me.
 
@@ -428,7 +428,7 @@ My father died on this ground when I was fifteen, on the day of an eclipse. The 
 
 — Steady! It’s only the dark! Hold the line!
 
-My brother died here too. The news took eight days to reach the Capital, and it took me ninety-two to get here. It feels as if it all happened in the same week.
+My brother died here too. The news took eight days to reach the Capital. It took me eighty-one to leave, and eleven to get here. It feels as if it all happened in the same week.
 
 ### [29]
 At the Gullets, the nights go quiet. The waterskins are hard with water at dawn, the troughs are full, and the kitchen barrels taste of barrel.

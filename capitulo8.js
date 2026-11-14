@@ -177,7 +177,7 @@ const SALA = {
     laje: T('A junta de cal em volta dela é mais clara que as outras. Mais nova. Piso em cima, e a laje balança como uma tampa.', 'The lime joint around it is paler than the others. Newer. I step on it, and the flagstone rocks like a lid.'),
   },
   levantar: T('Levantar a laje', 'Lift the flagstone'),
-  cisterna: T('Enfio a ponta da espada na junta e levanto. Embaixo, degraus de pedra molhada descem para o escuro, e de lá sobe um ar frio de água parada. A cisterna do templo.', 'I work my sword point into the joint and lift. Beneath it, wet stone steps go down into the dark, and cold air rises from still water. The temple cistern.'),
+  cisterna: T('Enfio a ponta da espada na junta e levanto. Embaixo, degraus de pedra molhada descem para o escuro. A cisterna do templo. Na parede do fundo, a água escorre por uma boca de pedra baixa, larga o bastante para alguém de joelhos, e o cheiro que vem de lá não é de água limpa.', 'I work my sword point into the joint and lift. Beneath it, wet stone steps go down into the dark. The temple cistern. In the far wall, the water drains through a low stone mouth, wide enough for someone on their knees, and the smell coming out of it is not clean water.'),
   subir: T('Subir', 'Go back up'),
 };
 
@@ -400,7 +400,7 @@ window.LIVRO = {
       texto: [
         T('O portão sul abre com o sol. Conto por companhia, como conto há vinte anos: vinte companhias de cem. Dois mil.', 'The south gate opens with the sun. I count by company, as I have for twenty years: twenty companies of a hundred. Two thousand.'), // N
         T('A cavalaria na frente. Depois a Terceira, a infantaria pesada do Lorde Varr, com o Varr a pé no meio dela, porque um Varr anda com os seus. Joseph monta com a mão esquerda na rédea. A direita treme de manhã; tremia já no Torneio.', 'The cavalry in front. Then the Third, Lord Varr’s heavy foot, with Varr walking in the middle of it, because a Varr marches with his own. Joseph rides with his left hand on the reins. His right shakes in the mornings; it already shook at the Tournament.'), // N
-        T('O Ansel vem na última fila da cavalaria. Era sentinela nas Goelas, e viu o meu irmão cair. Pediu para ficar na Capital. Eu mandei que viesse. Ele vai me mostrar onde foi.', 'Ansel rides in the last row of the cavalry. He was a sentry at the Gullets, and he saw my brother fall. He asked to stay in the Capital. I ordered him to come. He is going to show me where it happened.'), // N
+        T('O Ansel vem na última fila da cavalaria. Era sentinela nas Goelas, e viu o meu irmão cair. Pediu para ficar na Capital. Eu mandei que viesse. Ele vai me mostrar o lugar.', 'Ansel rides in the last row of the cavalry. He was a sentry at the Gullets, and he saw my brother fall. He asked to stay in the Capital. I ordered him to come. He is going to show me the place.'), // N
         T('Atrás da coluna vêm as carroças: os barris, os odres, a cozinha, a forja sobre rodas, os moços da estrebaria puxando os cavalos de reserva, as ajudantes do curandeiro sentadas em cima das lonas. Esses não entram na minha conta. Servo não se conta.', 'Behind the column come the wagons: the barrels, the waterskins, the kitchen, the forge on wheels, the stable boys leading the spare horses, the healer’s helpers sitting on the canvas. Those don’t go into my count. Servants aren’t counted.'), // N
         se(() => lavadeiraVeio(), T('No meio deles, uma Nymae com argola de cativa no tornozelo carrega dois baldes numa vara.', 'Among them, a Nymae with a captive’s ring on her ankle carries two buckets on a pole.')), // N
         T('Monto o cinzento. Antes de eu puxar a rédea, ele vira a cabeça para a estrada do sul.', 'I mount the grey. Before I pull the rein, he turns his head toward the south road.'), // N
@@ -498,7 +498,7 @@ window.LIVRO = {
         T('Bebo também. A outra sede continua.', 'I drink too. The other thirst stays.'), // N
         T('Meu pai morreu neste chão quando eu tinha quinze anos, num dia de eclipse. Os que voltaram contaram à mãe a última coisa que ele gritou. Eu estava atrás da porta.', 'My father died on this ground when I was fifteen, on the day of an eclipse. The men who came back told my mother the last thing he shouted. I was behind the door.'), // N
         T('— Firmes! É só o escuro! Segurem a linha!', '— Steady! It’s only the dark! Hold the line!'), // N
-        T('Meu irmão morreu aqui também. A notícia levou oito dias até a Capital, e eu levei noventa e dois para chegar aqui. Parece que tudo aconteceu na mesma semana.', 'My brother died here too. The news took eight days to reach the Capital, and it took me ninety-two to get here. It feels as if it all happened in the same week.'), // N
+        T('Meu irmão morreu aqui também. A notícia levou oito dias até a Capital. Eu levei oitenta e um para sair de lá, e onze para chegar aqui. Parece que tudo aconteceu na mesma semana.', 'My brother died here too. The news took eight days to reach the Capital. It took me eighty-one to leave, and eleven to get here. It feels as if it all happened in the same week.'), // N
       ] },
 
     { id: 'd02', zona: 'goelas-noite', fundo: { img: IMG('d02-noite'), kb: 'in', foco: '50% 50%', dim: .5 },
@@ -1048,7 +1048,7 @@ function noite(k) {
         r.push(T('Três noites, três lugares. Um ladrão de água deixa rastro molhado. Este não deixa rastro.', 'Three nights, three places. A water thief leaves a wet trail. This one leaves none.'));
         if ((st.noites || []).slice(0, 3).includes('feridos')) r.push(T('E um odre bebido fica úmido por dentro. Aquele estava seco.', 'And a skin someone has drunk from stays damp inside. That one was dry.'));
         if (sabeNome()) r.push(T('Na cela, ela me disse que na Orla a chamam de Madrinha. Achei que era conversa para marinheiro.', 'In the cell, she told me that on the Shore they call her the Godmother. I took it for sailors’ talk.'));
-        r.push(T('No livro de lendas da biblioteca, a Madrinha da Orla nunca tem o mesmo rosto duas vezes. Li aos catorze anos, do lado da página do dragão do norte.', 'In the book of legends in the library, the Godmother of the Shore never wears the same face twice. I read it at fourteen, beside the page on the dragon of the north.'));
+        r.push(T('No livro de lendas da biblioteca, a Madrinha da Orla nunca tem o mesmo rosto duas vezes. Li aos catorze anos. Na página seguinte vinha o dragão do norte.', 'In the book of legends in the library, the Godmother of the Shore never wears the same face twice. I read it at fourteen. The next page was the dragon of the north.'));
       }
       r.push(T('Mando trazer todos os que dormiram perto d' + lug(st).nome + '.', 'I have everyone who slept near ' + enDe(lug(st).nome) + ' brought to me.'));
       if (k === 0) r.push(T('Servo não se conta, e eu nunca soube o nome de nenhum. Hoje, pergunto.', 'Servants aren’t counted, and I have never known any of their names. Today, I ask.'));

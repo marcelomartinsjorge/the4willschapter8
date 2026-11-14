@@ -178,7 +178,7 @@ O portão sul abre com o sol. Conto por companhia, como conto há vinte anos: vi
 
 A cavalaria na frente. Depois a Terceira, a infantaria pesada do Lorde Varr, com o Varr a pé no meio dela, porque um Varr anda com os seus. Joseph monta com a mão esquerda na rédea. A direita treme de manhã; tremia já no Torneio.
 
-O Ansel vem na última fila da cavalaria. Era sentinela nas Goelas, e viu o meu irmão cair. Pediu para ficar na Capital. Eu mandei que viesse. Ele vai me mostrar onde foi.
+O Ansel vem na última fila da cavalaria. Era sentinela nas Goelas, e viu o meu irmão cair. Pediu para ficar na Capital. Eu mandei que viesse. Ele vai me mostrar o lugar.
 
 Atrás da coluna vêm as carroças: os barris, os odres, a cozinha, a forja sobre rodas, os moços da estrebaria puxando os cavalos de reserva, as ajudantes do curandeiro sentadas em cima das lonas. Esses não entram na minha conta. Servo não se conta.
 
@@ -378,7 +378,7 @@ Três noites, três lugares. Um ladrão de água deixa rastro molhado. Este não
 
 E um odre bebido fica úmido por dentro. Aquele estava seco.
 
-No livro de lendas da biblioteca, a Madrinha da Orla nunca tem o mesmo rosto duas vezes. Li aos catorze anos, do lado da página do dragão do norte.
+No livro de lendas da biblioteca, a Madrinha da Orla nunca tem o mesmo rosto duas vezes. Li aos catorze anos. Na página seguinte vinha o dragão do norte.
 
 Mando trazer todos os que dormiram perto da cozinha.
 
@@ -445,7 +445,7 @@ Meu pai morreu neste chão quando eu tinha quinze anos, num dia de eclipse. Os q
 
 — Firmes! É só o escuro! Segurem a linha!
 
-Meu irmão morreu aqui também. A notícia levou oito dias até a Capital, e eu levei noventa e dois para chegar aqui. Parece que tudo aconteceu na mesma semana.
+Meu irmão morreu aqui também. A notícia levou oito dias até a Capital. Eu levei oitenta e um para sair de lá, e onze para chegar aqui. Parece que tudo aconteceu na mesma semana.
 
 ### [29]
 Nas Goelas, as noites ficam quietas. Os odres amanhecem duros de água, os cochos, cheios, e os barris da cozinha têm gosto de barril.

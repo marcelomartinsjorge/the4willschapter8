@@ -18,7 +18,7 @@ Pasta: `the4willschapter8` · 57 páginas · 733 textos no roteiro · 105 textos
 
 ## B · Muletas (total / pior página ou bloco · limite: 10 no capítulo, 1 por tela)
 
-Capítulo `cap08` · motivos declarados lidos: 0 (/mnt/project/PROMPT_MESTRE_ESCRITA.md). Rótulos de botão não contam.
+Capítulo `cap08` · motivos declarados lidos: 0 (nenhum arquivo). Rótulos de botão não contam.
 
 | Muleta | Conta | Motivo (não conta) | Pior | Onde | Situação |
 |---|---|---|---|---|---|

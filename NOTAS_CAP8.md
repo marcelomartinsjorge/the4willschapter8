@@ -22,7 +22,7 @@ Laura, 36 anos, General-Rainha (o povo diz Lâmina), leva dois mil dos melhores 
 - Laura só sabe que a Nymae fugiu; a desconfiança nasce na marcha. Por isso o Markus fica, com a Capital e com a costa (a04).
 - A sabotagem é real e lenta: cochos secos, barril salgado, odres dos feridos **secos por dentro e sem furo**, tinas da forja. A pista de que “não é gente” é essa.
 - A desconfiança da Madrinha começa na Parte III (noite 2: “Penso nisso pela primeira vez aqui, com areia nos dentes”; noite 3: o livro de lendas, “nunca tem o mesmo rosto duas vezes”).
-- Nas Goelas: o Ansel em pessoa (ou um soldado do posto, se a Laura o matou no Cap. VII) e o túmulo no alto do muro velho dos Grakh, de onde se vê a roda. O gesto dos dois dedos é no túmulo, não contra o Kronk.
+- Nas Goelas: o Ansel em pessoa (ou um soldado do posto, se a Laura mandou executar o Ansel na segunda noite da caça; no Cap. VII ele não morre) e o túmulo no alto do muro velho dos Grakh, de onde se vê a roda. O gesto dos dois dedos é no túmulo, não contra o Kronk.
 - Desmascarou cedo → a água e o bronze chegam cedo, e os Grakh atacam com o grande na frente (rota A). Não desmascarou → Redom carrega, a onda pega a carga no meio do vale, o bronze chega depois (rota B).
 - Kronk apanha muito; o corte final é atrás da coxa; nada de “manco” fora do duelo. O eclipse interrompe; aparece o Maior.
 - Laura não estava na morte do pai: as últimas palavras dele chegaram “pelos que voltaram… Eu estava atrás da porta” (d01). Joseph não estava lá.
@@ -47,7 +47,7 @@ Laura, 36 anos, General-Rainha (o povo diz Lâmina), leva dois mil dos melhores 
 - **Executar** quem é ela → ela sai da corrente deixando a roupa com sal, e volta de dentro de um poço seco no amanhecer (rota A). Executar inocente → a tropa fica fria; a moral cai e menos gente volta.
 
 ### 3.3 Quantos voltam
-`38 + 31 (rota A) + {12, 6, 0} (moral) + 8 (vigia dobrada) + 8 (água guardada na noite certa)`. Vai de 38 a 97. O número aparece por extenso na contagem final e define as rajadas do Maior (3, 4 ou 5).
+~~`38 + 31 (rota A) + {12, 6, 0} (moral) + 8 (vigia dobrada) + 8 (água guardada na noite certa)`. Vai de 38 a 97.~~ **Substituída na v3:** `26 + 14 + {8, 4, 0} + 6 + 6`, de 26 a 60 (ver a seção v3). O número aparece por extenso na contagem final e define as rajadas do Maior (3, 4 ou 5).
 
 ### 3.4 Os jogos
 | Jogo | Página | Mecânica | O que o texto lê depois |
@@ -65,7 +65,7 @@ Laura, 36 anos, General-Rainha (o povo diz Lâmina), leva dois mil dos melhores 
 - **Lê dos capítulos anteriores:** Cap. II (promessa), III (correções), IV (mãe/cinco mentiras, Varr e o Merrow, consorte), VI (o rangido, quem estava ao lado do Kronk: Ikk, Dorgh), VII (consorte, fuga, chefes da trégua, disfarce, rosto da coluna, Nymae, intendente, alarme, confissão, semente).
 - **Escreve em `aqv_estado.cap8`:** mãe, prece, espada, Nymae, noites, leituras, mortos e inocentes, moral, fuga, desmascarou, rota, Joseph (ficou/morreu), Ansel, presságio, vigia, roda, duelo, Maior, sobreviventes, base do pulso, pontos.
 - Testado de ponta a ponta em três rotas (headless, sem erro de JavaScript):
-  - **A:** Laura executa a pessoa certa na noite 3 → fuga → onda na crista → 97 voltam.
+  - **A:** Laura executa a pessoa certa na noite 3 → fuga → onda na crista → 97 voltam (números da v1; na fórmula atual: A 60, B 42, C 56).
   - **B:** guarda tudo e não aponta ninguém → onda no meio da carga → 60 voltam.
   - **C (EN):** guarda tudo e aponta a pessoa certa na fila → o rosto escorrega → 91 voltam.
 
@@ -242,3 +242,12 @@ Total: **18 imagens novas** (todas no `MIDIAS_CAP8.md`, com personagem entre par
 - **Minijogo "O quarto dela":** os pontos foram reposicionados em cima do catre, da bacia, da janela e da laje iluminada. O palco agora tem a proporção da imagem: no computador cobre a tela, no celular em pé aparece inteiro, e os pontos não saem do lugar.
 - **Enquadramento:** o ponto de foco de cada imagem foi acertado para o personagem não ser cortado no celular.
 - **Faltam:** `duelo-fundo` (a atual é do Cap. VI), `codex-picos-de-cinza` (hoje é cópia), os sprites, os vídeos, os sons e as falas. Opcionais: refazer `f-eclipse` (inimigos em fila no meio de Redom) e a maça do Kronk (de ferro em vez de pedra).
+
+
+## Revisão externa · 14/11/2026
+- **Ansel:** ele não morre no Cap. VII. Só morre se a Laura mandar executá-lo na segunda noite da caça (é o engano da noite 2), e `anselVivo` lê `st.mortos`, que a caça preenche antes das Goelas. O código estava certo; a nota antiga dizia "Cap. VII" por engano e foi corrigida.
+- **Dias:** "eu levei noventa e dois para chegar aqui" parecia tempo de viagem. Agora: "Eu levei oitenta e um para sair de lá, e onze para chegar aqui."
+- **Sobreviventes:** a fórmula da v1 (38–97) estava riscada só pela seção v3; agora está marcada como substituída no próprio lugar. Canônica: 26–60. Rota A até 60, rota B até 46.
+- **Pistas:** mantidas. A pergunta do jogo não é "Madrinha ou Nymae", é "qual destes humanos tem corpo de Nymae". As pistas fortes (testa, boca, pescoço, pulso) são justamente as que nos humanos mostram gente (suor, lábio rachado, queimadura, pulso rápido). A aguadeira Nymae da noite 3 é a armadilha: mostra o que é ser Nymae, mas é inocente, e nunca conta para `sabeOnde`.
+- **Cisterna:** a laje agora mostra uma boca de pedra na parede do fundo, por onde a água escorre com cheiro de esgoto.
+- **Polimentos:** "Ele vai me mostrar o lugar."; "Li aos catorze anos. Na página seguinte vinha o dragão do norte."
