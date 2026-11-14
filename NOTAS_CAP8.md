@@ -254,3 +254,21 @@ Total: **18 imagens novas** (todas no `MIDIAS_CAP8.md`, com personagem entre par
 
 ## Vídeos cortados de 16 para 8 · 14/11/2026
 Vídeo é para cena impactante; paisagem e momento parado ficam com a imagem. **Ficam (8):** f-rosto, f-carga, f-onda, f-bronze, f-kronk, f-eclipse, f-eclipse-luta, f-maior. **Saem (8):** d01-goelas, d05-tumulo, e01-fogos, f-pira, f-linha, f-varr, f-depois, f-recuo. As páginas deles continuam com a imagem e o zoom lento.
+
+## v6 · 14/11/2026 · as últimas imagens, os vídeos e os duelos
+- **Imagens instaladas:** `duelo-fundo`, `maior-fundo`, `codex-picos-de-cinza`, `codex-ultimo-gole` e os retratos `varr`, `intendente`, `grisalho` (Tasso), `ansel`.
+- **Vídeos (5):**
+  - `f-maior` toma o lugar da imagem no f08 e no f09. No f08 o **som do próprio vídeo** toca uma vez (o fundo do capítulo abaixa); depois o vídeo segue mudo, em loop. Os efeitos `maior-chega` e `maior-riso` saíram, porque o vídeo já tem esse som.
+  - `f-kronk`: a imagem do f06 fica. O vídeo vira **cena de abertura do duelo**: ao apertar o botão do minijogo, ele toca em tela cheia com som, com "Pular ›", e o duelo começa quando acaba.
+  - `f-bronze` e `f-carga` tomam o lugar da imagem (mudos, em loop).
+  - `f-rosto`: a imagem do f01a fica. O vídeo toca **uma vez, em tela cheia e com som, antes da página aparecer**, e depois fica no botão "▶ Ver a cena". O efeito `rosto-escorrega` saiu.
+  - Os outros (onda, eclipse, eclipse-luta) não vão existir; as páginas ficam com a imagem.
+- **Duelos refeitos com os sprites novos** (Laura aos 36, 8 poses; o Maior, 5 poses, recortadas do fundo verde):
+  - os corpos se mexem: a Laura avança no golpe, recua no escudo, é jogada para trás na marca; o inimigo recua quando apanha e avança no ataque; o Maior respira e se inclina para trás antes de bater;
+  - câmera: zoom de soco e uma parada de frações de segundo no impacto (mais forte no golpe perfeito e no escudo contra o pesado); faíscas no escudo, areia nos pés, o risco branco da lâmina;
+  - o golpe pesado segurado no escudo usa a pose `impacto` (a Laura de joelho sob o escudo);
+  - o pulso acima de 100 pinta as bordas de vermelho, batendo no ritmo do coração;
+  - as flechas da rajada caem em arco e se cravam no Maior;
+  - os finais (o corte na coxa do Kronk e a última rajada no Maior) entram em câmera lenta, com faixas de cinema e a cor sumindo; quando o corpo cai, a areia sobe;
+  - no celular em pé, o palco vira uma faixa onde os dois aparecem inteiros (antes cortava os dois).
+- **MIDIAS_CAP8.md** agora tem só som: 19 efeitos novos, 4 upgrades, 7 ambientes (com prompt) e a dublagem.

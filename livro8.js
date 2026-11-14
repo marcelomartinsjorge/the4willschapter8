@@ -160,8 +160,11 @@ function mudaPeso(d) {
 const bgWrap = $('#bg');
 let bgKey = '';
 const resolveFundo = (p) => (st.fundoPag && st.fundoPag[p.id]) || (typeof p.fundo === 'function' ? p.fundo(st) : p.fundo);
+let vidSom = null;
+const soltaVidSom = () => { if (vidSom) { vidSom.muted = true; vidSom = null; A.duck(false); } };
 function setFundo(f) {
   if (!f) return; const key = JSON.stringify(f); if (key === bgKey) return; bgKey = key;
+  soltaVidSom();
   const layer = document.createElement('div');
   layer.className = 'bgl kb-' + (f.kb || 'in') + (f.tint ? ' tint-' + f.tint : '') + (f.retrato ? ' retrato' : '');
   layer.style.setProperty('--dim', f.dim != null ? f.dim : .5);
@@ -171,7 +174,14 @@ function setFundo(f) {
   if (f.video || f.clip) {
     const v = document.createElement('video'); v.src = vsrc(f.video || f.clip); v.muted = true; v.loop = true; v.playsInline = true; v.setAttribute('playsinline', ''); v.autoplay = true;
     v.style.objectPosition = f.foco || '50% 40%'; v.className = 'img';
-    if (f.img) v.poster = f.img; layer.appendChild(v); v.play().catch(() => {});
+    if (f.img) v.poster = f.img; layer.appendChild(v);
+    // som: o áudio do próprio vídeo toca uma vez (o vídeo é a cena); depois segue mudo, em loop
+    const comSom = f.som && A.on && !window.__JOGO_BOT && !st.feitos['vsom:' + f.video];
+    if (comSom) {
+      st.feitos['vsom:' + f.video] = 1; v.muted = false; v.loop = false; v.volume = .9; vidSom = v; A.duck(true);
+      v.onended = () => { if (vidSom === v) soltaVidSom(); v.muted = true; v.loop = true; v.play().catch(() => {}); };
+      v.play().catch(() => { if (vidSom === v) soltaVidSom(); v.muted = true; v.loop = true; v.play().catch(() => {}); });
+    } else v.play().catch(() => {});
     // vídeo ainda não gerado: fica a imagem
     v.onerror = () => { if (!f.img) return; const im = document.createElement('div'); im.className = 'img'; im.style.backgroundImage = `url("${f.img}")`; v.replaceWith(im); };
   } else { const im = document.createElement('div'); im.className = 'img'; im.style.backgroundImage = [src].concat(f.alt || []).map((u) => `url("${u}")`).join(', '); layer.appendChild(im); }
@@ -519,6 +529,20 @@ function renderDialogo(p) {
   return (st.dialogo[p.id] || []).length >= d.rodadas.length;
 }
 
+// ----- cena automática: o vídeo em tela cheia, com o som dele, antes da página ou do minijogo
+function cutscene(src) {
+  if (window.__JOGO_BOT) return Promise.resolve();
+  return new Promise((res) => {
+    const m = $('#cenaModal'), v = $('#cenaV'), b = $('#cenaClose');
+    v.src = vsrc(src); v.muted = !A.on; v.volume = .9; m.classList.add('show', 'auto'); A.duck(true);
+    const lbl = b.textContent; b.textContent = U('pular'); b.classList.add('pular');
+    let ok = false;
+    const fim = () => { if (ok) return; ok = true; v.pause(); m.classList.add('sai');
+      setTimeout(() => { m.classList.remove('show', 'auto', 'sai'); b.textContent = lbl; b.classList.remove('pular'); v.onended = v.onerror = null; A.duck(false); res(); }, 500); };
+    b.onclick = fim; v.onended = fim; v.onerror = fim;
+    v.play().catch(() => { v.muted = true; v.play().catch(fim); });
+  });
+}
 // ----- vídeo em tela cheia
 function verCena(src) {
   const m = $('#cenaModal'), v = $('#cenaV'); v.src = vsrc(src); m.classList.add('show'); A.duck(true); v.play().catch(() => {});
@@ -593,6 +617,9 @@ const MG = {
   },
   // ---------- o Grakh grande: o motor dos Caps. II e IV, com o corpo do Kronk do Cap. VI
   duelo(p) {
+    return cutscene('assets/video/f-kronk.mp4').then(() => MG._duelo(p));
+  },
+  _duelo(p) {
     const o = abreOverlay('duelo8');
     return window.DUELO8.start(o, { lang: LANG, A, modo: 'kronk', bpm: st.base || 52, fundo: 'assets/images/duelo-fundo.jpg',
       aoLado: (((window.AQV_ANTES || {}).cap6 || {}).aoLado || []) }).then((r) => {
@@ -620,7 +647,10 @@ function irProxima() {
   if (p && p.fim) return resumo();
   if (p && p.volta) { st.f.lembranca = null; salvar(); st.i = P.findIndex((x) => x.id === p.volta); A.ctx && A.virar(); return render(1); }
   const j = idxVis(st.i, 1); if (j >= P.length) return resumo();
-  st.i = j; A.ctx && A.virar(); render(1);
+  st.i = j; A.ctx && A.virar();
+  const pj = P[j];
+  if (pj.cenaAuto && !st.feitos['cena:' + pj.id]) { st.feitos['cena:' + pj.id] = 1; salvar(); setFundo(resolveFundo(pj)); return cutscene(pj.cenaAuto).then(() => render(1)); }
+  render(1);
 }
 function irAnterior() {
   if (MG._limpaPrece) { MG._limpaPrece(); MG._limpaPrece = null; }

@@ -194,3 +194,9 @@ body.fx-sol::before { background: radial-gradient(ellipse at 70% 18%, rgba(255,2
 @media (prefers-reduced-motion: reduce) {
   body.fx-tremor #bg, body.fx-tremor #page, body.fx-bronze #bg { animation: none; }
 }
+/* duelo no celular em pé: o palco vira uma faixa com os dois corpos inteiros */
+@media (orientation: portrait) {
+  #mg.duelo8 .d8-cv { top: 70px; bottom: auto; height: calc(100vw * .86); max-height: 58vh; }
+  #mg.duelo8 .d8-pop { top: 18%; }
+}
+@media (orientation: portrait) { #mg.duelo8 .d8-cv { -webkit-mask-image: linear-gradient(#000 82%, transparent); mask-image: linear-gradient(#000 82%, transparent); } }

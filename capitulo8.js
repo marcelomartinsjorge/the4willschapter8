@@ -182,14 +182,14 @@ const SALA = {
 };
 
 window.LIVRO_UI = {
-  pt: { parte: 'Parte', prox: 'Próxima', fim: 'Encerrar o capítulo', voltar: '← Voltar', ouvir: 'Ouvir', cena: '▶ Ver a cena', oque: 'O que Laura faz?', coracaoNao: 'O pulso não deixa.', decida: 'Decida', decidir: 'Decidir', escolheu: 'Você escolheu:', resp: 'Responder a', silencio: 'não responder', silencioR: 'Silêncio', momento: 'Momento de jogo', continuar: 'Continuar',
+  pt: { parte: 'Parte', prox: 'Próxima', fim: 'Encerrar o capítulo', voltar: '← Voltar', ouvir: 'Ouvir', cena: '▶ Ver a cena', pular: 'Pular ›', oque: 'O que Laura faz?', coracaoNao: 'O pulso não deixa.', decida: 'Decida', decidir: 'Decidir', escolheu: 'Você escolheu:', resp: 'Responder a', silencio: 'não responder', silencioR: 'Silêncio', momento: 'Momento de jogo', continuar: 'Continuar',
     mg: { ler: 'Ler o corpo', sala: 'O quarto dela', roda: 'Girar a roda', chao: 'Ouvir o chão', duelo: 'Ler a maça', erguer: 'Erguer a espada', maior: 'Ficar de pé', conta: 'Contar os vivos' },
     dica: { ler: 'Seis olhares, para quem você quiser.', sala: 'Toque no que quiser olhar.', roda: 'Segure para girar. Solte quando quiser.', chao: 'Toque junto com as batidas.', duelo: 'Leia o ombro e a maça. Aguente. Derrube.', erguer: 'Segure.', maior: 'Fique de pé e chame as rajadas.', conta: 'Segure para andar entre eles.' },
     coverEye: 'As Quatro Vontades · Capítulo VIII', coverLede: 'Vinte anos depois do Torneio, a Lâmina de Redom leva os melhores ao deserto.', coverGo: 'Começar', coverRestart: 'Começar de novo', coverCont: 'Continuar', coverHint: 'Use fones. Leia no seu tempo.', capN: 'Capítulo VIII',
     fimCap: 'Fim do Capítulo VIII', ficou: 'O que ficou', suas: 'Suas escolhas', reler: 'Reler o capítulo', confirm: 'Recomeçar o capítulo? O progresso deste capítulo se perde.', mesmo: (n) => `${n}% escolheram o mesmo`,
     pontos: 'Pontos do capítulo', jornada: 'Pontos da jornada', posicao: (p, n) => `${p}º de ${n} leitores`, semCap1: 'Jogue os capítulos anteriores neste navegador para somar a jornada.',
     pts: { caca: 'A caça', duelo: 'O duelo', maior: 'O Maior', vivos: 'Os que voltaram', antes: 'Capítulos anteriores' } },
-  en: { parte: 'Part', prox: 'Next', fim: 'Close the chapter', voltar: '← Back', ouvir: 'Listen', cena: '▶ Watch the scene', oque: 'What does Laura do?', coracaoNao: 'My pulse won’t let me.', decida: 'Decide', decidir: 'Decide', escolheu: 'You chose:', resp: 'Answer', silencio: 'say nothing', silencioR: 'Silence', momento: 'Moment of play', continuar: 'Continue',
+  en: { parte: 'Part', prox: 'Next', fim: 'Close the chapter', voltar: '← Back', ouvir: 'Listen', cena: '▶ Watch the scene', pular: 'Skip ›', oque: 'What does Laura do?', coracaoNao: 'My pulse won’t let me.', decida: 'Decide', decidir: 'Decide', escolheu: 'You chose:', resp: 'Answer', silencio: 'say nothing', silencioR: 'Silence', momento: 'Moment of play', continuar: 'Continue',
     mg: { ler: 'Read the body', sala: 'Her room', roda: 'Turn the wheel', chao: 'Listen to the ground', duelo: 'Read the mace', erguer: 'Raise the sword', maior: 'Stay on my feet', conta: 'Count the living' },
     dica: { ler: 'Six looks, on whoever you choose.', sala: 'Tap whatever you want to look at.', roda: 'Hold to turn. Let go when you want.', chao: 'Tap along with the beats.', duelo: 'Read the shoulder and the mace. Hold. Bring him down.', erguer: 'Hold.', maior: 'Stay on your feet and call the volleys.', conta: 'Hold to walk among them.' },
     coverEye: 'The Four Wills · Chapter VIII', coverLede: 'Twenty years after the Tournament, Redom’s Blade takes the best to the Dry Mouth.', coverGo: 'Begin', coverRestart: 'Begin again', coverCont: 'Continue', coverHint: 'Use headphones. Read at your own pace.', capN: 'Chapter VIII',
@@ -690,7 +690,7 @@ window.LIVRO = {
       cartao: { num: 'VI', nome: T('O Dia Comido', 'The Eaten Day'), epigrafe: T('Dia ser comido, Maior nascer.', 'Day be eaten, Biggest be born.'), fonte: T('Dito dos velhos Grakh', 'Saying of the old Grakh') } },
 
     // ---------- rota A: desmascarada ao amanhecer
-    { id: 'f01a', se: (st) => st.f.desmascarou === 'certo', zona: 'amanhecer', fundo: { img: IMG('f-rosto'), video: 'assets/video/f-rosto.mp4', kb: 'in', foco: '48% 35%', dim: .45 }, sons: [{ s: SFX('rosto-escorrega'), p: 0, v: .8 }],
+    { id: 'f01a', se: (st) => st.f.desmascarou === 'certo', zona: 'amanhecer', fundo: { img: IMG('f-rosto'), kb: 'in', foco: '48% 35%', dim: .45 }, cenaAuto: 'assets/video/f-rosto.mp4', cena: 'assets/video/f-rosto.mp4',
       texto: [
         T('O rosto escorrega.', 'The face slips.'), // N
         T('Primeiro a pele do pescoço, em placas finas, azul-cinza. Depois as orelhas, que descolam da cabeça e abrem em nadadeira. O corpo encolhe dentro da roupa de servo até a manga cobrir a mão. Os dois soldados soltam os braços ao mesmo tempo.', 'First the skin of the neck, in thin blue-grey plates. Then the ears, which peel away from the head and open into fins. The body shrinks inside the servant’s clothes until the sleeve covers the hand. The two soldiers let go of the arms at the same moment.'), // N
@@ -703,7 +703,7 @@ window.LIVRO = {
         T('— E a Boca Seca bebe todos.', '— And the Dry Mouth drinks them all.'), // N
       ] },
 
-    { id: 'f02a', se: (st) => rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), video: 'assets/video/f-onda.mp4', kb: 'in', foco: '78% 45%', dim: .4 },
+    { id: 'f02a', se: (st) => rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), kb: 'in', foco: '78% 45%', dim: .4 },
       sons: [{ s: SFX('onda-gigante'), ms: 400, v: 1 }, { fx: 'tremor', ms: 900, dur: 2400, forca: 1.4 }, { voz: 'L14', p: 2 }, { fx: 'agua', p: 4, dur: 2600 }, { s: SFX('gritos-longe'), p: 6, v: .6 }],
       texto: [
         T('No vale, o poço que brilhava apaga.', 'In the valley, the well that was shining goes dark.'), // N
@@ -726,7 +726,7 @@ window.LIVRO = {
         T('Estamos a cem passos do poço quando a água dele se levanta.', 'We are a hundred paces from the well when its water stands up.'), // N
       ] },
 
-    { id: 'f02b', se: (st) => !rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), video: 'assets/video/f-onda.mp4', kb: 'in', foco: '78% 45%', dim: .4 },
+    { id: 'f02b', se: (st) => !rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), kb: 'in', foco: '78% 45%', dim: .4 },
       sons: [{ s: SFX('onda-gigante'), p: 0, v: 1 }, { fx: 'agua', p: 1, dur: 2600 }, { fx: 'tremor', p: 1, dur: 2400, forca: 1.5 }, { s: SFX('gritos-longe'), p: 2, v: .6 }],
       texto: [
         T('A água sai do poço em pé, mais alta que a duna, e cai sobre a carga.', 'The water comes out of the well standing up, taller than the dune, and falls on the charge.'), // N
@@ -796,7 +796,7 @@ window.LIVRO = {
         T('O Varr ergue a espada e grita o próprio nome para um lado do vale, depois para o outro.', 'Varr raises his sword and shouts his own name to one side of the valley, then to the other.'), // N
       ] },
 
-    { id: 'f06', zona: 'duelo', fundo: { img: IMG('f-kronk'), video: 'assets/video/f-kronk.mp4', kb: 'in', foco: '52% 40%', dim: .45 }, sons: [{ s: SFX('passos-pesados'), p: 0, v: .9 }, { fx: 'tremor', p: 3, dur: 500, forca: .4 }, { s: SFX('espada-desembainha'), p: 5, v: .9 }],
+    { id: 'f06', zona: 'duelo', fundo: { img: IMG('f-kronk'), kb: 'in', foco: '52% 40%', dim: .45 }, sons: [{ s: SFX('passos-pesados'), p: 0, v: .9 }, { fx: 'tremor', p: 3, dur: 500, forca: .4 }, { s: SFX('espada-desembainha'), p: 5, v: .9 }],
       texto: [
         T('Não vejo mais a conjuradora. Vejo o grande vindo na minha direção, e os meus homens saindo do caminho dele, porque quem não sai cai. E porque eles sabem que eu quero ele.', 'I can’t see the conjurer any more. I see the big one coming my way, and my men getting out of his path, because whoever doesn’t, falls. And because they know I want him.'), // N
         T('Desço do cinzento e dou um tapa na anca dele. Ele corre para trás da duna. A pé eu leio melhor.', 'I get down from the grey and slap his haunch. He runs for the back of the dune. On foot I read better.'), // N
@@ -816,7 +816,7 @@ window.LIVRO = {
         T('É um alívio que eu não sentia desde o combate contra o Joseph, no Torneio Real.', 'It is a relief I haven’t felt since my fight against Joseph, at the Royal Tournament.'), // N
       ] },
 
-    { id: 'f07', zona: 'duelo', fundo: { img: IMG('f-eclipse'), video: 'assets/video/f-eclipse.mp4', kb: 'in', foco: '50% 40%', dim: .45 }, sons: [{ voz: 'L20', p: 1 }],
+    { id: 'f07', zona: 'duelo', fundo: { img: IMG('f-eclipse'), kb: 'in', foco: '50% 40%', dim: .45 }, sons: [{ voz: 'L20', p: 1 }],
       texto: [
         T('Paro em cima dele. Ele respira de boca aberta, com os dentes para fora.', 'I stand over him. He breathes through his open mouth, teeth bared.'), // N
         T('Foi um excelente adversário. Mas agora os Grakh acabam. Mais ninguém da minha família, mais ninguém de Redom, morre na mão desses selvagens, na areia deste deserto.', 'He was an excellent opponent. But now the Grakh end. No one else of my family, no one else of Redom, dies at the hands of these savages, in the sand of this desert.'), // N
@@ -831,7 +831,7 @@ window.LIVRO = {
         T('— Eclipse! Eclipse!', '— Eclipse! Eclipse!'), // N
       ] },
 
-    { id: 'f07b', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-eclipse-luta'), video: 'assets/video/f-eclipse-luta.mp4', kb: 'in', foco: '50% 40%', dim: .55 },
+    { id: 'f07b', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-eclipse-luta'), kb: 'in', foco: '50% 40%', dim: .55 },
       texto: [
         T('Me viro para eles com a espada no alto.', 'I turn toward them with my sword held high.'), // N
         { continuar: true, voz: 'L04', fx: [{ fx: 'clarao', ms: 200, dur: 500 }] },
@@ -841,8 +841,8 @@ window.LIVRO = {
       ] },
 
     // o Maior: o terceiro disparo
-    { id: 'f08', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-maior'), video: 'assets/video/f-maior.mp4', kb: 'in', foco: '55% 40%', dim: .5 }, pico: { bpm: 166, ms: 0 },
-      sons: [{ fx: 'tremor', p: 0, dur: 1600, forca: 1.3 }, { s: SFX('maior-chega'), p: 0, v: 1 }, { s: SFX('maior-riso'), p: 3, v: 1 }],
+    { id: 'f08', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-maior'), video: 'assets/video/f-maior.mp4', som: true, kb: 'in', foco: '55% 40%', dim: .5 }, pico: { bpm: 166, ms: 0 },
+      sons: [{ fx: 'tremor', p: 0, dur: 1600, forca: 1.3 }],
       texto: [
         T('Em pé, entre mim e o Grakh caído, no escuro do dia que virou noite, tem um Grakh que eu nunca vi. Uma aberração.', 'Standing between me and the fallen Grakh, in the dark of the day turned to night, is a Grakh I have never seen. An abomination.'), // N
         T('É maior que o outro. Muito maior. Maior que qualquer um. Um braço é mais grosso que o outro, e o osso do ombro ainda está subindo embaixo da pele, uma pele cinza, rachada, com músculos onde nenhum Grakh tem músculo.', 'He is bigger than the other. Much bigger. Bigger than any. One arm is thicker than the other, and the bone of the shoulder is still rising under the skin, grey skin, cracked, with muscle where no Grakh has muscle.'), // N

@@ -456,3 +456,12 @@ body .bgl.apagada .img { filter: saturate(.35) brightness(.72) !important; }
 
 .ex-deslize { position: absolute; left: 50%; top: calc(54px + 54vh - 34px + env(safe-area-inset-top,0px)); transform: translateX(-50%); margin: 0; padding: 6px 14px; background: rgba(14,10,9,.78); border: 1px solid rgba(190,72,60,.3); font-family: var(--sans); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--gold-hot); white-space: nowrap; pointer-events: none; transition: opacity .6s; animation: npulse 2.4s ease-in-out infinite; }
 .ex-deslize.some { opacity: 0; }
+
+/* cena automática (vídeo com som antes da página ou do duelo) */
+#cenaModal.auto { animation: cenaIn .6s ease both; }
+#cenaModal.sai { animation: cenaOut .5s ease both; }
+@keyframes cenaIn { from { opacity: 0 } to { opacity: 1 } }
+@keyframes cenaOut { to { opacity: 0 } }
+#cenaModal.auto video { object-fit: cover; }
+#cenaClose.pular { width: auto; padding: 8px 16px; border-radius: 999px; font: 600 13px/1 'Jost', sans-serif; letter-spacing: .08em; text-transform: uppercase; background: rgba(0,0,0,.45); color: #f2e6d0; border: 1px solid rgba(242,230,208,.35); top: auto; bottom: 22px; right: 22px; }
+@media (orientation: portrait) { #cenaModal.auto video { object-fit: contain; } }
