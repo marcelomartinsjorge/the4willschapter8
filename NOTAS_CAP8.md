@@ -275,3 +275,8 @@ Vídeo é para cena impactante; paisagem e momento parado ficam com a imagem. **
 
 ## v7 · 14/11/2026 · 24 falas novas da Laura
 L21–L40d (ver MIDIAS §4). O livro ganhou `vozes` por página (`em: [trecho PT, trecho EN]` toca quando o parágrafo que contém o trecho aparece, e só nas partidas em que ele aparece) e voz de opção em lista (`voz: [{ voz, em }]`, para falas que estão no resultado da escolha). Testado nas três rotas: 23 das 24 tocaram nos pontos certos; a L27 (espada no túmulo do Simon) só toca se a Laura levou a espada, ramo que as rotas de teste não percorrem.
+
+## v8 · 14/11/2026 · dublagem e sons no livro
+- 53 falas da Laura instaladas (falta só a `L09b`; a `L17b` usa a `L17a` provisoriamente). Tratamento por lugar: capela com eco de pedra, palácio com sala pequena, Goelas e acampamento secos, gritos de batalha com elmo + eco do vale, pensamentos próximos e quentes, e o "Simon." da L03 voltando das paredes das Goelas. Volume nivelado (-19 LUFS falas, -20 pensamentos, -16 gritos).
+- Efeitos: 3 gerados pelo Marcelo; 16 montados com sons dos Caps. II–VII (mistura, altura, eco, recorte); 1 novo (`linha-fecha`: o exército responde ao "Segurem a linha!" e os escudos fecham).
+- Ambientes: ficam os dos capítulos anteriores.

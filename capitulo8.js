@@ -831,7 +831,7 @@ window.LIVRO = {
         T('— Eclipse! Eclipse!', '— Eclipse! Eclipse!'), // N
       ] },
 
-    { id: 'f07b', zona: 'eclipse', escuro: true, fundo: { img: IMG('f-eclipse-luta'), kb: 'in', foco: '50% 40%', dim: .55 },
+    { id: 'f07b', zona: 'eclipse', escuro: true, sons: [{ s: SFX('linha-fecha'), em: ['A linha fecha', 'The line closes'], v: .85 }], fundo: { img: IMG('f-eclipse-luta'), kb: 'in', foco: '50% 40%', dim: .55 },
       texto: [
         T('Me viro para eles com a espada no alto.', 'I turn toward them with my sword held high.'), // N
         { continuar: true, voz: 'L04', fx: [{ fx: 'clarao', ms: 200, dur: 500 }] },

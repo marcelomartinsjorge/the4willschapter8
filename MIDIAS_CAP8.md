@@ -1,14 +1,19 @@
-# Cap. VIII · A Lâmina · O que falta criar (só som)
+# Cap. VIII · A Lâmina · Som
 
-*Atualizado em 14/11/2026.* Imagens, retratos, sprites dos duelos e vídeos estão **fechados**: o que não chegou não vai ser feito, e o livro já roda sem eles. Este arquivo agora tem só o que ainda vale gerar no **ElevenLabs**:
+*Atualizado em 14/11/2026.* **Fechado.** Imagens, vídeos, sprites, efeitos e dublagem estão no livro. Falta uma fala só:
 
-1. **Efeitos sonoros** (§2): 19 novos e 4 upgrades opcionais.
-2. **Ambientes** (§3): 7 loops de zona (5 para refazer, 2 novos).
-3. **Dublagem da Laura** (§4): 31 falas (L01–L20) mais 24 novas (L21–L40d), com as tags do Eleven v4.
+- **`L09b`** ("— Não prometo.", ramo da Justine): sem ela, a escolha fica sem voz. O prompt está em §4.
+- **`L17b`** ("É por você, Simon. E por você, pai."): por enquanto toca a `L17a` no lugar. Se gerar, é só salvar por cima.
 
-Para trocar uma peça: gere, salve com o **nome exato** na pasta indicada, por cima do provisório. Não precisa mexer em código (só os dois ambientes novos, que eu ligo).
+### O que foi feito com o que chegou
 
-**Os vídeos já trazem o próprio som** (`f-maior`, `f-kronk`, `f-rosto`), por isso saíram desta lista os efeitos `maior-chega`, `maior-riso` e `rosto-escorrega`.
+**Dublagem: tratada por lugar.** Cada fala recebeu o espaço onde a Laura está: na capela, eco de pedra (Justine); nos aposentos e salões do palácio, uma sala pequena; nas Goelas e no acampamento, ar aberto e seco. Os gritos da batalha (L04, L14, L16, L18) passaram pelo **elmo**: ressonância de metal perto da boca e o eco do vale depois. Os pensamentos (L05, L15, L17, L19, L20, L29, L30, L31, L39) ficaram mais próximos e quentes, como voz dentro da cabeça. O "— Simon." (L03), primeira vez que ela diz o nome, **volta das paredes das Goelas** duas vezes, cada vez mais longe. Todas niveladas no mesmo volume, sem silêncio no começo.
+
+**Efeitos.** Os três que você gerou (`agua-sobe`, `pedra-poco`, `vento-ferro`) entraram como vieram. Os outros 16 foram montados com sons dos Caps. II a VII, misturados e transformados: o bronze dos homens de bronze é o arrasto do Cap. V mais grave e com eco metálico; a carga é o galope do Cap. IV em três camadas defasadas; os passos do Kronk são a marreta do Cap. V em meia velocidade, três vezes; o chicote de água é a onda do Cap. VII cortada no pico, com escudo batendo; o grito do Varr é a sentinela do Cap. VI mais grave; os gritos ao longe são a tripulação do Cap. VII abafada, com o mar recuando.
+
+**Um efeito novo:** `linha-fecha`. Depois do "Firmes! É só o escuro! Segurem a linha!", quando o texto diz "A linha fecha", o exército responde e três escudos batem um no outro.
+
+**Ambientes:** ficam os dos capítulos anteriores, como você decidiu.
 
 ---
 
@@ -25,7 +30,7 @@ Só a **Laura** é dublada. No Eleven v4 as **tags entre colchetes são texto li
 
 ## 2. Efeitos sonoros (`assets/audio/sfx/`, ElevenLabs · Sound Effects)
 
-### 2.1 Novos ⭐ (19, ainda não existem: o livro toca o efeito por código no lugar)
+### 2.1 Os 19 efeitos (✅ todos no livro; os prompts ficam aqui para quem quiser trocar algum por um gerado)
 | Arquivo | Onde | Duração · Loop · Influência | Prompt |
 |---|---|---|---|
 | `vento-ferro.mp3` | d05b (túmulo do pai) | 6 s · não · 0.6 | `Lonely desert wind blowing across an old rusted iron spear tip planted in stones, a thin metallic whistle and soft hum, sand hissing over rocks, distant and desolate, cinematic.` |
@@ -58,7 +63,7 @@ Só a **Laura** é dublada. No Eleven v4 as **tags entre colchetes são texto li
 
 ---
 
-## 3. Ambientes (loops de zona, `assets/audio/`, ElevenLabs · Sound Effects)
+## 3. Ambientes (✅ decidido: ficam os dos capítulos anteriores; os prompts ficam como reserva)
 
 Cada zona do capítulo toca um fundo em loop enquanto o leitor está nela. As 20 zonas já têm som, mas vários vieram do Cap. V com **14 s**, curtos demais para zonas de muitas páginas (o ouvido percebe a repetição). Estes 7 são os que valem a pena fazer. As outras zonas (capital, quarto, capela, palácio, templo, estrada, tenda) já têm loops de 26 a 60 s e servem.
 
