@@ -183,7 +183,7 @@ function setFundo(f) {
       v.play().catch(() => { if (vidSom === v) soltaVidSom(); v.muted = true; v.loop = true; v.play().catch(() => {}); });
     } else v.play().catch(() => {});
     // vídeo ainda não gerado: fica a imagem
-    v.onerror = () => { if (!f.img) return; const im = document.createElement('div'); im.className = 'img'; im.style.backgroundImage = `url("${f.img}")`; v.replaceWith(im); };
+    v.onerror = () => { if (!f.img) return; const im = document.createElement('div'); im.className = 'img'; im.style.backgroundImage = [f.img].concat(f.alt || []).map((u) => `url("${u}")`).join(', '); v.replaceWith(im); };
   } else { const im = document.createElement('div'); im.className = 'img'; im.style.backgroundImage = [src].concat(f.alt || []).map((u) => `url("${u}")`).join(', '); layer.appendChild(im); }
   bgWrap.appendChild(layer);
   document.body.classList.toggle('lado-dir', f.lado === 'dir');
@@ -319,7 +319,7 @@ const FX = {
 function agendaItens(itens, els, base = 0) {
   (itens || []).forEach((it) => {
     const c = { done: false, fim: !!it.fim };
-    c.tocar = () => { if (c.done) return; c.done = true; if (it.fx) FX.go(it.fx, it.dur, it.forca); if (window.__VOZLOG && it.voz) window.__VOZLOG.push(typeof it.voz === 'function' ? it.voz(st) : it.voz); if (!A.ctx || !A.on) return; const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz; if (vz) A.narrate(vozUrl(vz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .7); };
+    c.tocar = () => { if (c.done) return; c.done = true; if (it.fundo) setFundo(it.fundo); if (it.cena) cutscene(it.cena); if (it.fx) FX.go(it.fx, it.dur, it.forca); if (window.__VOZLOG && it.voz) window.__VOZLOG.push(typeof it.voz === 'function' ? it.voz(st) : it.voz); if (!A.ctx || !A.on) return; const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz; if (vz) A.narrate(vozUrl(vz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .7); };
     if (c.fim) cuesPend.push(c);
     let alvo = it.p;
     if (it.em) { const ks = [].concat(it.em); alvo = els.findIndex((e) => ks.some((k) => (e.textContent || '').includes(k))); if (alvo < 0) return; }   // em: toca quando o parágrafo que contém o trecho (PT ou EN) aparece
@@ -333,7 +333,7 @@ function vozesDe(p) {
   return [].concat(v);
 }
 // as falas dubladas de Laura tocam sozinhas
-const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3';
+const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3?v=11';
 const vozDeOpcao = (o, cid) => { const v = nervosa(o, cid) ? o.vozNervosa : o.voz; return typeof v === 'function' ? v(st) : v; };
 const ABAFA = /^$/;   // o elmo já vem gravado nos arquivos (efeito aplicado na edição)
 const fala = (nome, ms = 0) => { if (!nome || typeof nome !== 'string') return; later(() => { if (A.ctx && A.on) A.narrate(vozUrl(nome), null, ABAFA.test(nome)); }, ms); };
@@ -371,7 +371,7 @@ function render(dir = 1) {
       else if (typeof it.p === 'number') k = it.p < 0 ? pos.length + it.p : it.p;
       else return;
       if (k <= 0 || k >= pos.length) return;   // 0 = toca na abertura da página (a virada é o toque do leitor)
-      const q = pos[k], dado = { voz: it.voz, s: it.s, v: it.v, fx: it.fx, dur: it.dur, forca: it.forca };
+      const q = pos[k], dado = { voz: it.voz, s: it.s, v: it.v, fx: it.fx, dur: it.dur, forca: it.forca, cena: it.cena, fundo: it.fundo };
       p._gated.add(it);
       const ant = lista[q - 1];
       if (ant && ant.cont && !(ant.cont.voz && dado.voz) && !(ant.cont.s && dado.s)) { Object.keys(dado).forEach((c) => { if (dado[c] != null) ant.cont[c] = dado[c]; }); }
@@ -423,6 +423,8 @@ function renderContinuar(p) {
     const vzc = typeof it.voz === 'function' ? it.voz(st) : it.voz;
     if (window.__VOZLOG && vzc) window.__VOZLOG.push(vzc);
     if (A.ctx && A.on) { if (vzc) A.narrate(vozUrl(vzc), null, false); if (it.s) A.once(it.s, it.v != null ? it.v : .8); }
+    if (it.cena) cutscene(it.cena);
+    if (it.fundo) setFundo(it.fundo);
     if (it.fx) [].concat(it.fx).forEach((f) => (typeof f === 'string' ? FX.go(f, it.dur, it.forca) : later(() => FX.go(f.fx, f.dur, f.forca), f.ms || 0)));
     const pico = valP(p.pico); if (pico && p._bloco === 2) later(() => { if (P[st.i] === p) Coracao.alvo(pico.bpm); }, 300);
     if (p._bloco < p._blocos.length) return renderContinuar(p);
@@ -506,6 +508,8 @@ function aplicar(o) {
 }
 // revela parágrafos com paradas: cada parada é um "Continuar" e as falas/sons dela só tocam no toque do leitor
 function toca(it) {
+  if (it.cena) cutscene(it.cena);
+  if (it.fundo) setFundo(it.fundo);
   if (it.fx) FX.go(it.fx, it.dur, it.forca);
   const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz;
   if (window.__VOZLOG && vz) window.__VOZLOG.push(vz);
@@ -646,7 +650,7 @@ const MG = {
       return { id, nome: tr(s.nome), papel: tr(s.papel), img: s.img, olhar };
     });
     const rot = {}; Object.keys(D.OLHAR_ROTULO).forEach((kk) => { rot[kk] = tr(D.OLHAR_ROTULO[kk]); });
-    return window.JOGOS8.ler(o, { lang: LANG, A, lista, rotulos: rot, max: 6, fundo: tx(p.fundo).img }).then((r) => {
+    return window.JOGOS8.ler(o, { lang: LANG, A, lista, rotulos: rot, max: 6, fundo: tx(p.fundo).img, ja: k === 2 ? (st.leituras || {}) : {} }).then((r) => {
       const lidos = Object.keys(r.olhares).filter((id) => r.olhares[id].length);
       (st.lidoNoite = st.lidoNoite || [])[k] = lidos; st.leituras = st.leituras || {};
       lidos.forEach((id) => { st.leituras[id] = Array.from(new Set((st.leituras[id] || []).concat(r.olhares[id]))); });

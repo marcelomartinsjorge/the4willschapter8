@@ -43,17 +43,18 @@ const fala = (el, s) => { el.innerHTML = `<p>${esc(s)}</p>`; el.classList.remove
 /* ------------------------------------------------------------------ LER O CORPO */
 function ler(root, o) {
   return new Promise((resolve) => {
-    const lista = o.lista || [], rot = o.rotulos || {};
+    const lista = o.lista || [], rot = o.rotulos || {}, ja = o.ja || {};
     const LUG = ['testa', 'orelhas', 'boca', 'pescoco', 'maos', 'pulso'];
     const POS = { testa: [50, 18], orelhas: [24, 33], boca: [50, 44], pescoco: [50, 60], maos: [27, 86], pulso: [73, 86] };
     const MAX = o.max || 6;
-    const vistos = {}; lista.forEach((s) => { vistos[s.id] = []; });
+    const OLHO = '<svg viewBox="0 0 24 14" aria-hidden="true"><path d="M1 7c3-4 7-6 11-6s8 2 11 6c-3 4-7 6-11 6S4 11 1 7z"/><circle cx="12" cy="7" r="3"/></svg>';
+    const vistos = {}, antes = {}; lista.forEach((s) => { vistos[s.id] = []; antes[s.id] = (ja[s.id] || []).filter((k) => s.olhar[k]); });
     let atual = lista[0], usados = 0;
     root.innerHTML = `<div class="j8-ler j8-perto">
       <div class="j8-ler-bg" style="${o.fundo ? `background-image:url('${esc(o.fundo)}')` : ''}"></div>
       <div class="j8-ler-topo">
-        <div class="j8-abas">${lista.map((s, k) => `<button class="j8-aba" data-k="${k}"><span class="j8-foto" style="background-image:url('${esc(s.img)}')"></span><b>${esc(s.nome)}</b><small>${esc(s.papel)}</small></button>`).join('')}</div>
-        <p class="j8-olhares">${L(o, 'Olhares', 'Looks')} <b>${MAX}</b></p>
+        <div class="j8-abas">${lista.map((s, k) => `<button class="j8-aba" data-k="${k}"><span class="j8-foto" style="background-image:url('${esc(s.img)}')"></span><b>${esc(s.nome)}</b><small>${esc(s.papel)}</small><span class="j8-pips"></span></button>`).join('')}</div>
+        <p class="j8-olhares" aria-label="${L(o, 'Olhares', 'Looks')}"><span class="j8-olhos">${Array.from({ length: MAX }, () => `<i>${OLHO}</i>`).join('')}</span><b>${MAX}</b></p>
       </div>
       <div class="j8-ler-duo">
         <div class="j8-retrato"><span class="j8-foto"></span>
@@ -68,19 +69,32 @@ function ler(root, o) {
     const $ = (s) => root.querySelector(s);
     const cont = $('.j8-olhares b'), visto = $('.j8-visto'), pronto = $('.j8-pronto');
     pronto.disabled = true;
+    const abas = () => {
+      const maxUm = Math.max(0, ...lista.map((s) => vistos[s.id].length));
+      root.querySelectorAll('.j8-aba').forEach((b) => {
+        const s = lista[+b.dataset.k], n = vistos[s.id].length;
+        b.querySelector('.j8-pips').innerHTML = n ? Array.from({ length: n }, () => '<i></i>').join('') : '';
+        // quem ainda não foi olhado chama atenção quando um outro já levou dois olhares
+        b.classList.toggle('chama', s !== atual && n === 0 && !antes[s.id].length && maxUm >= 2 && usados < MAX);
+      });
+      root.querySelectorAll('.j8-olhos i').forEach((el, k) => el.classList.toggle('gasto', k < usados));
+    };
     const mostra = (s) => {
       atual = s;
       root.querySelectorAll('.j8-aba').forEach((b) => b.classList.toggle('on', lista[+b.dataset.k] === s));
       $('.j8-retrato .j8-foto').style.backgroundImage = `url('${s.img}')`;
       $('.j8-papel').textContent = s.papel; $('.j8-nome').textContent = s.nome;
-      visto.innerHTML = vistos[s.id].map((k) => `<p><b>${esc(rot[k] || k)}.</b> ${esc(s.olhar[k] || '')}</p>`).join('') || `<p class="j8-vazio">${L(o, 'Ainda não olhei.', 'I haven’t looked yet.')}</p>`;
+      const linhas = antes[s.id].filter((k) => !vistos[s.id].includes(k)).map((k) => `<p class="j8-antes"><b>${esc(rot[k] || k)}.</b> ${esc(s.olhar[k] || '')}</p>`)
+        .concat(vistos[s.id].map((k) => `<p><b>${esc(rot[k] || k)}.</b> ${esc(s.olhar[k] || '')}</p>`));
+      visto.innerHTML = linhas.join('') || `<p class="j8-vazio">${L(o, 'Ainda não olhei.', 'I haven’t looked yet.')}</p>`;
       root.querySelectorAll('.j8-ponto').forEach((b) => {
-        const k = b.dataset.k, ja = vistos[s.id].includes(k);
-        b.classList.toggle('visto', ja); b.classList.toggle('apagado', !ja && usados >= MAX); b.disabled = ja || usados >= MAX;
+        const k = b.dataset.k, viu = vistos[s.id].includes(k) || antes[s.id].includes(k);
+        b.classList.toggle('visto', viu); b.classList.toggle('apagado', !viu && usados >= MAX); b.disabled = viu || usados >= MAX;
       });
+      abas();
     };
     const olha = (k) => {
-      if (usados >= MAX || vistos[atual.id].includes(k)) return;
+      if (usados >= MAX || vistos[atual.id].includes(k) || antes[atual.id].includes(k)) return;
       vistos[atual.id].push(k); usados++;
       o.A && o.A.tone && o.A.tone(330, .25, 'sine', .03);
       cont.textContent = MAX - usados; pronto.disabled = false;

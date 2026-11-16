@@ -287,3 +287,27 @@ L21–L40d (ver MIDIAS §4). O livro ganhou `vozes` por página (`em: [trecho PT
 - Permanecem na abertura da página (a virada é o toque): falas/sons no 1º parágrafo e a fala da própria Laura ao escolher.
 - a01: `L01` abre a página; `L01b` (resto do parágrafo da bandeja, instalado e tratado como pensamento) toca depois do Continuar; `L21` depois de outro Continuar.
 - Testes: rotas A/B/C com 0 erros (83, 82 e 79 passos).
+
+## v10 — feedback humano (1ª partida do Marcelo)
+- **A caça refeita.** A Madrinha não escapa mais de corrente nenhuma (`fugiu()` sempre falso). Duas noites de sabotagem na areia, em lugares que não são o dela (Wil/Nell/Bram e Tasso); depois de ouvir os Grakh, a terceira: ao amanhecer, todas as carroças d'água estão ocas (e04b). A coluna forma na crista e os servos ficam numa fila na frente: é ali o último "ler o corpo" (e05, k=2, todos os rostos possíveis + a Nymae aguadeira se veio) e a escolha de quem enforcar (e05d).
+  - Apontou certo → o rosto escorrega na corda (f01a) e a onda vem na hora (f02a, rota A).
+  - Apontou errado ou ninguém → a carga desce, a água vem no meio dela e a Madrinha sobe do fundo do poço (f01b/f02b, rota B).
+  - O enforcamento nunca mais é ignorado: ou ela vira a Madrinha na corda, ou um inocente morre diante da coluna e a leitura segue.
+- **Pistas mais sutis.** Nada de "não é de gente": pouco suor, pó branco no canto da boca (poeira ou sal), gola fechada no calor, pulso lento numa fila com medo.
+- **Jogo dos olhares.** Seis olhos no topo que se apagam a cada olhar; abas com o retrato de cada suspeito e pontos de quantos olhares cada um levou; quem ainda não foi olhado pulsa quando outro já levou dois. Na fila, o que ela já viu nas noites aparece marcado (não gasta olhar de novo).
+- **a03:** "— Esta é a vigésima primeira vez — completo por ela." (era lido como fala da Dolores).
+- **a04:** imagem do Aubert é a que o Marcelo mandou. A imagem velha que ele viu era cache do navegador: agora todo arquivo leva `?v=10` (imagens, sons, vozes, scripts, CSS). Trocar o número a cada entrega.
+- **Dublagem limpa:** todas as falas reprocessadas sem eco nem efeito de lugar (só corte de silêncio, compressão leve e volume nivelado: −18 LUFS, gritos −16).
+- **Onda:** o vídeo dele (`f-onda.mp4`, com som) entra no lugar do efeito de tela `agua`: rota A depois do Continuar do "A Terceira fecha o muro"; rota B como cena antes da página.
+- **Imagens novas com reserva:** `fundo.alt` (se a imagem nova não existe, a velha aparece por baixo) e troca de fundo num Continuar (`fundo` num item de som). Esperando: `f05-chicote`, `f05-desvia`, `f07-kronk-caido`, `f07-eclipse` (+ vídeo opcional). Prompts no MIDIAS §A.
+- **Duelo do Kronk:** o Kronk ficou parado também (9 poses tiradas das folhas do Cap. VI, com a mesma mola da Laura); sangue que voa e mancha a areia, onda de choque no acerto, rastro no passo lateral, respingo vermelho na tela quando ela leva o golpe, o braço dela pingando na fúria; música de batalha do Cap. VI e tambores da fúria; grunhidos do Kronk do Cap. VI. Prompts para sprites novos do Kronk no MIDIAS §B (opcional).
+- **Laura:** fator `k` por pose iguala o tamanho da cabeça entre as 8 poses (escudo .7, atingido .78, impacto .62…).
+- **O Maior mais longo:** ele ataca em sequências de 1, 2 e 3 golpes conforme sangra; a rajada só entra inteira com o peito aberto (sequência inteira bem respondida) e no anel; sem flecha nova, ele se recupera. Bot: ~70 s (antes: 5 s na mão do Marcelo).
+- **Checagem:** "inteira/atrás de mim/devagar/ninguém" novos cortados; continua só o ACIMA "da boca seca" (D1, pendente).
+
+## v11 — mídias novas e sprites do Kronk
+- Entraram `f05-chicote` (Madrinha com o chicote), `f05-desvia` (troca no Continuar do "Aberta, sangrando…"), `f07-kronk-caido` e `f07-eclipse` (imagem + vídeo `f07-eclipse.mp4`, no lugar do exército parado).
+- **Kronk:** 9 poses novas do Marcelo (guarda, prep, golpe, alto, pesado, apanha, esquiva, joelho, cai). Cada pose veio numa escala; medi cabeça, mãos e pés e assei a correção no próprio arquivo (fatores relativos à guarda: prep/golpe 1,03 · alto 0,78 · pesado 1,26 · apanha 1,04 · esquiva 1,06 · joelho 1,4 · cai 1,6). Todas dividem a mesma referência (`KPREF` = 931 px de pé).
+- **Altura:** Laura de pé 352 px na tela (~1,75 m); Kronk de pé 465 px (~2,30 m, razão 1,32).
+- Versão dos arquivos: `?v=11`.
+- Testes: duelo do Kronk (51 s) e do Maior (58 s) fecham no bot, sem erro.

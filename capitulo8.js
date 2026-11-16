@@ -17,9 +17,10 @@
 window.LIVRO_EN = window.LIVRO_EN || {};
 const T = (pt, en) => { if (en != null) window.LIVRO_EN[pt] = en; return pt; };
 const se = (cond, t) => ({ se: cond, t });
-const IMG = (n) => 'assets/images/' + n + '.jpg';
+const VER = '?v=11';   // muda a cada entrega: o navegador não guarda imagem velha
+const IMG = (n) => 'assets/images/' + n + '.jpg' + VER;
 const FD = (n, foco, clima) => Object.assign({ img: IMG(n), kb: 'in', foco: foco || '50% 45%', dim: .5 }, clima ? { clima: clima } : {});
-const SFX = (n) => 'assets/audio/sfx/' + n + '.mp3';
+const SFX = (n) => 'assets/audio/sfx/' + n + '.mp3' + VER;
 
 // ---------------------------------------------------------------- o que os capítulos anteriores deixaram
 const antes = () => window.AQV_ANTES || {};
@@ -56,7 +57,7 @@ const anselVivo = (st) => !(st.mortos || []).includes('ansel');
 const lavNaColuna = (st) => lavadeiraVeio() && st.escolhas.lavadeira8 !== 'devolver' && !(st.mortos || []).includes('lavadeira');
 const josephVeio = (st) => st.escolhas.joseph === 'ir';
 const sabeNome = () => !!((c7().interrogatorio || {}).nome); // no Cap. VII ela disse à Laura que na Orla a chamam de Madrinha
-const fugiu = (st) => !!st.f.fugiu;
+const fugiu = () => false;   // (v10) ela não escapa mais de corrente nenhuma: a caça termina na fila do Último Gole
 const rotaA = (st) => fugiu(st) || st.f.desmascarou === 'certo';
 
 // ---------------------------------------------------------------- a caça: os lugares, os rostos e os suspeitos
@@ -71,7 +72,8 @@ const LUGAR_DO_ROSTO = { estrebaria: 'estrebaria', nell: 'cozinha', ilse: 'ferid
 const lugarVerdadeiro = () => LUGAR_DO_ROSTO[disfarce()] || 'estrebaria';
 const ELA = () => LUGARES[lugarVerdadeiro()].quem;   // o rosto que ela usa
 const lugarDaNoite = (st, k) => (st.noites || [])[k] || 'estrebaria';
-const RETRATO = (n) => 'assets/images/rostos/' + n + '.jpg';
+const FAZ_SERVO = { estrebaria: T('puxando um cavalo', 'leading a horse'), cozinha: T('mexendo a panela', 'stirring the pot'), feridos: T('levando um balde para a tenda', 'carrying a bucket to the tent'), forja: T('soprando o fole', 'working the bellows') };
+const RETRATO = (n) => 'assets/images/rostos/' + n + '.jpg' + VER;
 
 // os seis lugares do corpo. Gente de verdade mostra gente: suor, orelha que esquenta, mão que treme.
 const SUSPEITOS = {
@@ -134,12 +136,12 @@ const SUSPEITOS = {
 };
 // quando o rosto é dela: o mesmo nome, outro corpo. As pistas que não são de gente.
 const OLHAR_DELA = {
-  testa: T('Seca. Num deserto onde até os cavalos suam, nem uma gota.', 'Dry. In a desert where even the horses sweat, not a drop.'),
+  testa: T('Pouco suor, para quem carregou balde desde cedo.', 'Little sweat, for someone who has carried buckets since early on.'),
   orelhas: T('Pergunto onde dormiu. A resposta vem certa, e as orelhas não mudam de cor.', 'I ask where they slept. The answer comes out right, and the ears don’t change colour.'),
-  boca: T('No canto da boca, uma crosta branca. Sal. A boca está seca; não é sal de suor.', 'At the corner of the mouth, a white crust. Salt. The mouth is dry; it isn’t sweat salt.'),
-  pescoco: T('Embaixo do queixo, onde a gola esconde, a pele brilha em placas finas. Escama.', 'Under the jaw, where the collar hides it, the skin shines in thin plates. Scale.'),
+  boca: T('Um pó branco no canto da boca. Poeira, ou sal.', 'A white dust at the corner of the mouth. Dust, or salt.'),
+  pescoco: T('A gola fechada até o queixo, no calor do meio-dia.', 'The collar buttoned up to the chin, in the midday heat.'),
   maos: T('Uma moeda anda pelos nós dos dedos e some quando eu olho.', 'A coin walks across the knuckles and vanishes when I look.'),
-  pulso: T('A manga desce até a mão, no calor. Puxo. A pele do pulso está repuxada e áspera, rachada nas dobras.', 'The sleeve comes down to the hand, in this heat. I pull it. The skin of the wrist is drawn tight and rough, cracked in the folds.'),
+  pulso: T('Lento. Todo mundo nesta fila tem medo de mim, menos este pulso.', 'Slow. Everyone in this line is afraid of me, except this pulse.'),
 };
 const PISTAS_FORTES = ['testa', 'boca', 'pescoco', 'pulso'];
 const OLHAR_ROTULO = {
@@ -149,7 +151,9 @@ const OLHAR_ROTULO = {
 const nomeDe = (id) => (SUSPEITOS[id] ? SUSPEITOS[id].nome : id);
 // quem está na fila para ser lido em cada noite: quem dorme no lugar e um engano
 const suspeitosDaNoite = (st, k) => {
-  const quem = LUGARES[lugarDaNoite(st, k)].quem, m = st.mortos || [];
+  const m = st.mortos || [];
+  if (k === 2) return ['wil', 'bram', 'ilse', 'nell'].filter((x) => !m.includes(x)).concat(lavNaColuna(st) ? ['lavadeira'] : []);   // a fila do Último Gole
+  const quem = LUGARES[lugarDaNoite(st, k)].quem;
   const enganos = [['tasso'], ['ansel'], [lavNaColuna(st) ? 'lavadeira' : 'tasso']][k] || [];
   return [quem].concat(enganos).filter((x, i, a) => a.indexOf(x) === i && !m.includes(x));
 };
@@ -160,7 +164,7 @@ const sabeOnde = (st) => pistasDela(st) >= 2;
 // a moral, escondida: aparece nos soldados
 const moral = (st) => 1 + (st.f.ladraoMorto ? 1 : 0) - 2 * (st.inocentes || []).length - (st.f.desmascarou === 'errado' ? 2 : 0) + (fugiu(st) ? 1 : 0);
 const faixaMoral = (st) => { const m = moral(st); return m >= 2 ? 'alta' : m >= 0 ? 'media' : 'baixa'; };
-const aguaSalva = (st) => fugiu(st) || !!st.f.guardouCerto;
+const aguaSalva = (st) => !!st.f.guardou;   // ao menos uma noite, guardou a água em vez de matar
 // quantos voltam (de dois mil)
 const sobreviventes = (st) => 26 + (rotaA(st) ? 14 : 0) + ({ alta: 8, media: 4, baixa: 0 }[faixaMoral(st)]) + (st.escolhas.vigia === 'oeste' ? 6 : 0) + (aguaSalva(st) ? 6 : 0);
 const arqueiros = (st) => Math.round(sobreviventes(st) * 2.2);
@@ -184,14 +188,14 @@ const SALA = {
 window.LIVRO_UI = {
   pt: { parte: 'Parte', prox: 'Próxima', fim: 'Encerrar o capítulo', voltar: '← Voltar', ouvir: 'Ouvir', cena: '▶ Ver a cena', pular: 'Pular ›', oque: 'O que Laura faz?', coracaoNao: 'O pulso não deixa.', decida: 'Decida', decidir: 'Decidir', escolheu: 'Você escolheu:', resp: 'Responder a', silencio: 'não responder', silencioR: 'Silêncio', momento: 'Momento de jogo', continuar: 'Continuar',
     mg: { ler: 'Ler o corpo', sala: 'O quarto dela', roda: 'Girar a roda', chao: 'Ouvir o chão', duelo: 'Ler a maça', erguer: 'Erguer a espada', maior: 'Ficar de pé', conta: 'Contar os vivos' },
-    dica: { ler: 'Seis olhares, para quem você quiser.', sala: 'Toque no que quiser olhar.', roda: 'Segure para girar. Solte quando quiser.', chao: 'Toque junto com as batidas.', duelo: 'Leia o ombro e a maça. Aguente. Derrube.', erguer: 'Segure.', maior: 'Fique de pé e chame as rajadas.', conta: 'Segure para andar entre eles.' },
+    dica: { ler: 'Seis olhares, para dividir entre todos.', sala: 'Toque no que quiser olhar.', roda: 'Segure para girar. Solte quando quiser.', chao: 'Toque junto com as batidas.', duelo: 'Leia o ombro e a maça. Aguente. Derrube.', erguer: 'Segure.', maior: 'Fique de pé e chame as rajadas.', conta: 'Segure para andar entre eles.' },
     coverEye: 'As Quatro Vontades · Capítulo VIII', coverLede: 'Vinte anos depois do Torneio, a Lâmina de Redom leva os melhores ao deserto.', coverGo: 'Começar', coverRestart: 'Começar de novo', coverCont: 'Continuar', coverHint: 'Use fones. Leia no seu tempo.', capN: 'Capítulo VIII',
     fimCap: 'Fim do Capítulo VIII', ficou: 'O que ficou', suas: 'Suas escolhas', reler: 'Reler o capítulo', confirm: 'Recomeçar o capítulo? O progresso deste capítulo se perde.', mesmo: (n) => `${n}% escolheram o mesmo`,
     pontos: 'Pontos do capítulo', jornada: 'Pontos da jornada', posicao: (p, n) => `${p}º de ${n} leitores`, semCap1: 'Jogue os capítulos anteriores neste navegador para somar a jornada.',
     pts: { caca: 'A caça', duelo: 'O duelo', maior: 'O Maior', vivos: 'Os que voltaram', antes: 'Capítulos anteriores' } },
   en: { parte: 'Part', prox: 'Next', fim: 'Close the chapter', voltar: '← Back', ouvir: 'Listen', cena: '▶ Watch the scene', pular: 'Skip ›', oque: 'What does Laura do?', coracaoNao: 'My pulse won’t let me.', decida: 'Decide', decidir: 'Decide', escolheu: 'You chose:', resp: 'Answer', silencio: 'say nothing', silencioR: 'Silence', momento: 'Moment of play', continuar: 'Continue',
     mg: { ler: 'Read the body', sala: 'Her room', roda: 'Turn the wheel', chao: 'Listen to the ground', duelo: 'Read the mace', erguer: 'Raise the sword', maior: 'Stay on my feet', conta: 'Count the living' },
-    dica: { ler: 'Six looks, on whoever you choose.', sala: 'Tap whatever you want to look at.', roda: 'Hold to turn. Let go when you want.', chao: 'Tap along with the beats.', duelo: 'Read the shoulder and the mace. Hold. Bring him down.', erguer: 'Hold.', maior: 'Stay on your feet and call the volleys.', conta: 'Hold to walk among them.' },
+    dica: { ler: 'Six looks, shared among them all.', sala: 'Tap whatever you want to look at.', roda: 'Hold to turn. Let go when you want.', chao: 'Tap along with the beats.', duelo: 'Read the shoulder and the mace. Hold. Bring him down.', erguer: 'Hold.', maior: 'Stay on your feet and call the volleys.', conta: 'Hold to walk among them.' },
     coverEye: 'The Four Wills · Chapter VIII', coverLede: 'Twenty years after the Tournament, Redom’s Blade takes the best to the Dry Mouth.', coverGo: 'Begin', coverRestart: 'Begin again', coverCont: 'Continue', coverHint: 'Use headphones. Read at your own pace.', capN: 'Chapter VIII',
     fimCap: 'End of Chapter VIII', ficou: 'What remained', suas: 'Your choices', reler: 'Read the chapter again', confirm: 'Restart the chapter? This chapter’s progress will be lost.', mesmo: (n) => `${n}% chose the same`,
     pontos: 'Chapter points', jornada: 'Journey points', posicao: (p, n) => `${p} of ${n} readers`, semCap1: 'Play the earlier chapters in this browser to add up the journey.',
@@ -207,11 +211,10 @@ window.LIVRO = {
   tituloPagEn: 'Laura, the Blade · The Four Wills',
   capa: IMG('capa'),
   proximo: { titulo: 'Capítulo IX · Aheryn', tituloEn: 'Chapter IX · Aheryn', url: '' },
-  // a ordem das três noites: o lugar dela sempre aparece; os outros dois saem dos que sobram
+  // as duas noites da areia acontecem em lugares que não são o dela; a terceira, no Último Gole, é na água da coluna inteira
   inicio: (st) => {
     st.bpm = 52; st.base = 52; st.mortos = []; st.inocentes = []; st.leituras = {}; st.lidos = [];
-    const v = lugarVerdadeiro(), resto = Object.keys(LUGARES).filter((l) => l !== v).sort(() => Math.random() - .5).slice(0, 2);
-    const k = Math.floor(Math.random() * 3); resto.splice(k, 0, v); st.noites = resto;
+    const v = lugarVerdadeiro(); st.noites = Object.keys(LUGARES).filter((l) => l !== v).sort(() => Math.random() - .5).slice(0, 2);
   },
   paginas: [
 
@@ -286,7 +289,7 @@ window.LIVRO = {
         T('Sento na beira da cama. Ela acha a minha mão sem procurar.', 'I sit on the edge of the bed. She finds my hand without looking for it.'), // N
         T('— Seu pai saiu por aquele portão catorze vezes. Voltou treze. Seu irmão saiu uma. Você saiu vinte e voltou vinte…', '— Your father rode out of that gate fourteen times. He came back thirteen. Your brother rode out once. You’ve ridden out twenty times and come back twenty…'), // N
         T('O polegar dela passa pelos meus calos e para no do meio.', 'Her thumb moves over my calluses and stops on the middle one.'), // N
-        T('— Esta é a vigésima primeira vez.', '— This is the twenty-first time.'), // N
+        T('— Esta é a vigésima primeira vez — completo por ela.', '— This is the twenty-first time — I finish for her.'), // N
         { continuar: true },
         T('O pulso sobe no meu pescoço. As minhas mãos se mexem dentro da dela, e ela sente, e não diz nada.', 'My pulse climbs in my neck. My hands move inside hers, and she feels it, and says nothing.'), // N
         T('— Ainda lembro de você menina. Frágil. — Ela quase sorri. — Talvez frágil você nunca tenha sido. Eu te imaginava Mãe-Rainha, como eu. Você foi muito mais do que eu sabia imaginar.', '— I still remember you as a girl. Fragile. — She almost smiles. — Maybe you were never fragile. I pictured you as Mother-Queen, like me. You became far more than I knew how to imagine.'), // N
@@ -470,14 +473,7 @@ window.LIVRO = {
     { id: 'parte-III', parte: 'III', zona: 'deserto', fundo: { img: IMG('c-dia'), kb: 'in', dim: .6, clima: 'poeira' },
       cartao: { num: 'III', nome: T('A Areia', 'The Sand'), epigrafe: T('No deserto, quem carrega a água carrega o exército.', 'In the desert, whoever carries the water carries the army.'), fonte: T('Dito dos intendentes', 'Quartermasters’ saying') } },
 
-    ...[0, 1, 2].flatMap((k) => [noite(k), decide(k)]),
-
-    // se ela já fugiu da corrente: as noites que sobram ficam quietas
-    { id: 'cq', se: (st) => fugiu(st) && st.f.fugiuNoite < 2, zona: 'deserto-noite', fundo: { img: IMG('c-noite'), kb: 'in', dim: .55 },
-      texto: [
-        T('As noites seguintes passam sem nada. Os odres amanhecem duros de água, e os cochos, cheios.', 'The nights that follow pass with nothing. The waterskins are hard with water at dawn, and the troughs are full.'), // N
-        T('O que quer que fosse, ficou para trás, na areia, sem água.', 'Whatever it was, it stayed behind, out in the sand, with no water.'), // N
-      ] },
+    ...[0, 1].flatMap((k) => [noite(k), decide(k)]),
 
     // o servo que cai: ela vê e não entende
     { id: 'c9', se: (st) => !fugiu(st), zona: 'deserto', fundo: { img: IMG('c-cai'), kb: 'in', foco: '50% 55%', dim: .45, clima: 'poeira' },
@@ -485,8 +481,7 @@ window.LIVRO = {
         T('No décimo dia, perto das carroças, um servo cai no calor.', 'On the tenth day, near the wagons, a servant falls in the heat.'), // N
         () => ({ estrebaria: T('Um moço da estrebaria, de joelhos ao lado de um cavalo.', 'A stable boy, on his knees beside a horse.'), forja: T('Um ajudante de ferreiro, ao lado da forja sobre rodas.', 'A smith’s boy, beside the forge on wheels.'), feridos: T('Uma ajudante do curandeiro, com um balde vazio na mão.', 'A healer’s helper, an empty bucket in her hand.'), cozinha: T('Uma das ajudantes da cozinha, entre os sacos de sal.', 'One of the kitchen helpers, among the salt sacks.') }[lugarVerdadeiro()]), // N
         T('Antes de alguém chegar, já está de pé, puxando a manga até cobrir o pulso.', 'Before anyone gets there, they are already up, pulling the sleeve down over the wrist.'), // N
-        (st) => (sabeOnde(st) ? T('É ' + nomeDe(ELA()) + '. Anoto o nome.', 'It’s ' + nomeDe(ELA()) + '. I note the name.')
-          : T('Anoto o lugar e a hora. O rosto, não: quando chego perto, estão todos iguais de poeira.', 'I note the place and the hour. Not the face: by the time I get there, they are all the same under the dust.')), // N
+        T('Anoto o lugar e a hora. O rosto, não: quando chego perto, estão todos iguais de poeira.', 'I note the place and the hour. Not the face: by the time I get there, they are all the same under the dust.'), // N
       ] },
 
     // ===================================================== IV · AS GOELAS
@@ -670,23 +665,47 @@ window.LIVRO = {
         T('Lá fora, a areia começa a clarear.', 'Outside, the sand begins to grow light.'), // N
       ] },
 
-    // o amanhecer: apontar alguém na fila. Se ela já fugiu da corrente, sobe de dentro de um poço seco.
-    { id: 'e05', se: (st) => !fugiu(st), vozes: [{ voz: 'L30', em: ['Sei onde olhar', 'I know where to look'] }], zona: 'amanhecer', fundo: { img: IMG('e05-fila'), kb: 'in', foco: '55% 45%', dim: .45 },
+    // o amanhecer: a última água some. Agora não tem mais noite para esperar.
+    { id: 'e04b', zona: 'amanhecer', fundo: { img: IMG('e05-fila'), kb: 'in', foco: '40% 50%', dim: .5 },
+      texto: (st) => {
+        const r = [
+          T('Com a primeira luz, o intendente entra na tenda sem pedir licença.', 'At first light, the quartermaster comes into the tent without asking leave.'),
+          T('— Lâmina. As carroças d’água.', '— Blade. The water wagons.'),
+          T('Saio com ele. Na fila de carroças, as tampas estão no lugar, os lacres também. Bato num barril. Oco. Bato no seguinte. Oco. De ponta a ponta, todos ocos, e nem uma gota na areia embaixo.', 'I go out with him. Along the line of wagons, the lids are in place, the seals too. I knock on a barrel. Hollow. I knock on the next. Hollow. From end to end, all hollow, and not a drop on the sand beneath.'),
+          T('Hoje, nenhum soldado de Redom bebe antes da carga. Lá embaixo, o único poço com água é dos Grakh.', 'Today, no soldier of Redom drinks before the charge. Down below, the only well with water belongs to the Grakh.'),
+        ];
+        if (matouORosto()) {
+          const l = lugarVerdadeiro();
+          r.push(T('Na carroça do feno, embaixo dos fardos, um soldado acha um corpo enrolado num manto e coberto de sal. Faz muitos dias que morreu.', 'In the hay wagon, under the bales, a soldier finds a body wrapped in a cloak and covered in salt. It has been dead for many days.'),
+            T('Tem o rosto de um servo da coluna. O mesmo servo está vivo a vinte passos, ' + FAZ_SERVO[l] + '.', 'It has the face of one of the column’s servants. The same servant is alive twenty paces away, ' + enDe(FAZ_SERVO[l]) + '.'),
+            T('Olho de um para o outro. É o mesmo rosto.', 'I look from one to the other. It is the same face.'));
+        }
+        r.push(T('Três vezes a água sumiu. Um ladrão de água deixa rastro molhado. Este não deixa rastro.', 'Three times the water has gone. A water thief leaves a wet trail. This one leaves none.'));
+        if ((st.noites || []).includes('feridos')) r.push(T('E um odre bebido fica úmido por dentro. Os da tenda dos feridos estavam secos.', 'And a skin someone has drunk from stays damp inside. The ones in the wounded tent were dry.'));
+        if (sabeNome()) r.push(T('Na cela, ela me disse que na Orla a chamam de Madrinha. Achei que era conversa para marinheiro.', 'In the cell, she told me that on the Shore they call her the Godmother. I took it for sailors’ talk.'));
+        r.push(T('No livro de lendas da biblioteca, a Madrinha da Orla nunca tem o mesmo rosto duas vezes. Li aos catorze anos. Na página seguinte vinha o dragão do norte.', 'In the book of legends in the library, the Godmother of the Shore never wears the same face twice. I read it at fourteen. The next page was the dragon of the north.'),
+          T('Não tenho mais noite para esperar.', 'I have no more nights to wait.'));
+        return r;
+      } },
+
+    { id: 'e05', vozes: [{ voz: 'L30', em: ['Sei onde olhar', 'I know where to look'] }], zona: 'amanhecer', fundo: { img: IMG('e05-fila'), kb: 'in', foco: '55% 45%', dim: .45 },
       texto: [
-        T('Antes da carga, mando a coluna formar na crista da duna, de frente para o vale. Os servos, na frente da coluna, numa fila só, de costas para o Pira.', 'Before the charge, I order the column to form up on the crest of the dune, facing the valley. The servants in front of the column, in a single line, their backs to the Pyre.'), // N
+        T('Mando a coluna formar na crista da duna, de frente para o vale. Os servos, na frente da coluna, numa fila só, de costas para o Pira.', 'I order the column to form up on the crest of the dune, facing the valley. The servants in front of the column, in a single line, their backs to the Pyre.'), // N
         (st) => T('Ando diante da fila. Os moços da estrebaria. O ferreiro e o ajudante. As moças da cozinha. As ajudantes do curandeiro.', 'I walk along the line. The stable boys. The smith and his boy. The kitchen girls. The healer’s helpers.') + (lavNaColuna(st) ? T(' A Nymae, no fim.', ' The Nymae, at the end.') : ''), // N
         T('O que tirou a nossa água está nesta fila, ou não está em lugar nenhum.', 'Whatever took our water is in this line, or it is nowhere.'), // N
-        se((st) => sabeOnde(st), T('Sei onde olhar.', 'I know where to look.')), // N
+        se(() => intendenteViu() || matouORosto(), T('Sei onde olhar.', 'I know where to look.')), // N
+        T('Pergunto, alto, para a fila:', 'I ask the line, loud:'), // N
+        T('— Quem esvaziou os barris?', '— Who emptied the barrels?'), // N
+        T('A fila fica muda. Paro diante dos que dormem perto da água que sumiu, um de cada vez, de perto.', 'The line stays mute. I stop in front of those who sleep near the water that went, one at a time, up close.'), // N
       ],
-      escolha: { id: 'desmascarar', pergunta: T('A fila', 'The line'), opcoes: (st) => opcoesFila(st) } },
+      minijogo: 'ler', ler: { k: 2 },
+      depois: [T('Volto para o começo da fila. A coluna espera, em silêncio.', 'I go back to the head of the line. The column waits, in silence.')] }, // N
 
-    { id: 'e05f', se: (st) => fugiu(st), zona: 'amanhecer', fundo: { img: IMG('e05-fila'), kb: 'in', foco: '55% 45%', dim: .45 },
-      texto: [
-        T('Antes da carga, mando a coluna formar na crista da duna, de frente para o vale.', 'Before the charge, I order the column to form up on the crest of the dune, facing the valley.'), // N
-        T('Lá embaixo, entre a duna e o Pira, uma coisa pequena sobe de dentro de um dos poços secos. Não está com a roupa que deixou na corrente: arrumou outra. Fica de pé na borda, de frente para nós, e abre as mãos.', 'Down below, between the dune and the Pyre, something small climbs out of one of the dry wells. It isn’t wearing the clothes it left in the chain: it found others. It stands on the rim, facing us, and opens its hands.'), // N
-        (st) => (sabeNome() ? T('É ela. A Madrinha. Interroguei a desgraçada por uma tarde inteira, embaixo da tocha da Ala Funda.', 'It’s her. The Godmother. I questioned the wretch for a whole afternoon, under the torch in the Deep Ward.')
-          : T('É ela. Interroguei a desgraçada por uma tarde, embaixo da tocha da Ala Funda.', 'It’s her. I questioned the wretch for an afternoon, under the torch in the Deep Ward.')), // N
-      ] },
+    { id: 'e05d', zona: 'amanhecer', fundo: { img: IMG('e05-fila'), kb: 'in', foco: '55% 45%', dim: .5 },
+      texto: (st) => [T('A Lei da Lâmina é clara: em campanha, quem rouba água morre diante da coluna. E a coluna toda está aqui, olhando.', 'The Law of the Blade is clear: on campaign, whoever steals water dies in front of the column. And the whole column is here, watching.'), // N
+        ...suspeitosDaNoite(st, 2).filter((id) => viu(st, id).length).map((id) => impressao(st, id)),
+        T('Não tenho prova. Tenho o que vi, e o sol subindo.', 'I have no proof. I have what I saw, and the sun climbing.')], // N
+      escolha: { id: 'desmascarar', pergunta: T('A fila', 'The line'), opcoes: (st) => opcoesFila(st) } },
 
     // ===================================================== VI · O DIA COMIDO (a batalha)
     { id: 'parte-VI', parte: 'VI', zona: 'batalha', fundo: { img: IMG('f-onda'), kb: 'in', dim: .62 }, sons: [{ s: SFX('tambores-guerra'), ms: 600, v: .5 }],
@@ -707,7 +726,7 @@ window.LIVRO = {
       ] },
 
     { id: 'f02a', se: (st) => rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), kb: 'in', foco: '78% 45%', dim: .4 },
-      sons: [{ s: SFX('onda-gigante'), ms: 400, v: 1 }, { fx: 'tremor', ms: 900, dur: 2400, forca: 1.4 }, { voz: 'L14', p: 2 }, { fx: 'agua', p: 4, dur: 2600 }, { s: SFX('gritos-longe'), p: 6, v: .6 }],
+      sons: [{ s: SFX('onda-gigante'), ms: 400, v: 1 }, { fx: 'tremor', ms: 900, dur: 2400, forca: 1.4 }, { voz: 'L14', p: 2 }, { cena: 'assets/video/f-onda.mp4', p: 4 }, { s: SFX('gritos-longe'), p: 6, v: .6 }],
       texto: [
         T('No vale, o poço que brilhava apaga.', 'In the valley, the well that was shining goes dark.'), // N
         T('A água sai dele de uma vez, em pé, mais alta que a duna, e vem pelo vale na direção das mãos dela, passando por cima dos poços secos.', 'The water comes out of it all at once, standing up, taller than the dune, and comes up the valley toward her hands, passing over the dry wells.'), // N
@@ -729,8 +748,8 @@ window.LIVRO = {
         T('Estamos a cem passos do poço quando a água dele se levanta.', 'We are a hundred paces from the well when its water stands up.'), // N
       ] },
 
-    { id: 'f02b', se: (st) => !rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), kb: 'in', foco: '78% 45%', dim: .4 },
-      sons: [{ s: SFX('onda-gigante'), p: 0, v: 1 }, { fx: 'agua', p: 1, dur: 2600 }, { fx: 'tremor', p: 1, dur: 2400, forca: 1.5 }, { s: SFX('gritos-longe'), p: 2, v: .6 }],
+    { id: 'f02b', se: (st) => !rotaA(st), zona: 'onda', fundo: { img: IMG('f-onda'), kb: 'in', foco: '78% 45%', dim: .4 }, cenaAuto: 'assets/video/f-onda.mp4', cena: 'assets/video/f-onda.mp4',
+      sons: [{ fx: 'tremor', p: 0, dur: 2400, forca: 1.5 }, { s: SFX('gritos-longe'), p: 2, v: .6 }],
       texto: [
         T('A água sai do poço em pé, mais alta que a duna, e cai sobre a carga.', 'The water comes out of the well standing up, taller than the dune, and falls on the charge.'), // N
         T('Não tem escudo para isso. A onda passa por cima da Terceira, dos cavalos, de mim. Quando volta, arrasta os homens pelo chão do vale, rolando, até os poços secos, e os poços bebem.', 'There is no shield for this. The wave goes over the Third, over the horses, over me. When it goes back, it drags the men across the valley floor, rolling, into the dry wells, and the wells drink.'), // N
@@ -782,8 +801,10 @@ window.LIVRO = {
       ] },
 
     // a conjuradora: o Varr
-    { id: 'f05', zona: 'batalha', fundo: { img: IMG('f-varr'), kb: 'in', foco: '80% 35%', dim: .45 },
-      sons: [{ s: SFX('chicote-agua'), p: 0, v: .9 }, { fx: 'clarao', p: 0, dur: 400 }, { s: SFX('chicote-agua'), p: 1, v: .9 }, { s: SFX('golpe'), p: 4, v: .9 }, { s: SFX('golpe'), p: 6, v: 1 }, { fx: 'tremor', p: 6, dur: 600, forca: .9 }, { s: SFX('varr-grito'), p: 7, v: .8 }],
+    { id: 'f05', zona: 'batalha', fundo: { img: IMG('f05-chicote'), alt: IMG('f-varr'), kb: 'in', foco: '60% 40%', dim: .45 },
+      sons: [{ s: SFX('chicote-agua'), p: 0, v: .9 }, { fx: 'clarao', p: 0, dur: 400 },
+        { fundo: { img: IMG('f05-desvia'), alt: IMG('f-varr'), kb: 'in', foco: '55% 40%', dim: .45 }, s: SFX('golpe-ar'), p: 5, v: .8 },
+        { fundo: { img: IMG('f-varr'), kb: 'in', foco: '80% 35%', dim: .45 }, s: SFX('golpe'), p: 6, v: 1 }, { fx: 'tremor', p: 6, dur: 600, forca: .9 }, { s: SFX('varr-grito'), p: 7, v: .8 }],
       texto: [
         (st) => {
           const quem = sabeNome() ? ['a Madrinha', 'the Godmother'] : ['a Nymae conjuradora', 'the Nymae conjurer'];
@@ -819,14 +840,14 @@ window.LIVRO = {
         T('É um alívio que eu não sentia desde o combate contra o Joseph, no Torneio Real.', 'It is a relief I haven’t felt since my fight against Joseph, at the Royal Tournament.'), // N
       ] },
 
-    { id: 'f07', zona: 'duelo', fundo: { img: IMG('f-eclipse'), kb: 'in', foco: '50% 40%', dim: .45 }, sons: [{ voz: 'L20', p: 1 }],
+    { id: 'f07', zona: 'duelo', fundo: { img: IMG('f07-kronk-caido'), alt: IMG('f-kronk'), kb: 'in', foco: '50% 45%', dim: .45 }, sons: [{ voz: 'L20', p: 1 }],
       texto: [
         T('Paro em cima dele. Ele respira de boca aberta, com os dentes para fora.', 'I stand over him. He breathes through his open mouth, teeth bared.'), // N
         T('Foi um excelente adversário. Mas agora os Grakh acabam. Mais ninguém da minha família, mais ninguém de Redom, morre na mão desses selvagens, na areia deste deserto.', 'He was an excellent opponent. But now the Grakh end. No one else of my family, no one else of Redom, dies at the hands of these savages, in the sand of this desert.'), // N
         T('Ergo a espada, ainda olhando para ele.', 'I raise the sword, still looking at him.'), // N
       ],
       minijogo: 'erguer',
-      sonsDepois: [{ fx: 'eclipse', p: 0 }, { s: SFX('eclipse-total'), p: 0, v: .9 }, { s: SFX('gritos-redom'), p: 3, v: .8 }],
+      sonsDepois: [{ fx: 'eclipse', p: 0 }, { s: SFX('eclipse-total'), p: 0, v: .9 }, { fundo: { img: IMG('f07-eclipse'), alt: IMG('f-eclipse'), video: 'assets/video/f07-eclipse.mp4', kb: 'in', foco: '50% 40%', dim: .3 }, p: 1 }, { s: SFX('gritos-redom'), p: 3, v: .8 }],
       depois: [
         T('O chão escurece, como se um dragão passasse por cima de nós, mas a sombra não passa.', 'The ground darkens, as if a dragon were passing over us, but the shadow doesn’t pass.'), // N
         T('Olho para cima. Um pedaço preto entra pela borda do sol e vai fechando, e a luz fica rala. Eclipse.', 'I look up. A black piece comes in at the sun’s edge and keeps closing, and the light thins. An eclipse.'), // N
@@ -930,7 +951,7 @@ window.LIVRO = {
   // ---------------------------------------------------------------- pontuação escondida (cap08)
   pontos: (st) => {
     const viuDela = pistasDela(st);
-    const caca = Math.max(800, 1200 * viuDela + (fugiu(st) || st.f.desmascarou === 'certo' ? 6000 : 0) + (st.f.ladraoMorto ? 1500 : 0) + (st.f.guardouCerto ? 1500 : 0) - 2500 * (st.inocentes || []).length);
+    const caca = Math.max(800, 1200 * viuDela + (fugiu(st) || st.f.desmascarou === 'certo' ? 6000 : 0) + (st.f.ladraoMorto ? 1500 : 0) + (st.f.guardou ? 1500 : 0) - 2500 * (st.inocentes || []).length);
     const d = st.duelo || {};
     const duelo = Math.max(2000, Math.round(900 * (d.leituras || 0) + 1500 * (d.laterais || 0) + (d.rodeou ? 2500 : 0) - 600 * (d.marcas || 0) - 3000 * (d.recomecos || 0) + 4000));
     const m = st.maior || {};
@@ -1027,17 +1048,10 @@ function noite(k) {
     texto: (st) => {
       const l = lugarDaNoite(st, k), r = [];
       if (k === 0) r.push(T('Na primeira noite de areia, alguém mexe na nossa água.', 'On the first night in the sand, someone gets into our water.'));
-      else if (String(st.escolhas['noite' + (k - 1)] || '').indexOf('x-') === 0) r.push(T('Na noite seguinte, a água some outra vez.', 'The next night, the water goes again.'));
-      else r.push(k === 1 ? T('Na segunda noite, a água some outra vez.', 'On the second night, the water goes again.') : T('Na terceira noite, outra vez.', 'On the third night, again.'));
+      else r.push(T('Quatro noites passam sem faltar água. Na quinta, ela some outra vez.', 'Four nights go by with the water untouched. On the fifth, it goes again.'));
       if (k > 0 && (st.inocentes || []).length) r.push(T('Os fogos perto do meu ficam calados. Os homens comem de costas para a minha tenda.', 'The fires near mine have gone quiet. The men eat with their backs to my tent.'));
       if (l === 'feridos' && alarme() >= 2) r.push(T('Dois guardas passaram a noite na porta dos feridos, como eu mando desde a Capital.', 'Two guards spent the night at the wounded men’s door, as I have ordered since the Capital.'));
       EVT[l].forEach((x) => r.push(typeof x === 'function' ? x(st) : x));
-      if (matouORosto() && l === lugarVerdadeiro()) {
-        const n = nomeDe(LUGARES[l].quem);
-        r.push(T('Na hora da ração, um soldado acha um corpo ' + ESCONDE[l] + ', enrolado num manto. Faz dias que morreu.', 'At ration time, a soldier finds a body ' + enDe(ESCONDE[l]) + ', wrapped in a cloak. It has been dead for days.'),
-          T('Tem o rosto de um servo da coluna. O mesmo servo está vivo a dez passos, ' + FAZ[l] + '.', 'It has the face of one of the column’s servants. The same servant is alive ten paces away, ' + enDe(FAZ[l]) + '.'),
-          T('Olho de um para o outro. É o mesmo rosto.', 'I look from one to the other. It is the same face.'));
-      }
       if (k === 1 && intendenteViu()) r.push(T('Antes da ração, o intendente me procura sozinho.', 'Before the ration, the quartermaster comes to find me alone.'),
         T('— Na revista da Capital, Lâmina, um servo tinha a pele áspera embaixo do queixo. Passei a mão para ver se era sarna. Não era. Não lembro qual servo.', '— At the inspection in the Capital, Blade, one of the servants had rough skin under the jaw. I ran my hand over it to see if it was mange. It wasn’t. I don’t remember which servant.'));
       if (k === 0) r.push(T('No deserto, água vale mais que ouro. Isso não é descuido.', 'In the desert, water is worth more than gold. This is no accident.'));
@@ -1046,13 +1060,7 @@ function noite(k) {
         const ela = sabeNome() ? ['a Madrinha', 'the Godmother'] : ['a Nymae', 'the Nymae'];
         if (confessou()) r.push(T('Na cela, ' + ela[0] + ' me disse que foi ela que levantou o mar contra a Sentença.', 'In the cell, ' + ela[1] + ' told me it was she who raised the sea against the Sentence.'));
         else if (semente()) r.push(T('Atrás das grades, ' + ela[0] + ' me falou do deserto sem eu perguntar.', 'Behind the bars, ' + ela[1] + ' spoke to me of the desert without my asking.'));
-        r.push(T('E faz nove dias que ela sumiu na estrada da costa. Penso nisso, e o coração bate mais forte. Tenho areia nos dentes.', 'And it is nine days since she vanished on the coast road. I think of it, and my heart beats harder. There is sand in my teeth.'));
-      }
-      if (k === 2) {
-        r.push(T('Três noites, três lugares. Um ladrão de água deixa rastro molhado. Este não deixa rastro.', 'Three nights, three places. A water thief leaves a wet trail. This one leaves none.'));
-        if ((st.noites || []).slice(0, 3).includes('feridos')) r.push(T('E um odre bebido fica úmido por dentro. Aquele estava seco.', 'And a skin someone has drunk from stays damp inside. That one was dry.'));
-        if (sabeNome()) r.push(T('Na cela, ela me disse que na Orla a chamam de Madrinha. Achei que era conversa para marinheiro.', 'In the cell, she told me that on the Shore they call her the Godmother. I took it for sailors’ talk.'));
-        r.push(T('No livro de lendas da biblioteca, a Madrinha da Orla nunca tem o mesmo rosto duas vezes. Li aos catorze anos. Na página seguinte vinha o dragão do norte.', 'In the book of legends in the library, the Godmother of the Shore never wears the same face twice. I read it at fourteen. The next page was the dragon of the north.'));
+        r.push(T('E faz doze dias que ela sumiu na estrada da costa. Penso nisso, e o coração bate mais forte. Tenho areia nos dentes.', 'And it is twelve days since she vanished on the coast road. I think of it, and my heart beats harder. There is sand in my teeth.'));
       }
       r.push(T('Mando trazer todos os que dormiram perto d' + lug(st).nome + '.', 'I have everyone who slept near ' + enDe(lug(st).nome) + ' brought to me.'));
       if (k === 0) r.push(T('Servo não se conta, e eu nunca soube o nome de nenhum. Hoje, pergunto.', 'Servants aren’t counted, and I have never known any of their names. Today, I ask.'));
@@ -1074,7 +1082,7 @@ function noite(k) {
 function impressao(st, id) {
   const v = viu(st, id), fortes = v.filter((o) => PISTAS_FORTES.includes(o)).length, n = nomeCom(id), en = enDe(n);
   if (!v.length) return id === 'lavadeira' ? T('Da Nymae, não cheguei a olhar de perto.', 'I never got a close look at the Nymae.') : T('De ' + n + ', não cheguei a olhar de perto.', 'I never got a close look at ' + en + '.');
-  if (id === ELA()) return fortes >= 2 ? T('Em ' + n + ', o que eu vi não é de gente.', 'In ' + en + ', what I saw doesn’t belong to a person.')
+  if (id === ELA()) return fortes >= 2 ? T('Em ' + n + ', mais de uma coisa não bate com o calor, nem com o medo. Não sei dizer o quê.', 'In ' + en + ', more than one thing doesn’t fit the heat, or the fear. I can’t say what.')
     : fortes === 1 ? T('Em ' + n + ', uma coisa não bate, e eu não sei dizer o quê.', 'In ' + en + ', something doesn’t fit, and I can’t say what.')
       : T('Em ' + n + ', só vi o cansaço de todo mundo.', 'In ' + en + ', I only saw the same tiredness as everyone.');
   if (id === 'tasso') return v.some((o) => ['orelhas', 'boca', 'maos'].includes(o)) ? T('Tasso mentiu sobre a água, e a boca dele não tem sede.', 'Tasso lied about the water, and his mouth isn’t thirsty.') : T('Em Tasso, só vi suor e medo.', 'In Tasso, I only saw sweat and fear.');
@@ -1119,10 +1127,8 @@ function decide(k) {
           return [T(cap1(n) + ' morre ao amanhecer.', cap1(en) + ' dies at dawn.'), MORTE[q]].filter(Boolean);
         } })),
       { id: 'guardar', txt: T('Pôr dois guardas n' + lugarNome(st) + ' e esperar.', 'Put two guards on ' + enDe(lugarNome(st)) + ' and wait.'),
-        efeito: (s) => { if (lugarDaNoite(s, k) === lugarVerdadeiro()) s.f.guardouCerto = true; },
-        resultado: (s) => (lugarDaNoite(s, k) === lugarVerdadeiro()
-          ? [T('Dois guardas da Terceira dormem sentados ao lado d' + lugarNome(s) + '. A água de lá amanhece no lugar.', 'Two guards of the Third sleep sitting up beside ' + enDe(lugarNome(s)) + '. The water there is still in place at dawn.')]
-          : [T('Dois guardas da Terceira dormem sentados ao lado d' + lugarNome(s) + '.', 'Two guards of the Third sleep sitting up beside ' + enDe(lugarNome(s)) + '.'),
+        efeito: (s) => { s.f.guardou = true; },
+        resultado: (s) => ([T('Dois guardas da Terceira dormem sentados ao lado d' + lugarNome(s) + '.', 'Two guards of the Third sleep sitting up beside ' + enDe(lugarNome(s)) + '.'),
             T('Perto do fogo, um sargento diz baixo que a Lâmina amoleceu. Deixo que ele pense que eu não ouvi.', 'By the fire, a sergeant says quietly that the Blade has gone soft. I let him think I didn’t hear.')]) },
     ] },
   };
@@ -1130,14 +1136,13 @@ function decide(k) {
 
 // a fila do amanhecer: os quatro rostos possíveis que estão vivos, e os enganos que ela leu
 function opcoesFila(st) {
-  const m = st.mortos || [], ids = ['wil', 'bram', 'ilse', 'nell'].filter((x) => !m.includes(x));
-  todosLidos(st).forEach((q) => { if (q && !ids.includes(q) && !m.includes(q) && (q !== 'lavadeira' || lavNaColuna(st))) ids.push(q); });
+  const ids = suspeitosDaNoite(st, 2);
   const ops = ids.map((id) => ({ id,
-    txt: () => (id === 'lavadeira' ? T('Apontar a Nymae.', 'Point at the Nymae.') : T('Apontar ' + nomeDe(id) + ', ' + SUSPEITOS[id].papel + '.', 'Point at ' + nomeDe(id) + ', ' + window.LIVRO_EN[SUSPEITOS[id].papel] + '.')),
+    txt: () => (id === 'lavadeira' ? T('Mandar enforcar a Nymae, aqui, agora.', 'Have the Nymae hanged, here, now.') : T('Mandar enforcar ' + nomeDe(id) + ', ' + SUSPEITOS[id].papel + ', aqui, agora.', 'Have ' + nomeDe(id) + ', the ' + window.LIVRO_EN[SUSPEITOS[id].papel] + ', hanged, here, now.')),
     efeito: (s) => { if (id === ELA()) s.f.desmascarou = 'certo'; else { s.f.desmascarou = 'errado'; s.mortos.push(id); s.inocentes.push(id); } },
     resultado: () => {
       const n = id === 'lavadeira' ? T('a Nymae', 'the Nymae') : nomeDe(id), en = window.LIVRO_EN[n] || n;
-      if (id === ELA()) return [T('Paro na frente de ' + n + ' e aponto.', 'I stop in front of ' + en + ' and point.'), T('Dois soldados pegam pelos braços. Não há resistência. O rosto sobe para mim.', 'Two soldiers take the arms. There is no struggle. The face comes up to look at me.')];
+      if (id === ELA()) return [T('Paro na frente de ' + n + ' e aponto. — A corda.', 'I stop in front of ' + en + ' and point. — The rope.'), T('Dois soldados pegam pelos braços. Não há resistência. O rosto sobe para mim.', 'Two soldiers take the arms. There is no struggle. The face comes up to look at me.')];
       return [T('Paro na frente de ' + n + ' e aponto.', 'I stop in front of ' + en + ' and point.'),
         T('A Terceira cumpre a lei ali mesmo, na frente da fila.', 'The Third carries out the law right there, in front of the line.'),
         T('Nada escorrega. Nada muda de cor. A fila não se mexe, e a coluna atrás de mim também não.', 'Nothing slips. Nothing changes colour. The line doesn’t move, and neither does the column behind me.')];

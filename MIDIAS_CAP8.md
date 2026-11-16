@@ -1,19 +1,17 @@
-# Cap. VIII · A Lâmina · Som
+# Cap. VIII · A Lâmina · O que falta
 
-*Atualizado em 14/11/2026.* **Fechado.** Imagens, vídeos, sprites, efeitos e dublagem estão no livro. Falta uma fala só:
+*Atualizado em 14/11/2026 (v11).* O livro roda inteiro sem nada desta lista. As imagens novas (`f05-chicote`, `f05-desvia`, `f07-kronk-caido`, `f07-eclipse` e o vídeo do eclipse) e os 9 sprites do Kronk já entraram.
 
+## Dublagem
 - **`L09b`** ("— Não prometo.", ramo da Justine): sem ela, a escolha fica sem voz. O prompt está em §4.
-- **`L17b`** ("É por você, Simon. E por você, pai."): por enquanto toca a `L17a` no lugar. Se gerar, é só salvar por cima.
+- **`L17b`** ("É por você, Simon. E por você, pai."): por enquanto toca a `L17a` no lugar.
 
-### O que foi feito com o que chegou
+**Desde a v10, as falas entram limpas:** só corte de silêncio e volume nivelado, sem eco nem efeito de lugar.
 
-**Dublagem: tratada por lugar.** Cada fala recebeu o espaço onde a Laura está: na capela, eco de pedra (Justine); nos aposentos e salões do palácio, uma sala pequena; nas Goelas e no acampamento, ar aberto e seco. Os gritos da batalha (L04, L14, L16, L18) passaram pelo **elmo**: ressonância de metal perto da boca e o eco do vale depois. Os pensamentos (L05, L15, L17, L19, L20, L29, L30, L31, L39) ficaram mais próximos e quentes, como voz dentro da cabeça. O "— Simon." (L03), primeira vez que ela diz o nome, **volta das paredes das Goelas** duas vezes, cada vez mais longe. Todas niveladas no mesmo volume, sem silêncio no começo.
-
-**Efeitos.** Os três que você gerou (`agua-sobe`, `pedra-poco`, `vento-ferro`) entraram como vieram. Os outros 16 foram montados com sons dos Caps. II a VII, misturados e transformados: o bronze dos homens de bronze é o arrasto do Cap. V mais grave e com eco metálico; a carga é o galope do Cap. IV em três camadas defasadas; os passos do Kronk são a marreta do Cap. V em meia velocidade, três vezes; o chicote de água é a onda do Cap. VII cortada no pico, com escudo batendo; o grito do Varr é a sentinela do Cap. VI mais grave; os gritos ao longe são a tripulação do Cap. VII abafada, com o mar recuando.
-
-**Um efeito novo:** `linha-fecha`. Depois do "Firmes! É só o escuro! Segurem a linha!", quando o texto diz "A linha fecha", o exército responde e três escudos batem um no outro.
-
-**Ambientes:** ficam os dos capítulos anteriores, como você decidiu.
+### O que já entrou
+- **Vídeo da onda** (`f-onda.mp4`, com som): rota A, no "A onda bate na crista", em tela cheia; rota B, antes da página da onda.
+- **Música do duelo:** a trilha de batalha do Cap. VI no Kronk e no Maior, com os tambores da fúria quando ele faz a Laura sangrar; os grunhidos do Kronk são os do Cap. VI.
+- **Efeitos:** ficam os da v8; os ambientes, os dos capítulos anteriores.
 
 ---
 
