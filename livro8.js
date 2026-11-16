@@ -333,7 +333,7 @@ function vozesDe(p) {
   return [].concat(v);
 }
 // as falas dubladas de Laura tocam sozinhas
-const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3?v=12';
+const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3?v=13';
 const vozDeOpcao = (o, cid) => { const v = nervosa(o, cid) ? o.vozNervosa : o.voz; return typeof v === 'function' ? v(st) : v; };
 const ABAFA = /^$/;   // o elmo já vem gravado nos arquivos (efeito aplicado na edição)
 const fala = (nome, ms = 0) => { if (!nome || typeof nome !== 'string') return; later(() => { if (A.ctx && A.on) A.narrate(vozUrl(nome), null, ABAFA.test(nome)); }, ms); };

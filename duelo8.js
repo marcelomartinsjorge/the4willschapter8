@@ -410,7 +410,7 @@ function start(root, opts) {
       ];
       if (fase === 3) ops.push({ k: 'rodear', nome: t.golpes.rodear[0], desc: t.golpes.rodear[1], cls: 'risco' });
       const k = await escolhe(ops);
-      if (k === 'respirar') { bpm = Math.max(base, bpm - 14); hp = Math.min(hpFase, hp + 4); pose('respirar', 1.2); grunhe('kronk-respira2', .6); linha(t.respirou); await espera(900); return null; }
+      if (k === 'respirar') { bpm = Math.max(base, bpm - 14); hp = Math.min(hpFase, hp + 4); pose('respirar', 1.2); linha(t.respirou); await espera(900); return null; }
       if (k === 'finta') { revelado = Math.random() < (fase === 3 ? .7 : .45) ? 'pesado' : 'golpe'; R.leituras++; pose('guarda', .4); empurra(CL, 40, 200); linha(t.tell.mordeu[revelado], 'ler'); await espera(900); return null; }
       if (k === 'rodear') { rodeando = true; R.rodeou = true; linha(t.rodear, 'ler'); await espera(900); return null; }
       const corte = k === 'corte', dur = corte ? 1.25 : .95, jan = (corte ? .085 : .1) * janelaK();
@@ -420,9 +420,9 @@ function start(root, opts) {
       if (j === 'perfeito' || j === 'bom') {
         const dano = (corte ? (j === 'perfeito' ? 15 : 10) : (j === 'perfeito' ? 9 : 6));
         MOM.golpeDela(corte || j === 'perfeito'); sfx('corte', .7); hp = Math.max(fase === 3 ? 6 : 1, hp - dano); flash = 0; shake = .25;
-        popTxt(j === 'perfeito' ? t.rot.perfeito : t.rot.bom,'bom'); anima('apanha').then(guarda); grunhe(Math.random() < .5 ? 'kronk-apanha1' : 'kronk-apanha2', .75); grunhe('acerta-leve', .5);
+        popTxt(j === 'perfeito' ? t.rot.perfeito : t.rot.bom,'bom'); anima('apanha').then(guarda); grunhe('acerta-leve', .5);
         linha(t.acertos[Math.floor(Math.random() * t.acertos.length)]);
-      } else { MOM.erroDela(); sfx('golpe-ar', .6); popTxt(j === 'nada' ? t.rot.tarde : t.rot[j] || t.rot.defende,'mal'); anima('esquiva').then(guarda); grunhe('kronk-esquiva', .55); linha(t.erro); }
+      } else { MOM.erroDela(); sfx('golpe-ar', .6); popTxt(j === 'nada' ? t.rot.tarde : t.rot[j] || t.rot.defende,'mal'); anima('esquiva').then(guarda); linha(t.erro); }
       await espera(800);
       return null;
     };
@@ -433,7 +433,7 @@ function start(root, opts) {
       const lido = !!revelado; revelado = null;
       const rapido = fase >= 2 || rodeando;
       if (tipo === 'golpe') {
-        linha(t.tell.golpe, 'tell'); MOM.ataqueDele(); grunhe('kronk-golpe', .7);
+        linha(t.tell.golpe, 'tell'); MOM.ataqueDele();
         const dur = (fase === 1 ? .95 : fase === 2 ? .78 : .82) * (lido ? 1.15 : 1);
         kAnim = { nome: 'golpe', f: 0, play: true, ate: KR.golpe.impacto, fps: KR.golpe.impacto / dur };
         const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }]);
@@ -443,7 +443,7 @@ function start(root, opts) {
         else if (j === 'perfeito' && r.k === 'lateral') { MOM.lateral(); sfx('golpe-ar', .6); popTxt(t.rot.passou,'bom'); linha(t.passou); R.respostas++; }
         else await marca(j);
       } else {
-        linha(rapido ? t.tell.pesadoRapido : t.tell.pesado, 'tell'); empurra(CE, 34, 1600, 0, .07); grunhe('kronk-pesado', .75);
+        linha(rapido ? t.tell.pesadoRapido : t.tell.pesado, 'tell'); empurra(CE, 34, 1600, 0, .07);
         await anima('pesado', { ate: KR.pesado.segura, fps: 22 });
         const segura = rodeando ? rnd(.15, .35) : rapido ? rnd(.35, .8) : rnd(.7, 1.4);
         // segurar a maça no alto: tocar agora é cedo
@@ -466,7 +466,7 @@ function start(root, opts) {
           await espera(650);
           if (fimPronto) { await fim(); return; }
           const dano = rodeando ? 24 : 14;
-          MOM.golpeDela(true); sfx('corte', .8); grunhe('kronk-apanha1', .8); hp = Math.max(fase === 3 ? 6 : 1, hp - dano); shake = .35; anima('apanha').then(guarda); linha(t.contraGolpe);
+          MOM.golpeDela(true); sfx('corte', .8); hp = Math.max(fase === 3 ? 6 : 1, hp - dano); shake = .35; anima('apanha').then(guarda); linha(t.contraGolpe);
         } else if ((j === 'perfeito' || j === 'bom') && r.k === 'escudo') { MOM.escudo(true); sfx('escudo-impacto-2', .9); shake = .3; popTxt(t.rot.segurou,'meio'); linha(t.segurouPesado); bpm += 7; R.respostas++; }
         else await marca(j);
       }
@@ -487,7 +487,7 @@ function start(root, opts) {
       pose('golpe', 3); sfx('corte', .9); MOM.golpeDela(true); soco(.12, KX - 60, CHAO - KH * .35, .25); flash = .3; shake = .7;
       await cena(t.fim, 1700);
       lento = 1; areia(KX, 40, 1.6); shake = .9;
-      sangue(KX - 30, CHAO - KH * .3, 60, 1, 1.3); grunhe('kronk-apanha2', .9);
+      sangue(KX - 30, CHAO - KH * .3, 60, 1, 1.3);
       await anima('cai', { fps: 18 });
       await espera(600); faixasAlvo = 0;
       fecha();
@@ -499,8 +499,7 @@ function start(root, opts) {
         await turnoDela(); if (acabou) return;
         if (fase === 1 && hp <= 78) {
           fase = 2; hpFase = hp; marcas = 0;
-          kAnim = { nome: 'pesado', f: 0, play: true, fps: 30 };
-          grunhe('kronk-mata2', .9); tocaLoop('tambores-furia-loop', .32).then((h) => { furia = h; });
+          kAnim = { nome: 'pesado', f: 0, play: true, fps: 30 }; tocaLoop('tambores-furia-loop', .32).then((h) => { furia = h; });
           await cena(t.fase2.slice(0, 2), 1400); pose('atingido', 1.5); flash = 1; shake = 1; sfx('escudo-impacto-2', 1); sangue(LX + 30, CHAO - LH * .62, 46, -1, 1.1); mancharTela();
           base = 78; bpm = Math.max(bpm, 82); R.golpesRecebidos++; guarda();
           await cena(t.fase2.slice(2), 1500);

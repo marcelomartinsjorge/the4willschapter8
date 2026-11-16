@@ -315,3 +315,8 @@ L21–L40d (ver MIDIAS §4). O livro ganhou `vozes` por página (`em: [trecho PT
 ## v12 — últimas falas
 - `L09b` e `L17b` instaladas (mesmo tratamento da v10: corte de silêncio, compressão leve, −18 LUFS). A `L17b` deixou de repetir a `L17a`: toca no ramo em que ela visitou o pai (f01b e f04).
 - Versão dos arquivos: `?v=12`. Dublagem da Laura completa.
+
+## v13 — vídeo do Kronk e luta sem falas antigas
+- `f-kronk.mp4` trocado pelo vídeo novo do Marcelo (com zoom que corta os soldados), usado na cutscene antes do duelo do Kronk.
+- Luta do Kronk: removidos os 7 sons de voz herdados do Cap. VI (`kronk-apanha1/2`, `esquiva`, `golpe`, `pesado`, `respira2`, `mata2`), que tinham fala em português. Ficam o som de acerto, a música de batalha e os tambores da fúria.
+- Versão dos arquivos: `?v=13`.
