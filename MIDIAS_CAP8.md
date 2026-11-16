@@ -1,10 +1,9 @@
 # Cap. VIII · A Lâmina · O que falta
 
-*Atualizado em 14/11/2026 (v11).* O livro roda inteiro sem nada desta lista. As imagens novas (`f05-chicote`, `f05-desvia`, `f07-kronk-caido`, `f07-eclipse` e o vídeo do eclipse) e os 9 sprites do Kronk já entraram.
+*Atualizado em 14/11/2026 (v12).* O livro roda inteiro sem nada desta lista. As imagens novas (`f05-chicote`, `f05-desvia`, `f07-kronk-caido`, `f07-eclipse` e o vídeo do eclipse) e os 9 sprites do Kronk já entraram.
 
 ## Dublagem
-- **`L09b`** ("— Não prometo.", ramo da Justine): sem ela, a escolha fica sem voz. O prompt está em §4.
-- **`L17b`** ("É por você, Simon. E por você, pai."): por enquanto toca a `L17a` no lugar.
+- **Completa.** As 55 falas da Laura estão instaladas, inclusive `L09b` ("— Não prometo.") e `L17b` ("É por você, Simon. E por você, pai.", que agora toca no ramo em que ela visitou o pai).
 
 **Desde a v10, as falas entram limpas:** só corte de silêncio e volume nivelado, sem eco nem efeito de lugar.
 

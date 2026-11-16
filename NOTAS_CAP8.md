@@ -311,3 +311,7 @@ L21–L40d (ver MIDIAS §4). O livro ganhou `vozes` por página (`em: [trecho PT
 - **Altura:** Laura de pé 352 px na tela (~1,75 m); Kronk de pé 465 px (~2,30 m, razão 1,32).
 - Versão dos arquivos: `?v=11`.
 - Testes: duelo do Kronk (51 s) e do Maior (58 s) fecham no bot, sem erro.
+
+## v12 — últimas falas
+- `L09b` e `L17b` instaladas (mesmo tratamento da v10: corte de silêncio, compressão leve, −18 LUFS). A `L17b` deixou de repetir a `L17a`: toca no ramo em que ela visitou o pai (f01b e f04).
+- Versão dos arquivos: `?v=12`. Dublagem da Laura completa.
