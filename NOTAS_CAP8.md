@@ -320,3 +320,18 @@ L21–L40d (ver MIDIAS §4). O livro ganhou `vozes` por página (`em: [trecho PT
 - `f-kronk.mp4` trocado pelo vídeo novo do Marcelo (com zoom que corta os soldados), usado na cutscene antes do duelo do Kronk.
 - Luta do Kronk: removidos os 7 sons de voz herdados do Cap. VI (`kronk-apanha1/2`, `esquiva`, `golpe`, `pesado`, `respira2`, `mata2`), que tinham fala em português. Ficam o som de acerto, a música de batalha e os tambores da fúria.
 - Versão dos arquivos: `?v=13`.
+
+## v14 — feedback de jogo (5 pontos) e grunhidos do Kronk
+- **Respirar contra o Maior:** agora baixa o piso de repouso (−10 por respiro, até 96) e o pulso (−14). Antes o piso era o pulso inicial (150–166) e respirar não saía da voz tremida. As escolhas do ombro e da coragem continuam acelerando.
+- **Pistas:** o resumo de cada rosto cita só o que a Laura de fato viu (testa, boca, gola, moeda, pulso; no Tasso: orelhas, boca, moedas). A moeda que some (`maos`) entrou em `PISTAS_FORTES`.
+- **Água guardada:** no Último Gole o barril vigiado ainda tem um palmo de água e os odres chegam meio cheios; no fim, um guarda bebe o último gole e “seis estão de pé por causa dele”.
+- **Erguer a espada:** a altura salva muda o texto da f07b (no alto ≥75; à altura do ombro 40–74; baixa <40).
+- **Vigiar a Nymae:** se foi vigiada, o soldado jura que ela não largou os barris (impressão) e, se for executada, devolve a manta sem dizer nada.
+- **Kronk:** sete grunhidos novos sem fala (feitos dos sons do Grakh, tom mais grave) no lugar dos antigos.
+- Versão dos arquivos: `?v=14`. Bot: rota A (85 passos) e B (80) sem erro.
+
+## v15 — travadas nos duelos
+- **Causa:** o canvas aplicava filtros de cor (`ctx.filter`) a cada quadro no fundo e nos sprites, e de novo no brilho do acerto e no cinza do golpe final; os raios usavam `shadowBlur`; as 6 folhas antigas do Kronk (sem uso desde as poses paradas) ainda carregavam e ocupavam memória; os sons do golpe final só eram carregados na hora.
+- **Correção:** os filtros são aplicados uma vez (sprites e fundo em cinza são "assados" ao abrir o duelo; o brilho do acerto é pré-assado durante a introdução); raios sem `shadowBlur`; folhas antigas não carregam mais; sons dos duelos pré-carregados.
+- **Medido (Chrome sem GPU, bot):** pior quadro na luta com o Kronk de 1033 ms para 267 ms; 99% dos quadros de ~950 ms para 16,8 ms. O mesmo no Maior.
+- Versão dos arquivos: `?v=15`.

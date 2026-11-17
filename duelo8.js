@@ -173,10 +173,20 @@ function start(root, opts) {
     const $ = (s) => root.querySelector(s);
     const cv = $('.d8-cv'), cx = cv.getContext('2d'), log = $('.d8-log'), menu = $('.d8-menu'), pop = $('.d8-pop');
     const bg = await load(opts.fundo);
-    const kimg = {}; await Promise.all(Object.entries(KR).map(async ([k, a]) => { kimg[k] = await load(a.src); }));
+    const kimg = {};   // as folhas antigas do Kronk não carregam mais: as poses paradas bastam e as folhas pesavam na memória
     const limg = {}; await Promise.all(Object.entries(LA).map(async ([k, a]) => { limg[k] = await load(a.src); }));
     const kpimg = {}; if (!maior) await Promise.all(Object.entries(KP).map(async ([k, a]) => { kpimg[k] = await load(a.src); }));
     const mimg = {}; if (maior) await Promise.all(Object.entries(MA).map(async ([k, a]) => { mimg[k] = await load(a.src); }));
+    // o filtro de cor do canvas custa caro a cada quadro (e trava no golpe final): assa uma vez, desenha direto
+    const assa = (im, f) => { if (!im) return im; const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.filter = f; x.drawImage(im, 0, 0); return c; };
+    const claro = (im) => (im ? (im._cl || (im._cl = assa(im, 'brightness(1.8) saturate(.2)'))) : im);
+    for (const k in kpimg) kpimg[k] = assa(kpimg[k], 'saturate(.85) contrast(1.06)');
+    for (const k in mimg) mimg[k] = assa(mimg[k], 'contrast(1.08) brightness(.92)');
+    const bgG = assa(bg, 'grayscale(1) contrast(1.25)');
+    // aquece o que o golpe final usa, durante a introdução
+    { const fila = [].concat(Object.values(kpimg), Object.values(mimg)); const aquece = () => { const im = fila.shift(); if (im) { claro(im); setTimeout(aquece, 60); } }; setTimeout(aquece, 400); }
+    if (A && A.buf) ['acerta-leve', 'kronk-apanha1', 'kronk-apanha2', 'kronk-esquiva', 'kronk-golpe', 'kronk-mata2', 'kronk-pesado', 'kronk-respira2', 'tambores-furia-loop', 'musica-loop'].forEach((n) => A.buf(DA + n + '.mp3'));
+    if (A && A.buf) ['corte', 'escudo-impacto-1', 'escudo-impacto-2', 'golpe-ar', 'virote-impacto', 'virotes'].forEach((n) => A.buf('assets/audio/sfx/' + n + '.mp3'));
 
     // ------------------------------------------------------------ estado
     const R = { leituras: 0, laterais: 0, marcas: 0, recomecos: 0, rodeou: false, golpesRecebidos: 0, deslizes: 0, respostas: 0, quedas: 0, t0: performance.now() };
@@ -247,18 +257,16 @@ function start(root, opts) {
         const n = maiorPose(), a = MA[n], im = mimg[n];
         if (im) {
           const s = KH / MREF * a.k, resp = n === 'cai' ? 1 : 1 + Math.sin(T * 1.7) * .012;
-          cx.filter = 'contrast(1.08) brightness(.92)';
           cx.drawImage(im, -a.ax * s, -a.base * s * resp, im.width * s, im.height * s * resp);
-          if (CE.hit > 0) { cx.globalCompositeOperation = 'lighter'; cx.globalAlpha = CE.hit * .2; cx.filter = 'brightness(1.8) saturate(.2)'; cx.drawImage(im, -a.ax * s, -a.base * s * resp, im.width * s, im.height * s * resp); }
+          if (CE.hit > 0) { cx.globalCompositeOperation = 'lighter'; cx.globalAlpha = CE.hit * .2; cx.drawImage(claro(im), -a.ax * s, -a.base * s * resp, im.width * s, im.height * s * resp); }
           cx.restore(); return;
         }
       }
       const kn = kronkPose(), ka = KP[kn], ki = kpimg[kn];
       if (ki) {
         const s = KH / KPREF, resp = kn === 'cai' || kn === 'joelho' ? 1 : 1 + Math.sin(T * 1.9) * .014;
-        cx.filter = 'saturate(.85) contrast(1.06)';
         cx.drawImage(ki, -ka.ax * s, -ka.base * s * resp, ki.width * s, ki.height * s * resp);
-        if (CE.hit > 0) { cx.globalCompositeOperation = 'lighter'; cx.globalAlpha = CE.hit * .25; cx.filter = 'brightness(1.8) saturate(.2)'; cx.drawImage(ki, -ka.ax * s, -ka.base * s * resp, ki.width * s, ki.height * s * resp); }
+        if (CE.hit > 0) { cx.globalCompositeOperation = 'lighter'; cx.globalAlpha = CE.hit * .25; cx.drawImage(claro(ki), -ka.ax * s, -ka.base * s * resp, ki.width * s, ki.height * s * resp); }
         cx.restore(); return;
       }
       const fr = kFrame(kAnim.nome, kAnim.f);
@@ -274,7 +282,7 @@ function start(root, opts) {
       const L = LA[poseL] || LA.guarda, li = limg[poseL] || limg.guarda;
       if (rastro > 0 && li) {   // o passo lateral deixa o corpo para trás por um instante
         const s0 = LH / LREF * (L.k || 1);
-        for (let g = 1; g <= 3; g++) { cx.save(); cx.globalAlpha = rastro * (.32 - g * .08); cx.filter = 'brightness(1.4) saturate(.3)'; cx.translate(LX + CL.x + g * 34 * rastro, CHAO + CL.y); cx.drawImage(li, -L.ax * s0, -L.base * s0, li.width * s0, li.height * s0); cx.restore(); }
+        for (let g = 1; g <= 3; g++) { cx.save(); cx.globalAlpha = rastro * (.32 - g * .08); cx.translate(LX + CL.x + g * 34 * rastro, CHAO + CL.y); cx.drawImage(li, -L.ax * s0, -L.base * s0, li.width * s0, li.height * s0); cx.restore(); }
       }
       cx.save(); cx.translate(LX + CL.x, CHAO + CL.y); cx.rotate(CL.r);
       if (li) {
@@ -289,7 +297,7 @@ function start(root, opts) {
         const u = p.t / p.vida;
         if (p.k === 'f') { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 900 * dt; cx.strokeStyle = `rgba(${p.cor},${1 - u})`; cx.lineWidth = 2.2; cx.beginPath(); cx.moveTo(p.x, p.y); cx.lineTo(p.x - p.vx * .025, p.y - p.vy * .025); cx.stroke(); }
         else if (p.k === 'a') { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 120 * dt; p.vx *= .97; const r = p.r * (1 + u * 1.6); cx.fillStyle = `rgba(196,160,112,${.32 * (1 - u)})`; cx.beginPath(); cx.arc(p.x, p.y, r, 0, 6.283); cx.fill(); }
-        else if (p.k === 'r') { cx.save(); cx.translate(p.x, p.y); cx.rotate(p.ang); const L = 260 * Math.min(1, u * 3); cx.strokeStyle = `rgba(255,248,230,${.95 * (1 - u)})`; cx.lineWidth = 5 * (1 - u) + 1; cx.shadowColor = 'rgba(255,230,180,.9)'; cx.shadowBlur = 18; cx.beginPath(); cx.moveTo(-L / 2, 0); cx.quadraticCurveTo(0, -24, L / 2, 0); cx.stroke(); cx.restore(); }
+        else if (p.k === 'r') { cx.save(); cx.translate(p.x, p.y); cx.rotate(p.ang); const L = 260 * Math.min(1, u * 3); cx.strokeStyle = `rgba(255,248,230,${.95 * (1 - u)})`; cx.lineWidth = 5 * (1 - u) + 1; cx.beginPath(); cx.moveTo(-L / 2, 0); cx.quadraticCurveTo(0, -24, L / 2, 0); cx.stroke(); cx.strokeStyle = `rgba(255,230,180,${.25 * (1 - u)})`; cx.lineWidth = 14 * (1 - u) + 2; cx.stroke(); cx.restore(); }
         else if (p.k === 's') { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 1500 * dt; cx.fillStyle = `rgba(120,8,6,${.95 * (1 - u * .4)})`; cx.beginPath(); cx.ellipse(p.x, p.y, p.r * 1.5, p.r, Math.atan2(p.vy, p.vx), 0, 6.283); cx.fill(); if (p.y >= CHAO + rnd(-6, 14)) { manchas.push({ x: p.x, y: Math.min(p.y, CHAO + 18), r: p.r * rnd(1.6, 3) }); if (manchas.length > 160) manchas.shift(); p.t = p.vida; } }
         else if (p.k === 'o') { const r = p.r1 * (.2 + u * .9); cx.strokeStyle = `rgba(${p.cor},${.8 * (1 - u)})`; cx.lineWidth = 7 * (1 - u) + 1; cx.beginPath(); cx.arc(p.x, p.y, r, 0, 6.283); cx.stroke(); }
         else if (p.k === 'v') { if (p.t < 0) continue; const k = Math.min(1, p.t / .38); const x = p.x + (p.tx - p.x) * k, y = p.y + (p.ty - p.y) * k; const ang = Math.atan2(p.ty - p.y, p.tx - p.x); cx.save(); cx.translate(x, y); cx.rotate(ang); cx.strokeStyle = `rgba(40,30,22,${k < 1 ? .95 : .95 * (1 - (p.t - .38) / .17)})`; cx.lineWidth = 2; cx.beginPath(); cx.moveTo(-34, 0); cx.lineTo(0, 0); cx.stroke(); cx.fillStyle = 'rgba(220,220,210,.9)'; cx.fillRect(-36, -2, 6, 4); cx.restore(); }
@@ -300,8 +308,8 @@ function start(root, opts) {
       // câmera
       if (zoom > .001) { cx.translate(zoomX, zoomY); cx.scale(1 + zoom, 1 + zoom); cx.translate(-zoomX, -zoomY); }
       if (shake > 0) cx.translate(rnd(-1, 1) * shake * 14, rnd(-1, 1) * shake * 9);
-      if (cinza > .01) cx.filter = `grayscale(${cinza}) contrast(${1 + cinza * .25})`;
-      if (bg) { const s = Math.max(W / bg.width, H / bg.height) * 1.04; cx.drawImage(bg, (W - bg.width * s) / 2 - (CL.x - CE.x) * .02, (H - bg.height * s) / 2, bg.width * s, bg.height * s); }
+      if (bg) { const s = Math.max(W / bg.width, H / bg.height) * 1.04; cx.drawImage(bg, (W - bg.width * s) / 2 - (CL.x - CE.x) * .02, (H - bg.height * s) / 2, bg.width * s, bg.height * s);
+        if (cinza > .01 && bgG) { cx.globalAlpha = Math.min(1, cinza); cx.drawImage(bgG, (W - bg.width * s) / 2 - (CL.x - CE.x) * .02, (H - bg.height * s) / 2, bg.width * s, bg.height * s); cx.globalAlpha = 1; } }
       cx.fillStyle = `rgba(10,6,4,${.22 + escuro})`; cx.fillRect(0, 0, W, H);
       const gr = cx.createLinearGradient(0, CHAO - 90, 0, H); gr.addColorStop(0, 'rgba(0,0,0,0)'); gr.addColorStop(1, 'rgba(0,0,0,.6)'); cx.fillStyle = gr; cx.fillRect(0, CHAO - 90, W, H);
       // o sangue na areia
@@ -410,7 +418,7 @@ function start(root, opts) {
       ];
       if (fase === 3) ops.push({ k: 'rodear', nome: t.golpes.rodear[0], desc: t.golpes.rodear[1], cls: 'risco' });
       const k = await escolhe(ops);
-      if (k === 'respirar') { bpm = Math.max(base, bpm - 14); hp = Math.min(hpFase, hp + 4); pose('respirar', 1.2); linha(t.respirou); await espera(900); return null; }
+      if (k === 'respirar') { bpm = Math.max(base, bpm - 14); hp = Math.min(hpFase, hp + 4); pose('respirar', 1.2); grunhe('kronk-respira2', .6); linha(t.respirou); await espera(900); return null; }
       if (k === 'finta') { revelado = Math.random() < (fase === 3 ? .7 : .45) ? 'pesado' : 'golpe'; R.leituras++; pose('guarda', .4); empurra(CL, 40, 200); linha(t.tell.mordeu[revelado], 'ler'); await espera(900); return null; }
       if (k === 'rodear') { rodeando = true; R.rodeou = true; linha(t.rodear, 'ler'); await espera(900); return null; }
       const corte = k === 'corte', dur = corte ? 1.25 : .95, jan = (corte ? .085 : .1) * janelaK();
@@ -420,9 +428,9 @@ function start(root, opts) {
       if (j === 'perfeito' || j === 'bom') {
         const dano = (corte ? (j === 'perfeito' ? 15 : 10) : (j === 'perfeito' ? 9 : 6));
         MOM.golpeDela(corte || j === 'perfeito'); sfx('corte', .7); hp = Math.max(fase === 3 ? 6 : 1, hp - dano); flash = 0; shake = .25;
-        popTxt(j === 'perfeito' ? t.rot.perfeito : t.rot.bom,'bom'); anima('apanha').then(guarda); grunhe('acerta-leve', .5);
+        popTxt(j === 'perfeito' ? t.rot.perfeito : t.rot.bom,'bom'); anima('apanha').then(guarda); grunhe(Math.random() < .5 ? 'kronk-apanha1' : 'kronk-apanha2', .75); grunhe('acerta-leve', .5);
         linha(t.acertos[Math.floor(Math.random() * t.acertos.length)]);
-      } else { MOM.erroDela(); sfx('golpe-ar', .6); popTxt(j === 'nada' ? t.rot.tarde : t.rot[j] || t.rot.defende,'mal'); anima('esquiva').then(guarda); linha(t.erro); }
+      } else { MOM.erroDela(); sfx('golpe-ar', .6); popTxt(j === 'nada' ? t.rot.tarde : t.rot[j] || t.rot.defende,'mal'); anima('esquiva').then(guarda); grunhe('kronk-esquiva', .55); linha(t.erro); }
       await espera(800);
       return null;
     };
@@ -433,7 +441,7 @@ function start(root, opts) {
       const lido = !!revelado; revelado = null;
       const rapido = fase >= 2 || rodeando;
       if (tipo === 'golpe') {
-        linha(t.tell.golpe, 'tell'); MOM.ataqueDele();
+        linha(t.tell.golpe, 'tell'); MOM.ataqueDele(); grunhe('kronk-golpe', .7);
         const dur = (fase === 1 ? .95 : fase === 2 ? .78 : .82) * (lido ? 1.15 : 1);
         kAnim = { nome: 'golpe', f: 0, play: true, ate: KR.golpe.impacto, fps: KR.golpe.impacto / dur };
         const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }]);
@@ -443,7 +451,7 @@ function start(root, opts) {
         else if (j === 'perfeito' && r.k === 'lateral') { MOM.lateral(); sfx('golpe-ar', .6); popTxt(t.rot.passou,'bom'); linha(t.passou); R.respostas++; }
         else await marca(j);
       } else {
-        linha(rapido ? t.tell.pesadoRapido : t.tell.pesado, 'tell'); empurra(CE, 34, 1600, 0, .07);
+        linha(rapido ? t.tell.pesadoRapido : t.tell.pesado, 'tell'); empurra(CE, 34, 1600, 0, .07); grunhe('kronk-pesado', .75);
         await anima('pesado', { ate: KR.pesado.segura, fps: 22 });
         const segura = rodeando ? rnd(.15, .35) : rapido ? rnd(.35, .8) : rnd(.7, 1.4);
         // segurar a maça no alto: tocar agora é cedo
@@ -466,7 +474,7 @@ function start(root, opts) {
           await espera(650);
           if (fimPronto) { await fim(); return; }
           const dano = rodeando ? 24 : 14;
-          MOM.golpeDela(true); sfx('corte', .8); hp = Math.max(fase === 3 ? 6 : 1, hp - dano); shake = .35; anima('apanha').then(guarda); linha(t.contraGolpe);
+          MOM.golpeDela(true); sfx('corte', .8); grunhe('kronk-apanha1', .8); hp = Math.max(fase === 3 ? 6 : 1, hp - dano); shake = .35; anima('apanha').then(guarda); linha(t.contraGolpe);
         } else if ((j === 'perfeito' || j === 'bom') && r.k === 'escudo') { MOM.escudo(true); sfx('escudo-impacto-2', .9); shake = .3; popTxt(t.rot.segurou,'meio'); linha(t.segurouPesado); bpm += 7; R.respostas++; }
         else await marca(j);
       }
@@ -487,7 +495,7 @@ function start(root, opts) {
       pose('golpe', 3); sfx('corte', .9); MOM.golpeDela(true); soco(.12, KX - 60, CHAO - KH * .35, .25); flash = .3; shake = .7;
       await cena(t.fim, 1700);
       lento = 1; areia(KX, 40, 1.6); shake = .9;
-      sangue(KX - 30, CHAO - KH * .3, 60, 1, 1.3);
+      sangue(KX - 30, CHAO - KH * .3, 60, 1, 1.3); grunhe('kronk-apanha2', .9);
       await anima('cai', { fps: 18 });
       await espera(600); faixasAlvo = 0;
       fecha();
@@ -499,7 +507,8 @@ function start(root, opts) {
         await turnoDela(); if (acabou) return;
         if (fase === 1 && hp <= 78) {
           fase = 2; hpFase = hp; marcas = 0;
-          kAnim = { nome: 'pesado', f: 0, play: true, fps: 30 }; tocaLoop('tambores-furia-loop', .32).then((h) => { furia = h; });
+          kAnim = { nome: 'pesado', f: 0, play: true, fps: 30 };
+          grunhe('kronk-mata2', .9); tocaLoop('tambores-furia-loop', .32).then((h) => { furia = h; });
           await cena(t.fase2.slice(0, 2), 1400); pose('atingido', 1.5); flash = 1; shake = 1; sfx('escudo-impacto-2', 1); sangue(LX + 30, CHAO - LH * .62, 46, -1, 1.1); mancharTela();
           base = 78; bpm = Math.max(bpm, 82); R.golpesRecebidos++; guarda();
           await cena(t.fase2.slice(2), 1500);
@@ -551,7 +560,7 @@ function start(root, opts) {
         // o turno dela
         const tremida = bpm >= 130;
         const k = await escolhe([tremida ? { k: 'tremido', nome: t.golpes.tremido[0], desc: t.golpes.tremido[1], cls: 'tremida' } : { k: 'chamar', nome: t.golpes.chamar[0], desc: t.golpes.chamar[1] }, { k: 'respirar', nome: t.golpes.respirarM[0], desc: t.golpes.respirarM[1] }]);
-        if (k === 'respirar') { bpm = Math.max(base, bpm - 12); pose('respirar', 1.1); linha(t.respirouM); semFlecha++; }
+        if (k === 'respirar') { base = Math.max(96, base - 10); bpm = Math.max(base, bpm - 14); pose('respirar', 1.1); linha(t.respirouM); semFlecha++; }
         else if (k === 'tremido') { R.deslizes++; linha(t.chamouTremido, 'mal'); atrasada = true; await espera(700); }
         else { await rajada(true); semFlecha = 0; }
         if (acabou) return;

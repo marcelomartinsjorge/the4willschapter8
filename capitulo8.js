@@ -17,7 +17,7 @@
 window.LIVRO_EN = window.LIVRO_EN || {};
 const T = (pt, en) => { if (en != null) window.LIVRO_EN[pt] = en; return pt; };
 const se = (cond, t) => ({ se: cond, t });
-const VER = '?v=13';   // muda a cada entrega: o navegador não guarda imagem velha
+const VER = '?v=15';   // muda a cada entrega: o navegador não guarda imagem velha
 const IMG = (n) => 'assets/images/' + n + '.jpg' + VER;
 const FD = (n, foco, clima) => Object.assign({ img: IMG(n), kb: 'in', foco: foco || '50% 45%', dim: .5 }, clima ? { clima: clima } : {});
 const SFX = (n) => 'assets/audio/sfx/' + n + '.mp3' + VER;
@@ -143,7 +143,7 @@ const OLHAR_DELA = {
   maos: T('Uma moeda anda pelos nós dos dedos e some quando eu olho.', 'A coin walks across the knuckles and vanishes when I look.'),
   pulso: T('Lento. Todo mundo nesta fila tem medo de mim, menos este pulso.', 'Slow. Everyone in this line is afraid of me, except this pulse.'),
 };
-const PISTAS_FORTES = ['testa', 'boca', 'pescoco', 'pulso'];
+const PISTAS_FORTES = ['testa', 'boca', 'pescoco', 'pulso', 'maos'];
 const OLHAR_ROTULO = {
   testa: T('A testa', 'The brow'), orelhas: T('As orelhas', 'The ears'), boca: T('A boca', 'The mouth'),
   pescoco: T('O pescoço', 'The neck'), maos: T('As mãos', 'The hands'), pulso: T('O pulso', 'The wrist'),
@@ -612,6 +612,7 @@ window.LIVRO = {
         T('Os da frente, perto da água, têm sombras grandes em volta: os que lutam. Os de trás, menores: os velhos e as crias.', 'The ones in front, near the water, have big shadows around them: the fighters. The ones behind, smaller: the old and the young.'), // N
         T('Trinta e quatro, ou trinta e sete. Vinte anos atrás, nas Goelas, contei mais de trezentos.', 'Thirty-four, or thirty-seven. Twenty years ago, at the Gullets, I counted more than three hundred.'), // N
         T('Os outros seis poços ficam entre a duna e a água, abertos no chão. Um soldado joga uma pedra no mais perto. Ela cai, cai, e não bate em nada.', 'The other six wells lie between the dune and the water, open in the ground. A soldier drops a stone into the nearest. It falls, and falls, and hits nothing.'), // N
+        (st) => (st.f.guardou ? T('Na carroça, o barril que os guardas da Terceira vigiaram ainda tem um palmo de água. É pouco. Os odres da coluna chegam ao vale meio cheios, e não vazios.', 'On the wagon, the barrel the Third’s guards watched still holds a hand’s depth of water. It is little. The column’s skins reach the valley half full, not empty.') : null),
       ] },
 
     { id: 'e02', zona: 'deserto-noite', fundo: { img: IMG('e02-chao'), kb: 'in', foco: '72% 55%', dim: .55 },
@@ -857,7 +858,10 @@ window.LIVRO = {
 
     { id: 'f07b', zona: 'eclipse', escuro: true, sons: [{ s: SFX('linha-fecha'), em: ['A linha fecha', 'The line closes'], v: .85 }], fundo: { img: IMG('f-eclipse-luta'), kb: 'in', foco: '50% 40%', dim: .55 },
       texto: [
-        T('Me viro para eles com a espada no alto.', 'I turn toward them with my sword held high.'), // N
+        (st) => { const h = st.erguer && st.erguer.altura != null ? st.erguer.altura : 100;
+          return h >= 75 ? T('Me viro para eles com a espada no alto.', 'I turn toward them with my sword held high.')
+            : h >= 40 ? T('Me viro para eles com a espada à altura do ombro. O braço treme, mas a ponta não cai.', 'I turn toward them with my sword at shoulder height. The arm shakes, but the point does not drop.')
+              : T('Me viro para eles com a espada baixa, a ponta quase na areia, e levanto a voz no lugar dela.', 'I turn toward them with my sword low, the point almost in the sand, and I raise my voice in its place.'); },
         { continuar: true, voz: 'L04', fx: [{ fx: 'clarao', ms: 200, dur: 500 }] },
         T('— Firmes! É só o escuro! Segurem a linha!', '— Steady! It’s only the dark! Hold the line!'), // N
         T('As palavras são do meu pai. A linha fecha.', 'The words are my father’s. The line closes.'), // N
@@ -917,6 +921,7 @@ window.LIVRO = {
       depois: (st) => {
         const n = sobreviventes(st), pt = extenso(n, 'pt'), en = extenso(n, 'en');
         return [T(cap1(pt) + '. De dois mil.', cap1(en) + '. Out of two thousand.'),
+          st.f.guardou ? T('Perto da carroça, um dos guardas da Terceira bebe o último gole do barril que vigiou. Seis dos que levantam só estão de pé por causa dele.', 'Near the wagon, one of the Third’s guards drinks the last swallow from the barrel he watched. Six of those who get up are on their feet because of it.') : null,
           T('O Varr, com a cabeça enfaixada num pedaço da própria capa, conta a morte da bruxa a quem quiser ouvir. Quando acaba, começa outra vez. Ninguém ri.', 'Varr, his head bound in a strip of his own cloak, tells the death of the witch to anyone who will listen. When he finishes, he starts again. Nobody laughs.')]; // N
       } },
 
@@ -1082,11 +1087,25 @@ function noite(k) {
 function impressao(st, id) {
   const v = viu(st, id), fortes = v.filter((o) => PISTAS_FORTES.includes(o)).length, n = nomeCom(id), en = enDe(n);
   if (!v.length) return id === 'lavadeira' ? T('Da Nymae, não cheguei a olhar de perto.', 'I never got a close look at the Nymae.') : T('De ' + n + ', não cheguei a olhar de perto.', 'I never got a close look at ' + en + '.');
-  if (id === ELA()) return fortes >= 2 ? T('Em ' + n + ', mais de uma coisa não bate com o calor, nem com o medo. Não sei dizer o quê.', 'In ' + en + ', more than one thing doesn’t fit the heat, or the fear. I can’t say what.')
-    : fortes === 1 ? T('Em ' + n + ', uma coisa não bate, e eu não sei dizer o quê.', 'In ' + en + ', something doesn’t fit, and I can’t say what.')
-      : T('Em ' + n + ', só vi o cansaço de todo mundo.', 'In ' + en + ', I only saw the same tiredness as everyone.');
-  if (id === 'tasso') return v.some((o) => ['orelhas', 'boca', 'maos'].includes(o)) ? T('Tasso mentiu sobre a água, e a boca dele não tem sede.', 'Tasso lied about the water, and his mouth isn’t thirsty.') : T('Em Tasso, só vi suor e medo.', 'In Tasso, I only saw sweat and fear.');
-  if (id === 'lavadeira') return T('A Nymae é seca e tem sal na boca, como toda Nymae que já vi.', 'The Nymae is dry and has salt on her mouth, like every Nymae I have ever seen.');
+  if (id === ELA()) {
+    const PD = { testa: ['quase nenhum suor', 'hardly any sweat'], boca: ['pó branco no canto da boca', 'white dust at the corner of the mouth'],
+      pescoco: ['a gola fechada no calor', 'the collar buttoned in the heat'], maos: ['uma moeda que some nos dedos', 'a coin vanishing between the fingers'], pulso: ['o pulso lento', 'a slow pulse'] };
+    const ps = ['testa', 'boca', 'pescoco', 'maos', 'pulso'].filter((o) => v.includes(o));
+    const jn = (arr, e) => (arr.length < 2 ? arr.join('') : arr.slice(0, -1).join(', ') + e + arr[arr.length - 1]);
+    if (!ps.length) return T('Em ' + n + ', só vi o cansaço de todo mundo.', 'In ' + en + ', I only saw the same tiredness as everyone.');
+    return T('Em ' + n + ', ' + jn(ps.map((o) => PD[o][0]), ' e ') + '. ' + (ps.length >= 2 ? 'Mais de uma coisa não bate, e eu não sei dizer o quê.' : 'Uma coisa não bate, e eu não sei dizer o quê.'),
+      'In ' + en + ', ' + jn(ps.map((o) => PD[o][1]), ' and ') + '. ' + (ps.length >= 2 ? 'More than one thing doesn’t fit, and I can’t say what.' : 'One thing doesn’t fit, and I can’t say what.'));
+  }
+  if (id === 'tasso') {
+    const TS = { orelhas: ['as orelhas dele esquentaram quando perguntei da água', 'his ears went hot when I asked about the water'], boca: ['a boca dele estava molhada, com a ração que recebe', 'his mouth was wet, on the ration he gets'],
+      maos: ['o punho dele fechava moedas de cobre demais para um soldado', 'his fist held too many copper coins for a soldier'] };
+    const ts = ['orelhas', 'boca', 'maos'].filter((o) => v.includes(o));
+    if (!ts.length) return T('Em Tasso, só vi suor e medo.', 'In Tasso, I only saw sweat and fear.');
+    const jn2 = (arr, e) => (arr.length < 2 ? arr.join('') : arr.slice(0, -1).join(', ') + e + arr[arr.length - 1]);
+    return T('Em Tasso, ' + jn2(ts.map((o) => TS[o][0]), ', e ') + '.', 'In Tasso, ' + jn2(ts.map((o) => TS[o][1]), ', and ') + '.');
+  }
+  if (id === 'lavadeira') return st.escolhas.lavadeira8 === 'vigiar' ? T('A Nymae é seca e tem sal na boca, como toda Nymae que já vi. O soldado que a vigia jura que ela não largou os barris a noite inteira.', 'The Nymae is dry and has salt on her mouth, like every Nymae I have ever seen. The soldier watching her swears she never left the barrels all night.')
+    : T('A Nymae é seca e tem sal na boca, como toda Nymae que já vi.', 'The Nymae is dry and has salt on her mouth, like every Nymae I have ever seen.');
   return T('Em ' + n + ', só vi cansaço e medo de mim.', 'In ' + en + ', I only saw tiredness, and fear of me.');
 }
 
@@ -1117,14 +1136,14 @@ function decide(k) {
           else if (q === 'tasso') { s.f.ladraoMorto = true; s.mortos.push('tasso'); }
           else { s.mortos.push(q); s.inocentes.push(q); }
         },
-        resultado: () => {
+        resultado: (s0) => {
           const n = nomeCom(q), en = enDe(n);
           if (q === ELA()) return [T('Até o amanhecer, ' + n + ' fica na carroça dos presos, com corrente no tornozelo e dois guardas.', 'Until dawn, ' + en + ' is kept in the prisoners’ wagon, a chain on the ankle and two guards.'),
             T('Antes do sol, um dos guardas acorda com o cabelo molhado e a corrente vazia. Na carroça sobra a roupa de ' + n + ', com uma crosta de sal nas dobras.', 'Before sunrise, one of the guards wakes with wet hair and an empty chain. In the wagon lie ' + en + '’s clothes, with a crust of salt in the folds.'),
             T('Gente não sai de corrente deixando a roupa.', 'People don’t slip a chain and leave their clothes behind.')];
           if (q === 'tasso') return [T('Tasso morre ao amanhecer. Nas coisas dele acham onze odres com a marca de outras companhias.', 'Tasso dies at dawn. Among his things they find eleven skins marked with other companies’ signs.'),
             T('A Terceira bate os escudos uma vez.', 'The Third strikes its shields once.')];
-          return [T(cap1(n) + ' morre ao amanhecer.', cap1(en) + ' dies at dawn.'), MORTE[q]].filter(Boolean);
+          return [T(cap1(n) + ' morre ao amanhecer.', cap1(en) + ' dies at dawn.'), MORTE[q], q === 'lavadeira' && s0 && s0.escolhas.lavadeira8 === 'vigiar' ? T('O soldado que a vigiava devolve a manta ao intendente sem dizer nada.', 'The soldier who watched her hands his blanket back to the quartermaster without a word.') : null].filter(Boolean);
         } })),
       { id: 'guardar', txt: T('Pôr dois guardas n' + lugarNome(st) + ' e esperar.', 'Put two guards on ' + enDe(lugarNome(st)) + ' and wait.'),
         efeito: (s) => { s.f.guardou = true; },
