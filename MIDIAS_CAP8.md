@@ -1,6 +1,6 @@
 # Cap. VIII · A Lâmina · O que falta
 
-*Atualizado em 14/11/2026 (v13).* O livro roda inteiro sem nada desta lista. As imagens novas (`f05-chicote`, `f05-desvia`, `f07-kronk-caido`, `f07-eclipse` e o vídeo do eclipse) e os 9 sprites do Kronk já entraram.
+*Atualizado em 17/11/2026 (v17).* O livro roda inteiro sem nada desta lista. As imagens novas (`f05-chicote`, `f05-desvia`, `f07-kronk-caido`, `f07-eclipse` e o vídeo do eclipse), os 9 sprites do Kronk e as 12 imagens novas dos duelos (`DUELO8_IMAGENS.md`) já entraram.
 
 ## Dublagem
 - **Completa.** As 55 falas da Laura estão instaladas, inclusive `L09b` ("— Não prometo.") e `L17b` ("É por você, Simon. E por você, pai.", que agora toca no ramo em que ela visitou o pai).

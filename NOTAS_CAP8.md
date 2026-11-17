@@ -335,3 +335,24 @@ L21–L40d (ver MIDIAS §4). O livro ganhou `vozes` por página (`em: [trecho PT
 - **Correção:** os filtros são aplicados uma vez (sprites e fundo em cinza são "assados" ao abrir o duelo; o brilho do acerto é pré-assado durante a introdução); raios sem `shadowBlur`; folhas antigas não carregam mais; sons dos duelos pré-carregados.
 - **Medido (Chrome sem GPU, bot):** pior quadro na luta com o Kronk de 1033 ms para 267 ms; 99% dos quadros de ~950 ms para 16,8 ms. O mesmo no Maior.
 - Versão dos arquivos: `?v=15`.
+
+## v16 — duelos híbridos (com o jogo da Bryne)
+Esboço aprovado em `claude/DUELO8_HIBRIDO_v1.md` (projeto). O que entrou:
+- **Comum:** barras sem número (vida e pulso da Laura, A Lâmina, vida do inimigo) e estados com nome de corpo (Sangra, Braço ferido, Perna ferida, Plantado, Presa, Escudo erguido, Tonta, Cego, Exposto, Lido). O pulso é a estamina: cada ação sobe, respirar desce; no máximo ela perde o turno sem ar. **Derrota:** a vida zera, ela cai, "Lutar de novo" recomeça aquele duelo (sem ajuda por enquanto). As três marcas saíram.
+- **Kronk (vida 180, ~4 min):** sem fúria e sem cura. Fases por ferimento: inteiro · ferido <60% (agarrar, peso, maça para cima; os tambores voltam quando ele faz a Laura sangrar) · desesperado <25% (Rodear, duas pancadas). Ações: Estocada (sangra), Corte, Mirar ▸ Braço/Perna/Peito, Finta, Erguer/Manter o escudo (30 de resistência; quebrado, ela fica tonta), Respirar, Rodear, A Lâmina (cena + golpe de 12 a 40). O fim continua sendo o passo lateral e o corte na coxa.
+- **O Maior:** a Laura só se defende (escudo, ler o ombro, areia nos olhos, respirar, soltar-se). Golpes dele: braço pequeno (↑), braço grande (↓), varredura (↑), pisão (↓), agarrar (↓). "Soltem!" só aparece com ele exposto: sequência inteira bem respondida, ou cego de areia (a rajada entra mais forte).
+- **Escolhas do livro:** espada levada (Lâmina começa com 1/3), espada deixada (Corte mais fácil), prometeu comer (+vida), água guardada (+vida), visitou o pai (Lâmina enche mais rápido), desmascarou a Madrinha (o 1º golpe do Kronk vem lido). Perdão, ombro e sobreviventes como antes.
+- **Pontuação do duelo:** as derrotas tiram o que os recomeços tiravam.
+- **Imagens novas:** 13 prompts em `DUELO8_IMAGENS.md`. A arte da Lâmina já está ligada (`assets/images/d-lamina.jpg`); as poses eu ligo quando chegarem.
+- Teste (bot): rotas A, B e C sem erro; com 30–45% de erro de tempo o bot às vezes perde e o "Lutar de novo" funciona. Desempenho: 99% dos quadros em 16,8 ms. Versão `?v=16`.
+
+
+## v17 — as imagens novas dos duelos
+
+- As 12 imagens do Marcelo entraram, recortadas do fundo verde e salvas na escala da guarda de cada personagem (medida pela cabeça, pelo pé e, no Kronk, pela maça). Todas viradas para a direita no arquivo; o jogo espelha o inimigo. As duas de agarrão já vêm na posição do duelo e não são espelhadas.
+- Laura: `areia` (Areia nos olhos, Maior), `baixo` (Mirar ▸ Perna), `rola` (o desvio contra o Maior, no lugar do passo lateral), `caida` (derrota).
+- Kronk: `meio` (a maça pelo meio, durante o golpe), `plantado` (enquanto ele está plantado).
+- Maior: `varredura` e `pisao` (durante o golpe), `cego` (enquanto está cego de areia).
+- Agarrão: `kronk/presa.webp` e `maior/presa.webp`. Enquanto ela está presa, os dois sprites somem e entra a imagem única.
+- `assets/images/d-lamina.jpg` (1920 px): a arte antes do golpe da Lâmina.
+- Limpeza: a mancha cinza no alto da `laura-caida` foi apagada no recorte.

@@ -113,6 +113,122 @@ const TX = {
   },
 };
 
+// (v16) o duelo híbrido: mais ações, golpes novos dele, a vida dela, A Lâmina
+const TX2 = {
+  pt: {
+    regrasK: [['Seu turno', 'escolha o que a Laura faz. O golpe entra se o toque cair quando o anel fechar sobre ele'], ['O turno dele', 'o corpo dele avisa. ↑ Escudo segura. ↓ Passo lateral tira ela do caminho'], ['O pulso', 'cada ação cansa, e respirar baixa. Com o pulso alto, as janelas fecham'], ['A Lâmina', 'os toques na hora certa enchem a barra. Cheia, um golpe que quase decide a luta'], ['A vida dela', 'se acabar, a Laura cai']],
+    regrasM: [['O turno dele', 'ele vem em sequências. ↑ Escudo ou ↓ Passo lateral, conforme o corpo avisa'], ['Seu turno', 'a Laura só se defende: escudo, ler o ombro, areia nos olhos, respirar'], ['Os arqueiros', 'só soltam quando ele fica exposto: depois de uma sequência inteira bem respondida, ou cego de areia'], ['A carne fecha', 'sem flecha nova, ele se recupera'], ['O pulso', 'alto, a ordem sai tremida e atrasa']],
+    teclado: 'Teclado: 1 a 9 escolhem · Espaço golpeia · ↑ escudo · ↓ passo lateral',
+    vida: 'Laura', lamina: 'A Lâmina',
+    acao: { estocada: ['Estocada', 'Rápida. Abre um corte que sangra.'], corte: ['Corte', 'Lento. Mais estrago.'], mirar: ['Mirar', 'O braço, a perna ou o peito.'],
+      braco: ['Braço', 'A mão da maça. Ele bate mais fraco.'], perna: ['Perna', 'O joelho. Ele fica lento.'], torso: ['Peito', 'Fundo e difícil. Cansa muito.'], voltar: ['Voltar', 'Outra coisa.'],
+      finta: ['Finta', 'Ele morde. Eu vejo o que vem.'], escudo: ['Erguer o escudo', 'Segura melhor. Cansa o braço.'], manter: ['Manter o escudo', 'Cansa o braço.'],
+      respirar: ['Respirar', 'Baixa o pulso.'], lamina: ['A Lâmina', 'Agora.'], soltar: ['Soltar-me', 'A mão dele no meu braço.'], curta: ['Estocada curta', 'Presa, de perto.'],
+      ler: ['Ler o ombro', 'O próximo golpe não me engana.'], areia: ['Areia nos olhos', 'Um punhado de areia na cara dele.'] },
+    est: { sangra: 'Sangra', braco: 'Braço ferido', perna: 'Perna ferida', firme: 'Plantado', presa: 'Presa', escudo: 'Escudo erguido', tonta: 'Tonta', cego: 'Cego', exposto: 'Exposto', lido: 'Lido' },
+    tell2: { agarrar: 'A mão livre dele se abre.', peso: 'Ele planta os pés na areia e espera.', maca: 'Ele pega a maça pelo meio, com as duas mãos.', duas: 'Ele vem com duas, uma atrás da outra.' },
+    mordeu2: { agarrar: 'Ele morde a finta. A mão livre vai vir.', peso: 'Ele morde a finta e planta os pés.', maca: 'Ele morde a finta. Vai pegar a maça pelo meio.', duas: 'Ele morde a finta. Vai vir com duas.' },
+    escapou: 'Saio do alcance da mão por um dedo.',
+    presa: 'A mão dele fecha no meu braço do escudo. Puxo, e ele não solta.',
+    presaGolpe: 'Presa, não tenho para onde ir. A maça entra.',
+    soltou: 'Torço o braço e saio da mão dele.',
+    naoSoltou: 'Puxo. A mão não abre.',
+    pesoCastiga: 'Erro, e ele está ali, plantado. O ombro dele me joga para trás.',
+    pesoFim: 'Ele tira os pés da areia.',
+    macaEsquiva: 'A maça sobe rente ao meu queixo.',
+    macaEscudo: 'O cabo pega o escudo por baixo, e o escudo bate no meu rosto.',
+    macaPega: 'A maça sobe por baixo do escudo e pega o meu queixo. O mundo gira.',
+    tonta: 'O mundo ainda gira. Não consigo levantar a espada.',
+    semAr: 'O ar não vem. Fico parada, a espada baixa, puxando o ar.',
+    sangra: 'O corte da estocada pinga na areia.',
+    abreSangra: 'A ponta abre um corte que não fecha.',
+    acertoBraco: 'A lâmina pega o pulso da maça. A próxima pancada vai vir mais leve.',
+    acertoPerna: 'A lâmina pega o joelho. Ele pisa torto.',
+    acertoTorso: 'A lâmina entra fundo no peito dele. Ele dobra, e volta.',
+    curta: 'Presa, enfio a ponta onde dá.',
+    escudoUp: 'Ergo o escudo até os olhos.',
+    escudoMantem: 'Mantenho o escudo. O braço arde.',
+    escudoQuebra: 'O escudo racha de cima a baixo. O que passou me põe de joelhos.',
+    escudoAbsorve: 'O escudo toma o golpe por mim.',
+    laminaVai: ['Respiro uma vez.', 'Sei onde ele vai estar. A espada também sabe.'],
+    laminaAcerta: 'Atravesso a guarda dele. A lâmina abre o corpo do ombro ao quadril.',
+    laminaMeio: 'A lâmina entra pelo flanco e sai pelas costas.',
+    laminaPouco: 'Ele vira o corpo a tempo. A lâmina pega só a carne do braço.',
+    perdeuT: 'Laura cai', perdeu: 'A maça desce mais uma vez, e a areia vem até o meu rosto.', perdeuM: 'O braço grande me tira do chão. Não sei quando caio.', denovo: 'Lutar de novo',
+    bonus: { levar: 'A espada do Simon pesa na mão. Conheço este peso.', deixar: 'A minha espada. A mão sabe onde ela termina.', comer: 'Comi na estrada, como prometi. As pernas aguentam.', agua: 'Bebi do barril que os guardas vigiaram.', pai: 'O pai está lá em cima, olhando a roda.', leu: 'Li o rosto dela. Leio o dele.' },
+    tellM2: { golpe: 'O braço pequeno recua.', pesado: 'O braço grande sobe.', varredura: 'Os dois braços descem, rentes à areia.', pisao: 'Ele levanta o pé.', agarrar: 'A mão grande se abre.' },
+    varrOk: 'Finco o escudo na areia. Os dois braços batem nele, e ele aguenta.',
+    varrMal: 'Os braços passam por baixo de tudo e me levam junto.',
+    pisaoOk: 'Saio de lado. O pé dele afunda na areia onde eu estava.',
+    pisaoMal: 'O pé desce perto. O chão sobe e me derruba.',
+    agarraOkM: 'A mão grande fecha no ar, onde eu estava.',
+    agarraMalM: 'A mão grande fecha no meu ombro e me levanta do chão.',
+    presaM: 'Presa, não tenho para onde ir. O braço pequeno entra.',
+    soltouM: 'Bato o escudo nos dedos dele até a mão abrir.',
+    acertoM: { golpe: 'O braço pequeno pega o meu flanco.', pesado: 'O braço grande pega o escudo e o ombro juntos.' },
+    areiaOk: 'Jogo a areia na cara dele. Ele cobre os olhos com o braço pequeno e urra.',
+    areiaMal: 'O vento leva a areia para o lado.',
+    lerOk: 'Olho o ombro dele, não a mão.',
+    cegoAberto: 'Ele não vê. O peito fica aberto para os arqueiros.',
+  },
+  en: {
+    regrasK: [['Your turn', 'choose what Laura does. The strike lands if the tap falls when the ring closes on him'], ['His turn', 'his body warns you. ↑ Shield holds. ↓ Sidestep takes her out of the way'], ['The pulse', 'every action tires her, and breathing brings it down. With the pulse high, the windows close'], ['The Blade', 'taps right on time fill the bar. Full, one strike that nearly decides the fight'], ['Her life', 'if it runs out, Laura falls']],
+    regrasM: [['His turn', 'he comes in sequences. ↑ Shield or ↓ Sidestep, as his body warns you'], ['Your turn', 'Laura only defends: shield, read the shoulder, sand in the eyes, breathe'], ['The archers', 'only loose when he is open: after a whole sequence answered well, or blinded by sand'], ['The flesh closes', 'with no new arrow, he recovers'], ['The pulse', 'high, the order comes out shaky and late']],
+    teclado: 'Keyboard: 1 to 9 choose · Space strikes · ↑ shield · ↓ sidestep',
+    vida: 'Laura', lamina: 'The Blade',
+    acao: { estocada: ['Thrust', 'Fast. Opens a cut that bleeds.'], corte: ['Cut', 'Slow. More damage.'], mirar: ['Aim', 'The arm, the leg or the chest.'],
+      braco: ['Arm', 'The mace hand. He hits softer.'], perna: ['Leg', 'The knee. He slows down.'], torso: ['Chest', 'Deep and hard. Very tiring.'], voltar: ['Back', 'Something else.'],
+      finta: ['Feint', 'He bites. I see what’s coming.'], escudo: ['Raise the shield', 'Holds better. Tires the arm.'], manter: ['Keep the shield up', 'Tires the arm.'],
+      respirar: ['Breathe', 'The pulse drops.'], lamina: ['The Blade', 'Now.'], soltar: ['Break free', 'His hand on my arm.'], curta: ['Short thrust', 'Held, up close.'],
+      ler: ['Read the shoulder', 'The next blow won’t fool me.'], areia: ['Sand in the eyes', 'A fistful of sand in his face.'] },
+    est: { sangra: 'Bleeding', braco: 'Wounded arm', perna: 'Wounded leg', firme: 'Planted', presa: 'Held', escudo: 'Shield up', tonta: 'Dazed', cego: 'Blind', exposto: 'Open', lido: 'Read' },
+    tell2: { agarrar: 'His free hand opens.', peso: 'He plants his feet in the sand and waits.', maca: 'He takes the mace by the middle, with both hands.', duas: 'He comes with two, one after the other.' },
+    mordeu2: { agarrar: 'He bites on the feint. The free hand is coming.', peso: 'He bites on the feint and plants his feet.', maca: 'He bites on the feint. He’ll take the mace by the middle.', duas: 'He bites on the feint. He’ll come with two.' },
+    escapou: 'I get out of the hand’s reach by a finger.',
+    presa: 'His hand closes on my shield arm. I pull, and he doesn’t let go.',
+    presaGolpe: 'Held, I have nowhere to go. The mace gets in.',
+    soltou: 'I twist my arm and get out of his hand.',
+    naoSoltou: 'I pull. The hand doesn’t open.',
+    pesoCastiga: 'I miss, and he’s right there, planted. His shoulder throws me back.',
+    pesoFim: 'He pulls his feet out of the sand.',
+    macaEsquiva: 'The mace comes up past my chin.',
+    macaEscudo: 'The haft catches the shield from below, and the shield hits my face.',
+    macaPega: 'The mace comes up under the shield and catches my chin. The world spins.',
+    tonta: 'The world is still spinning. I can’t lift the sword.',
+    semAr: 'The air won’t come. I stand still, sword low, dragging breath in.',
+    sangra: 'The thrust’s cut drips onto the sand.',
+    abreSangra: 'The point opens a cut that won’t close.',
+    acertoBraco: 'The blade catches the mace wrist. The next blow will come lighter.',
+    acertoPerna: 'The blade catches the knee. He steps crooked.',
+    acertoTorso: 'The blade goes deep into his chest. He doubles over, and comes back.',
+    curta: 'Held, I drive the point in wherever it goes.',
+    escudoUp: 'I raise the shield to my eyes.',
+    escudoMantem: 'I keep the shield up. My arm burns.',
+    escudoQuebra: 'The shield splits from top to bottom. What got through puts me on my knees.',
+    escudoAbsorve: 'The shield takes the blow for me.',
+    laminaVai: ['I breathe once.', 'I know where he will be. So does the sword.'],
+    laminaAcerta: 'I go through his guard. The blade opens his body from shoulder to hip.',
+    laminaMeio: 'The blade goes in at the flank and out at the back.',
+    laminaPouco: 'He turns his body in time. The blade only takes the flesh of his arm.',
+    perdeuT: 'Laura falls', perdeu: 'The mace comes down once more, and the sand comes up to my face.', perdeuM: 'The big arm lifts me off the ground. I don’t know when I fall.', denovo: 'Fight again',
+    bonus: { levar: 'Simon’s sword is heavy in my hand. I know this weight.', deixar: 'My own sword. My hand knows where it ends.', comer: 'I ate on the road, as I promised. My legs hold.', agua: 'I drank from the barrel the guards watched.', pai: 'Father is up there, watching the wheel.', leu: 'I read her face. I read his.' },
+    tellM2: { golpe: 'The small arm draws back.', pesado: 'The big arm rises.', varredura: 'Both arms come down, close to the sand.', pisao: 'He lifts his foot.', agarrar: 'The big hand opens.' },
+    varrOk: 'I dig the shield into the sand. Both arms strike it, and it holds.',
+    varrMal: 'The arms go under everything and take me with them.',
+    pisaoOk: 'I step aside. His foot sinks into the sand where I was.',
+    pisaoMal: 'The foot comes down close. The ground rises and knocks me down.',
+    agarraOkM: 'The big hand closes on the air where I was.',
+    agarraMalM: 'The big hand closes on my shoulder and lifts me off the ground.',
+    presaM: 'Held, I have nowhere to go. The small arm gets in.',
+    soltouM: 'I beat the shield on his fingers until the hand opens.',
+    acertoM: { golpe: 'The small arm catches my flank.', pesado: 'The big arm catches the shield and the shoulder together.' },
+    areiaOk: 'I throw the sand in his face. He covers his eyes with the small arm and roars.',
+    areiaMal: 'The wind carries the sand aside.',
+    lerOk: 'I watch his shoulder, not his hand.',
+    cegoAberto: 'He can’t see. His chest is open to the archers.',
+  },
+};
+
 // ------------------------------------------------------------------ os corpos
 const S = 'assets/sprites/';
 // Kronk: as folhas do Cap. VI (grade de ceil(sqrt(frames)) colunas, virado para a direita)
@@ -134,11 +250,15 @@ const LA = {
 const LREF = 720;
 // (v10) cada pose foi gerada numa escala: k iguala o tamanho da cabeça entre as poses
 Object.assign(LA.guarda, { k: 1 }); Object.assign(LA.escudo, { k: .7 }); Object.assign(LA.lateral, { k: .95 }); Object.assign(LA.golpe, { k: .93 });
-Object.assign(LA.atingido, { k: .78 }); Object.assign(LA.respirar, { k: 1.03 }); Object.assign(LA.cansado, { k: .93 }); Object.assign(LA.impacto, { k: .62 });
+Object.assign(LA.atingido, { k: .78 });
+// (v17) poses novas, já salvas na escala da guarda
+Object.assign(LA, { areia: { src: S + 'laura/areia.webp', ax: 232, base: 632, k: 1 }, baixo: { src: S + 'laura/baixo.webp', ax: 393, base: 685, k: 1 },
+  rola: { src: S + 'laura/rola.webp', ax: 391, base: 621, k: 1 }, caida: { src: S + 'laura/caida.webp', ax: 478, base: 345, k: 1 } }); Object.assign(LA.respirar, { k: 1.03 }); Object.assign(LA.cansado, { k: .93 }); Object.assign(LA.impacto, { k: .62 });
 // (v11) Kronk parado: 9 poses geradas pelo Marcelo, todas na mesma escala de corpo (o tamanho já vem acertado no arquivo)
 const KP = {
   guarda: { ax: 242, base: 931 }, prep: { ax: 316, base: 896 }, golpe: { ax: 268, base: 905 }, alto: { ax: 378, base: 1234 }, pesado: { ax: 485, base: 717 },
   apanha: { ax: 241, base: 905 }, esquiva: { ax: 318, base: 858 }, joelho: { ax: 343, base: 671 }, cai: { ax: 466, base: 559 },
+  meio: { ax: 297, base: 707 }, plantado: { ax: 338, base: 709 },   // (v17)
 };
 Object.keys(KP).forEach((k) => { KP[k].src = S + 'kronk/p/' + k + '.webp'; });
 const KPREF = 931;   // altura do Kronk de pé (guarda), no sprite
@@ -148,19 +268,28 @@ const MA = {
   guarda: { src: S + 'maior/guarda.webp', ax: 142, base: 929, k: 1 }, golpe: { src: S + 'maior/golpe.webp', ax: 349, base: 925, k: 1 },
   pesado: { src: S + 'maior/pesado.webp', ax: 398, base: 911, k: 1 }, apanha: { src: S + 'maior/apanha.webp', ax: 110, base: 929, k: 1 },
   cai: { src: S + 'maior/cai.webp', ax: 555, base: 913, k: .86 },
+  // (v17) poses novas, já salvas na escala da guarda
+  cego: { src: S + 'maior/cego.webp', ax: 310, base: 849, k: 1 }, pisao: { src: S + 'maior/pisao.webp', ax: 520, base: 903, k: 1 },
+  varredura: { src: S + 'maior/varredura.webp', ax: 416, base: 688, k: 1 },
 };
+// (v17) o agarrão: os dois numa imagem só, já na posição do duelo (ela à esquerda, ele à direita; não espelha).
+// meio = o ponto entre os dois quadris; px = escala da imagem para a tela
+const PRESA = { kronk: { src: S + 'kronk/presa.webp', meio: 536, base: 784, px: .5 }, maior: { src: S + 'maior/presa.webp', meio: 589, base: 1060, px: .5 } };
 const MREF = 934;
 const load = (src) => new Promise((res) => { const i = new Image(); i.onload = () => res(i); i.onerror = () => res(null); i.src = src; });
 
 function start(root, opts) {
-  const lang = opts.lang === 'en' ? 'en' : 'pt', t = TX[lang], A = opts.A, maior = opts.modo === 'maior';
+  const lang = opts.lang === 'en' ? 'en' : 'pt', t = Object.assign({}, TX[lang], TX2[lang]), A = opts.A, maior = opts.modo === 'maior';
   return new Promise(async (resolve) => {
     root.innerHTML = `
       <div class="d8">
         <canvas class="d8-cv" width="1280" height="720"></canvas>
         <div class="d8-hud">
-          <div class="d8-ele"><b>${maior ? t.tM : t.tK}</b><i class="d8-bar"><em></em></i></div>
-          <div class="d8-eu"><span class="d8-bpm"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.4C.9 8 3 4 6.8 4c2.2 0 3.6 1.2 5.2 3 1.6-1.8 3-3 5.2-3C21 4 23.1 8 21.6 11.6 19.5 16.4 12 21 12 21z"/></svg><b>52</b></span><span class="d8-marcas">${t.marcas} <i></i><i></i><i></i></span></div>
+          <div class="d8-ele"><b>${maior ? t.tM : t.tK}</b><i class="d8-bar d8-hpE"><em></em></i><span class="d8-est d8-estE"></span></div>
+          <div class="d8-eu"><b class="d8-nome">${t.vida}</b><i class="d8-bar d8-vida"><em></em></i>
+            <span class="d8-lin"><span class="d8-bpm"><svg viewBox="0 0 24 24"><path d="M12 21s-7.5-4.6-9.6-9.4C.9 8 3 4 6.8 4c2.2 0 3.6 1.2 5.2 3 1.6-1.8 3-3 5.2-3C21 4 23.1 8 21.6 11.6 19.5 16.4 12 21 12 21z"/></svg></span><i class="d8-bar d8-pulso"><em></em></i></span>
+            ${maior ? '' : `<span class="d8-lin d8-lam"><small>${t.lamina}</small><i class="d8-bar d8-lamb"><em></em></i></span>`}
+            <span class="d8-est d8-estL"></span></div>
         </div>
         <div class="d8-pop"></div>
         <div class="d8-caixa"><div class="d8-log"></div><div class="d8-menu"></div></div>
@@ -176,6 +305,8 @@ function start(root, opts) {
     const kimg = {};   // as folhas antigas do Kronk não carregam mais: as poses paradas bastam e as folhas pesavam na memória
     const limg = {}; await Promise.all(Object.entries(LA).map(async ([k, a]) => { limg[k] = await load(a.src); }));
     const kpimg = {}; if (!maior) await Promise.all(Object.entries(KP).map(async ([k, a]) => { kpimg[k] = await load(a.src); }));
+    const lamImg = maior ? null : await load('assets/images/d-lamina.jpg');
+    const presaImg = await load(PRESA[maior ? 'maior' : 'kronk'].src);
     const mimg = {}; if (maior) await Promise.all(Object.entries(MA).map(async ([k, a]) => { mimg[k] = await load(a.src); }));
     // o filtro de cor do canvas custa caro a cada quadro (e trava no golpe final): assa uma vez, desenha direto
     const assa = (im, f) => { if (!im) return im; const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const x = c.getContext('2d'); x.filter = f; x.drawImage(im, 0, 0); return c; };
@@ -186,14 +317,18 @@ function start(root, opts) {
     // aquece o que o golpe final usa, durante a introdução
     { const fila = [].concat(Object.values(kpimg), Object.values(mimg)); const aquece = () => { const im = fila.shift(); if (im) { claro(im); setTimeout(aquece, 60); } }; setTimeout(aquece, 400); }
     if (A && A.buf) ['acerta-leve', 'kronk-apanha1', 'kronk-apanha2', 'kronk-esquiva', 'kronk-golpe', 'kronk-mata2', 'kronk-pesado', 'kronk-respira2', 'tambores-furia-loop', 'musica-loop'].forEach((n) => A.buf(DA + n + '.mp3'));
-    if (A && A.buf) ['corte', 'escudo-impacto-1', 'escudo-impacto-2', 'golpe-ar', 'virote-impacto', 'virotes'].forEach((n) => A.buf('assets/audio/sfx/' + n + '.mp3'));
+    if (A && A.buf) ['corte', 'escudo-impacto-1', 'escudo-impacto-2', 'golpe-ar', 'virote-impacto', 'virotes', 'espada-desembainha'].forEach((n) => A.buf('assets/audio/sfx/' + n + '.mp3'));
 
     // ------------------------------------------------------------ estado
     const R = { leituras: 0, laterais: 0, marcas: 0, recomecos: 0, rodeou: false, golpesRecebidos: 0, deslizes: 0, respostas: 0, quedas: 0, t0: performance.now() };
     let bpm = opts.bpm || 52, base = opts.bpm || 52;
-    const HPMAX = maior ? (opts.rajadas || 4) : 120;
+    if (BOT()) window.__D8R = R;
+    const HPMAX = maior ? (opts.rajadas || 4) : 180;
     let hp = HPMAX, fase = 1, marcas = 0, hpFase = HPMAX, revelado = null, rodeando = false, ombroUsado = 0, fimPronto = false, acabou = false;
     let poseL = 'guarda', poseLt = 0, kAnim = { nome: 'guarda', f: 0, t: 0 }, ring = null, shake = 0, flash = 0, rajadaFx = 0, escuro = maior ? .12 : 0;
+    const BB = opts.bonus || {};
+    let VMAX = 100 + (BB.comer ? 12 : 0) + (BB.agua ? 12 : 0), vida = VMAX, lamina = !maior && BB.espada === 'levar' ? 34 : 0, primeiroLido = !maior && !!BB.leu;
+    let escudoUp = false, escudoHP = 0, presa = false, tonta = false, sangraT = 0, bracoT = 0, pernaT = 0, pesoT = 0, macaCD = 0, cegoT = 0, lidoM = false, areiaCD = 0, perdido = false;
     const janelaK = () => clamp(1.65 - (bpm - 52) / 95, .45, 1.65);
 
     // ------------------------------------------------------------ som
@@ -208,11 +343,20 @@ function start(root, opts) {
     const linha = (s, cls = '') => { log.insertAdjacentHTML('beforeend', `<p class="${cls}">${s}</p>`); while (log.children.length > 4) log.firstElementChild.remove(); };
     const popTxt = (s, cls = '') => { pop.innerHTML = `<span class="${cls}">${s}</span>`; pop.classList.remove('on'); void pop.offsetWidth; pop.classList.add('on'); };
     const espera = (ms) => new Promise((r) => setTimeout(r, BOT() ? Math.min(ms, 30) : ms));
+    let estAnt = '';
     const hud = () => {
-      $('.d8-bar em').style.width = (100 * hp / HPMAX) + '%';
-      $('.d8-bpm b').textContent = Math.round(bpm);
-      root.querySelectorAll('.d8-marcas i').forEach((el, k) => el.classList.toggle('on', k < marcas));
+      $('.d8-hpE em').style.width = (100 * hp / HPMAX) + '%';
+      $('.d8-vida em').style.width = (100 * vida / VMAX) + '%';
+      $('.d8-pulso em').style.width = clamp((bpm - 48) / 122, 0, 1) * 100 + '%';
+      if (!maior) { $('.d8-lamb em').style.width = lamina + '%'; root.classList.toggle('d8-cheia', lamina >= 100); }
       root.classList.toggle('d8-alto', bpm >= 110);
+      const E = [], L = [];
+      if (sangraT > 0) E.push(['sangra', 'mal']); if (bracoT > 0) E.push(['braco', 'bom']); if (pernaT > 0) E.push(['perna', 'bom']); if (pesoT > 0) E.push(['firme', 'frio']);
+      if (cegoT > 0) E.push(['cego', 'bom']); if (aberto) E.push(['exposto', 'bom']); if (revelado || lidoM) E.push(['lido', 'frio']);
+      if (escudoUp) L.push(['escudo', 'bom']); if (presa) L.push(['presa', 'mal']); if (tonta) L.push(['tonta', 'mal']);
+      const htm = (xs) => xs.map(([k, c]) => `<i class="${c}">${t.est[k]}</i>`).join('');
+      const novo = htm(E) + '|' + htm(L);
+      if (novo !== estAnt) { estAnt = novo; $('.d8-estE').innerHTML = htm(E); $('.d8-estL').innerHTML = htm(L); }
     };
 
     // ------------------------------------------------------------ desenho
@@ -243,14 +387,21 @@ function start(root, opts) {
       return { im, sx: (k % cols) * fw, sy: Math.floor(k / cols) * fh, fw, fh };
     };
     // o Maior: a pose parada do momento + respiração e inclinação
+    let poseE = null;   // (v17) pose especial do inimigo durante um golpe (meio, varredura, pisao)
     const kronkPose = () => {
       const n = kAnim.nome, f = kAnim.f;
+      if (poseE && KP[poseE]) return poseE;
+      if (n === 'guarda' && pesoT > 0) return 'plantado';
       if (n === 'golpe') return f < KR.golpe.impacto - .5 ? 'prep' : 'golpe';
       if (n === 'pesado') return f < KR.pesado.impacto - .5 ? 'alto' : 'pesado';
       if (n === 'cai') return f < KR.cai.frames * .55 ? 'joelho' : 'cai';
       return KP[n] ? n : 'guarda';
     };
-    const maiorPose = () => (kAnim.nome === 'esquiva' ? 'guarda' : MA[kAnim.nome] ? kAnim.nome : 'guarda');
+    const maiorPose = () => {
+      if (poseE && MA[poseE]) return poseE;
+      if (kAnim.nome === 'guarda' && cegoT > 0) return 'cego';
+      return kAnim.nome === 'esquiva' ? 'guarda' : MA[kAnim.nome] ? kAnim.nome : 'guarda';
+    };
     const desenhaInimigo = () => {
       cx.save(); cx.translate(KX + CE.x, CHAO + CE.y); cx.rotate(CE.r); cx.scale(-1, 1);
       if (maior) {
@@ -318,7 +469,13 @@ function start(root, opts) {
       cx.fillStyle = 'rgba(0,0,0,.4)'; cx.beginPath(); cx.ellipse(LX + CL.x, CHAO + 4, 78, 12, 0, 0, 6.283); cx.fill();
       cx.beginPath(); cx.ellipse(KX + CE.x, CHAO + 6, maior ? 170 : 115, 17, 0, 0, 6.283); cx.fill();
       // quem ataca fica na frente
-      if (poseL === 'golpe') { desenhaInimigo(); desenhaLaura(); } else { desenhaLaura(); desenhaInimigo(); }
+      if (presa && presaImg && !perdido) {   // (v17) presa: os dois numa imagem só
+        const P = PRESA[maior ? 'maior' : 'kronk'], s = P.px, mx = (LX + KX) / 2 + (CL.x + CE.x) / 2, resp = 1 + Math.sin(T * 2.2) * .008;
+        cx.save(); cx.translate(mx, CHAO + CE.y); cx.rotate(CE.r * .5);
+        cx.drawImage(presaImg, -P.meio * s, -P.base * s * resp, presaImg.width * s, presaImg.height * s * resp);
+        if (CE.hit > 0) { cx.globalCompositeOperation = 'lighter'; cx.globalAlpha = CE.hit * .2; cx.drawImage(claro(presaImg), -P.meio * s, -P.base * s * resp, presaImg.width * s, presaImg.height * s * resp); }
+        cx.restore();
+      } else if (poseL === 'golpe' || poseL === 'baixo') { desenhaInimigo(); desenhaLaura(); } else { desenhaLaura(); desenhaInimigo(); }
       cx.filter = 'none';
       desenhaParts(dt);
       // o anel
@@ -354,7 +511,7 @@ function start(root, opts) {
       dt *= lento; T += dt;
       const a = KR[kAnim.nome] || KR.guarda;
       if (kAnim.play) { kAnim.f += dt * (kAnim.fps || a.fps || 26); if (kAnim.ate != null && kAnim.f >= kAnim.ate) { kAnim.f = kAnim.ate; kAnim.play = false; if (kAnim.fim) { const f = kAnim.fim; kAnim.fim = null; f(); } } else if (kAnim.f >= a.frames) { if (a.loop) kAnim.f = 0; else { kAnim.f = a.frames - 1; kAnim.play = false; if (kAnim.fim) { const f = kAnim.fim; kAnim.fim = null; f(); } } } }
-      if (poseLt > 0) { poseLt -= dt; if (poseLt <= 0) poseL = bpm >= 120 ? 'cansado' : 'guarda'; }
+      if (poseLt > 0) { poseLt -= dt; if (poseLt <= 0) poseL = escudoUp ? 'escudo' : bpm >= 120 ? 'cansado' : 'guarda'; }
       mola(CL, dt); mola(CE, dt);
       zoom = Math.max(0, zoom - dt * .35); faixas += (faixasAlvo - faixas) * Math.min(1, dt * 5); cinza = Math.max(0, cinza - dt * .25);
       rastro = Math.max(0, rastro - dt * 2.4); respingo = Math.max(0, respingo - dt * .55);
@@ -367,10 +524,10 @@ function start(root, opts) {
     const pose = (p, dur = .7) => { poseL = p; poseLt = dur; };
     // os momentos, com corpo: cada um junta pose, mola, partículas, câmera e som
     const MOM = {
-      golpeDela: (forte) => { pose('golpe', .6); empurra(CL, 120, 280, 0, .02); setTimeout(() => { risco(KX - 10, CHAO - KH * .55, forte ? -.7 : -.35); CE.hit = 1; empurra(CE, 46, 240, 0, .05); soco(forte ? .07 : .04, KX - 120, CHAO - KH * .5, forte ? .13 : .07); sangue(KX - 40, CHAO - KH * rnd(.4, .65), forte ? 40 : 22, 1, forte ? 1.2 : .9); onda(KX - 40, CHAO - KH * .55, '255,235,215', forte ? 190 : 120); if (forte) { lento = .35; setTimeout(() => { lento = 1; }, BOT() ? 0 : 260); } }, BOT() ? 0 : 110); },
-      erroDela: () => { pose('golpe', .5); empurra(CL, 90, 240); empurra(CE, 70, 300, 0, .06); },
+      golpeDela: (forte, p = 'golpe') => { pose(p, .6); empurra(CL, 120, 280, 0, .02); setTimeout(() => { risco(KX - 10, CHAO - KH * .55, forte ? -.7 : -.35); CE.hit = 1; empurra(CE, 46, 240, 0, .05); soco(forte ? .07 : .04, KX - 120, CHAO - KH * .5, forte ? .13 : .07); sangue(KX - 40, CHAO - KH * rnd(.4, .65), forte ? 40 : 22, 1, forte ? 1.2 : .9); onda(KX - 40, CHAO - KH * .55, '255,235,215', forte ? 190 : 120); if (forte) { lento = .35; setTimeout(() => { lento = 1; }, BOT() ? 0 : 260); } }, BOT() ? 0 : 110); },
+      erroDela: (p = 'golpe') => { pose(p, .5); empurra(CL, 90, 240); empurra(CE, 70, 300, 0, .06); },
       escudo: (forte) => { onda(LX + 70, CHAO - LH * .55, '255,214,150', forte ? 170 : 110); pose(forte ? 'impacto' : 'escudo', forte ? .9 : .7); empurra(CL, forte ? -46 : -24, 220, forte ? 6 : 0); empurra(CE, -90, 200, 0, -.05); faisca(LX + 70, CHAO - LH * .62, forte ? 30 : 18); soco(forte ? .045 : .025, LX + 60, CHAO - LH * .55, forte ? .09 : .05); if (forte) areia(LX + CL.x, 14, .7); },
-      lateral: () => { rastro = 1; pose('lateral', .8); empurra(CL, -95, 420, 0, -.03); empurra(CE, -150, 360, 0, -.08); setTimeout(() => areia(KX - 160, 26, 1.1), BOT() ? 0 : 160); },
+      lateral: () => { rastro = 1; pose(maior ? 'rola' : 'lateral', .8); empurra(CL, -95, 420, 0, -.03); empurra(CE, -150, 360, 0, -.08); setTimeout(() => areia(KX - 160, 26, 1.1), BOT() ? 0 : 160); },
       marca: () => { sangue(LX + 40, CHAO - LH * .55, 30, -1, 1); mancharTela(); pose('atingido', .9); empurra(CL, -70, 300, 4, -.06); empurra(CE, -110, 220, 0, -.06); faisca(LX + 40, CHAO - LH * .5, 10, '255,120,90'); soco(.03, LX, CHAO - LH * .5, .08); },
       ataqueDele: () => { empurra(CE, 26, 500, 0, .04); },
     };
@@ -378,7 +535,7 @@ function start(root, opts) {
     // ------------------------------------------------------------ entrada: o anel
     // espera um toque (Espaço ou botão). Devolve o erro em segundos (negativo = cedo), ou null se não houve toque.
     let ouvinte = null;
-    const anel = (sobre, dur, botoes) => new Promise((res) => {
+    const anel = (sobre, dur, botoes, certo) => new Promise((res) => {
       ring = { sobre, t0: performance.now(), dur: dur * 1000, r0: 170, r1: 44 };
       menu.innerHTML = botoes.map((b) => `<button class="d8-b ${b.cls || ''}" data-k="${b.k}">${b.rot}</button>`).join('');
       let feito = false;
@@ -386,13 +543,13 @@ function start(root, opts) {
       menu.querySelectorAll('.d8-b').forEach((b) => b.onpointerdown = (e) => { e.preventDefault(); fecha(b.dataset.k); });
       ouvinte = (k) => { if (botoes.some((b) => b.k === k)) fecha(k); };
       setTimeout(() => { if (!feito) { feito = true; ring = null; menu.innerHTML = ''; ouvinte = null; res({ k: null, err: null }); } }, (dur + .45) * 1000);
-      if (BOT()) setTimeout(() => fecha(botoes[window.__JOGO_BOT_LADO === 'escudo' ? 0 : botoes.length - 1].k), dur * 1000 * .98);
+      if (BOT()) { const ruim = Math.random() < (window.__JOGO_BOT_RUIM || 0); setTimeout(() => fecha(ruim && Math.random() < .5 ? botoes[0].k : certo || botoes[window.__JOGO_BOT_LADO === 'escudo' ? 0 : botoes.length - 1].k), dur * 1000 * (ruim ? .55 : .98)); }
     });
     const onKey = (e) => {
       if (!ouvinte && !menuOuvinte) return;
       const mapa = { ' ': 'agora', ArrowUp: 'escudo', ArrowDown: 'lateral' };
       if (ouvinte && mapa[e.key]) { e.preventDefault(); ouvinte(mapa[e.key]); return; }
-      if (menuOuvinte && /^[1-5]$/.test(e.key)) { e.preventDefault(); menuOuvinte(+e.key - 1); }
+      if (menuOuvinte && /^[1-9]$/.test(e.key)) { e.preventDefault(); menuOuvinte(+e.key - 1); }
     };
     let menuOuvinte = null;
     addEventListener('keydown', onKey);
@@ -403,90 +560,197 @@ function start(root, opts) {
       const fim = (k) => { menuOuvinte = null; menu.innerHTML = ''; res(k); };
       menu.querySelectorAll('.d8-op').forEach((b) => b.onclick = () => fim(b.dataset.k));
       menuOuvinte = (i) => { const o = ops[i]; if (o) fim(o.k); };
-      if (BOT()) setTimeout(() => fim((ops.find((o) => o.k === 'chamar' || o.k === 'tremido') || ops.find((o) => o.k === (fimPronto ? 'rodear' : 'estocada')) || ops[0]).k), 20);
+      if (BOT()) { const pref = ['chamar', 'tremido', 'soltar', fimPronto ? 'rodear' : 'lamina', 'lamina', 'estocada', 'respirar']; setTimeout(() => fim((window.__JOGO_BOT_ALEA && Math.random() < .6 ? ops[Math.floor(Math.random() * ops.length)] : pref.map((p) => ops.find((o) => o.k === p)).find(Boolean) || ops[0]).k), 20); }
     });
 
     const julga = (err, jan) => (err == null ? 'nada' : Math.abs(err) <= jan * .45 ? 'perfeito' : Math.abs(err) <= jan ? 'bom' : err < 0 ? 'cedo' : 'tarde');
 
-    // ------------------------------------------------------------ KRONK
-    const turnoDela = async () => {
-      const ops = [
-        { k: 'estocada', nome: t.golpes.estocada[0], desc: t.golpes.estocada[1] },
-        { k: 'corte', nome: t.golpes.corte[0], desc: t.golpes.corte[1] },
-        { k: 'finta', nome: t.golpes.finta[0], desc: t.golpes.finta[1] },
-        { k: 'respirar', nome: t.golpes.respirar[0], desc: t.golpes.respirar[1] },
-      ];
-      if (fase === 3) ops.push({ k: 'rodear', nome: t.golpes.rodear[0], desc: t.golpes.rodear[1], cls: 'risco' });
-      const k = await escolhe(ops);
-      if (k === 'respirar') { bpm = Math.max(base, bpm - 14); hp = Math.min(hpFase, hp + 4); pose('respirar', 1.2); grunhe('kronk-respira2', .6); linha(t.respirou); await espera(900); return null; }
-      if (k === 'finta') { revelado = Math.random() < (fase === 3 ? .7 : .45) ? 'pesado' : 'golpe'; R.leituras++; pose('guarda', .4); empurra(CL, 40, 200); linha(t.tell.mordeu[revelado], 'ler'); await espera(900); return null; }
-      if (k === 'rodear') { rodeando = true; R.rodeou = true; linha(t.rodear, 'ler'); await espera(900); return null; }
-      const corte = k === 'corte', dur = corte ? 1.25 : .95, jan = (corte ? .085 : .1) * janelaK();
-      if (corte) bpm += 3;
-      const r = await anel('ele', dur, [{ k: 'agora', rot: t.agora, cls: 'agora' }]);
-      const j = julga(r.err, jan);
-      if (j === 'perfeito' || j === 'bom') {
-        const dano = (corte ? (j === 'perfeito' ? 15 : 10) : (j === 'perfeito' ? 9 : 6));
-        MOM.golpeDela(corte || j === 'perfeito'); sfx('corte', .7); hp = Math.max(fase === 3 ? 6 : 1, hp - dano); flash = 0; shake = .25;
-        popTxt(j === 'perfeito' ? t.rot.perfeito : t.rot.bom,'bom'); anima('apanha').then(guarda); grunhe(Math.random() < .5 ? 'kronk-apanha1' : 'kronk-apanha2', .75); grunhe('acerta-leve', .5);
-        linha(t.acertos[Math.floor(Math.random() * t.acertos.length)]);
-      } else { MOM.erroDela(); sfx('golpe-ar', .6); popTxt(j === 'nada' ? t.rot.tarde : t.rot[j] || t.rot.defende,'mal'); anima('esquiva').then(guarda); grunhe('kronk-esquiva', .55); linha(t.erro); }
-      await espera(800);
-      return null;
+    // ------------------------------------------------------------ comum (v16)
+    const B = opts.bonus || {};
+    const ganha = (x) => { if (maior) return; lamina = Math.min(100, lamina + x * (B.pai ? 1.3 : 1) * (bpm >= 120 ? .5 : 1)); };
+    const kAtk = (nome, dur) => { kAnim = { nome, f: 0, play: true, ate: KR[nome].impacto, fps: KR[nome].impacto / dur }; };
+    const kSolta = (nome) => { kAnim = { nome, f: KR[nome].impacto, play: true, fps: 30, fim: guarda }; };
+    const solta = () => { if (escudoUp) { escudoUp = false; escudoHP = 0; } };
+    // o golpe que chega nela: o escudo erguido toma primeiro; o que passa vira vida
+    const leva = (x, txt) => {
+      if (!maior && bracoT > 0) x = Math.round(x * .6);
+      if (escudoUp) {
+        if (x >= escudoHP) { x -= escudoHP; escudoUp = false; escudoHP = 0; tonta = true; linha(t.escudoQuebra, 'mal'); MOM.escudo(true); sfx('escudo-impacto-2', 1); shake = .8; }
+        else { escudoHP -= x; x = 0; linha(t.escudoAbsorve); MOM.escudo(true); sfx('escudo-impacto-1', .9); shake = .35; }
+      }
+      if (x > 0) { vida = Math.max(0, vida - x); R.marcas++; R.golpesRecebidos++; MOM.marca(); sfx('escudo-impacto-2', .9); shake = .6; flash = .6; bpm += 7; if (txt) linha(txt, 'mal'); popTxt(t.rot.marca, 'mal'); }
+    };
+    const perdeu = () => vida <= 0;
+    const derrota = async () => {
+      perdido = true; menu.innerHTML = ''; ring = null; pose(limg.caida ? 'caida' : 'atingido', 999); faixasAlvo = 1; cinza = 1; lento = .6; flash = 1;
+      sangue(LX + 30, CHAO - LH * .5, 50, -1, 1.1); empurra(CL, -60, 900, 30, -.2);
+      linha(maior ? t.perdeuM : t.perdeu, 'cena'); await espera(1900);
+      const ov = document.createElement('div'); ov.className = 'd8-regras d8-perdeu';
+      ov.innerHTML = `<div class="d8-rin"><h2>${t.perdeuT}</h2><button class="cta d8-denovo">${t.denovo}</button></div>`;
+      root.querySelector('.d8').appendChild(ov);
+      const de = () => { encerra(); start(root, Object.assign({}, opts, { derrotas: (opts.derrotas || 0) + 1 })).then(resolve); };
+      ov.querySelector('.d8-denovo').onclick = de;
+      if (BOT()) setTimeout(de, 10);
+    };
+    const abertura = async () => {
+      const ls = [];
+      if (!maior && B.espada === 'levar') ls.push(t.bonus.levar); else if (!maior && B.espada === 'deixar') ls.push(t.bonus.deixar);
+      if (B.comer) ls.push(t.bonus.comer); if (B.agua) ls.push(t.bonus.agua);
+      if (!maior && B.pai) ls.push(t.bonus.pai); if (!maior && B.leu) ls.push(t.bonus.leu);
+      for (const l of ls.slice(0, 3)) { linha(l, 'ler'); await espera(1300); }
     };
 
-    const turnoDele = async () => {
-      let tipo = revelado || (Math.random() < (fase === 3 ? .55 : fase === 2 ? .45 : .38) ? 'pesado' : 'golpe');
-      if (rodeando) tipo = 'pesado';
-      const lido = !!revelado; revelado = null;
-      const rapido = fase >= 2 || rodeando;
-      if (tipo === 'golpe') {
-        linha(t.tell.golpe, 'tell'); MOM.ataqueDele(); grunhe('kronk-golpe', .7);
-        const dur = (fase === 1 ? .95 : fase === 2 ? .78 : .82) * (lido ? 1.15 : 1);
-        kAnim = { nome: 'golpe', f: 0, play: true, ate: KR.golpe.impacto, fps: KR.golpe.impacto / dur };
-        const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }]);
-        kAnim = { nome: 'golpe', f: KR.golpe.impacto, play: true, fps: 30, fim: guarda };
-        const jan = (r.k === 'lateral' ? .07 : .15) * janelaK() * (lido ? 1.3 : 1), j = julga(r.err, jan);
-        if ((j === 'perfeito' || j === 'bom') && r.k === 'escudo') { MOM.escudo(false); sfx('escudo-impacto-1', .8); popTxt(t.rot.segurou,'bom'); linha(t.segurou); bpm += 2; R.respostas++; }
-        else if (j === 'perfeito' && r.k === 'lateral') { MOM.lateral(); sfx('golpe-ar', .6); popTxt(t.rot.passou,'bom'); linha(t.passou); R.respostas++; }
-        else await marca(j);
-      } else {
-        linha(rapido ? t.tell.pesadoRapido : t.tell.pesado, 'tell'); empurra(CE, 34, 1600, 0, .07); grunhe('kronk-pesado', .75);
-        await anima('pesado', { ate: KR.pesado.segura, fps: 22 });
-        const segura = rodeando ? rnd(.15, .35) : rapido ? rnd(.35, .8) : rnd(.7, 1.4);
-        // segurar a maça no alto: tocar agora é cedo
-        const cedo = await new Promise((res) => {
-          menu.innerHTML = `<button class="d8-b" data-k="escudo">↑ ${t.escudo}</button><button class="d8-b" data-k="lateral">↓ ${t.lateral}</button>`;
-          let ok = false; const fim = (v) => { if (ok) return; ok = true; ouvinte = null; menu.innerHTML = ''; res(v); };
-          menu.querySelectorAll('.d8-b').forEach((b) => b.onpointerdown = (e) => { e.preventDefault(); fim(b.dataset.k); });
-          ouvinte = (k) => fim(k);
-          setTimeout(() => fim(null), (BOT() ? .02 : segura) * 1000);
-        });
-        if (cedo) { popTxt(t.rot.cedo,'mal'); linha(t.cedoPesado, 'mal'); kAnim = { nome: 'pesado', f: KR.pesado.segura, play: true, fps: 40, fim: guarda }; await espera(250); await marca('cedo'); await fimRodeio(); return; }
-        linha(t.tell.desce, 'tell');
-        const dur = (fase === 1 ? .62 : .5) * (lido ? 1.2 : 1);
-        kAnim = { nome: 'pesado', f: KR.pesado.segura, play: true, ate: KR.pesado.impacto, fps: (KR.pesado.impacto - KR.pesado.segura) / dur };
-        const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }]);
-        kAnim = { nome: 'pesado', f: KR.pesado.impacto, play: true, fps: 30, fim: guarda };
-        const jan = (r.k === 'lateral' ? .09 : .14) * janelaK() * (lido ? 1.3 : 1), j = julga(r.err, jan);
-        if ((j === 'perfeito' || j === 'bom') && r.k === 'lateral') {
-          MOM.lateral(); sfx('golpe-ar', .7); popTxt(t.rot.contra,'bom'); linha(t.contra); R.laterais++; R.leituras++; R.respostas++;
-          await espera(650);
-          if (fimPronto) { await fim(); return; }
-          const dano = rodeando ? 24 : 14;
-          MOM.golpeDela(true); sfx('corte', .8); grunhe('kronk-apanha1', .8); hp = Math.max(fase === 3 ? 6 : 1, hp - dano); shake = .35; anima('apanha').then(guarda); linha(t.contraGolpe);
-        } else if ((j === 'perfeito' || j === 'bom') && r.k === 'escudo') { MOM.escudo(true); sfx('escudo-impacto-2', .9); shake = .3; popTxt(t.rot.segurou,'meio'); linha(t.segurouPesado); bpm += 7; R.respostas++; }
-        else await marca(j);
-      }
-      await fimRodeio();
+    // ------------------------------------------------------------ KRONK
+    const tipoDele = () => {
+      if (rodeando) return 'pesado';
+      if (fimPronto && Math.random() < .6) return 'pesado';
+      if (fase === 1) return Math.random() < .4 ? 'pesado' : 'golpe';
+      const pool = [['golpe', 35], ['pesado', 30], ['agarrar', presa ? 0 : 15], ['peso', pesoT > 0 ? 0 : 10], ['maca', macaCD > 0 ? 0 : 12], ['duas', fase === 3 ? 18 : 0]];
+      let r = Math.random() * pool.reduce((s, p) => s + p[1], 0);
+      for (const [k, w] of pool) { if ((r -= w) < 0) return k; }
+      return 'golpe';
     };
-    const fimRodeio = async () => { if (rodeando) { rodeando = false; } };
-    const marca = async (j) => {
-      marcas++; R.marcas++; R.golpesRecebidos++; MOM.marca(); sfx('escudo-impacto-2', .9); shake = .6; flash = .6; bpm += 9;
-      popTxt(j === 'cedo' ? t.rot.cedo : j === 'tarde' || j === 'nada' ? t.rot.tarde : t.rot.marca,'mal');
-      linha(t.marca[Math.min(marcas - 1, 2)], 'mal');
-      await espera(700);
-      if (marcas >= 3) { marcas = 0; R.recomecos++; hp = hpFase; linha(t.reset); await espera(1100); }
+    const lentoK = () => (pernaT > 0 ? 1.25 : 1);
+    const ATK = {
+      estocada: { dur: .95, jan: .1, d: [9, 6], c: 4 }, corte: { dur: 1.25, jan: .085, d: [15, 10], c: 7 },
+      braco: { dur: 1.05, jan: .09, d: [6, 4], c: 6 }, perna: { dur: 1.05, jan: .09, d: [6, 4], c: 6 }, torso: { dur: 1.3, jan: .07, d: [19, 13], c: 10 },
+      curta: { dur: .8, jan: .12, d: [4, 3], c: 3 },
+    };
+    const opK = (k, cls) => ({ k, nome: t.acao[k][0], desc: t.acao[k][1], cls });
+    const turnoDela = async () => {
+      R.turnos = (R.turnos || 0) + 1;
+      if (tonta) { tonta = false; linha(t.tonta, 'mal'); pose('cansado', 1.2); await espera(1300); return; }
+      if (bpm >= 168) { linha(t.semAr, 'mal'); bpm -= 24; pose('respirar', 1.3); await espera(1400); return; }
+      let ops;
+      if (presa) ops = [opK('soltar'), opK('curta')];
+      else {
+        ops = [opK('estocada'), opK('corte'), opK('mirar'), opK('finta'), opK(escudoUp ? 'manter' : 'escudo'), opK('respirar')];
+        if (fase === 3) ops.push({ k: 'rodear', nome: t.golpes.rodear[0], desc: t.golpes.rodear[1], cls: 'risco' });
+        if (lamina >= 100) ops.unshift(opK('lamina', 'lamina'));
+      }
+      let k = await escolhe(ops);
+      if (k === 'mirar') { k = await escolhe([opK('braco'), opK('perna'), opK('torso'), opK('voltar', 'voltar')]); if (k === 'voltar') return turnoDela(); }
+      if (k !== 'escudo' && k !== 'manter') solta();
+      if (k === 'respirar') { bpm = Math.max(base, bpm - 16); pose('respirar', 1.2); linha(t.respirouM); await espera(900); return; }
+      if (k === 'finta') { revelado = tipoDele(); R.leituras++; bpm += 3; ganha(6); pose('guarda', .4); empurra(CL, 40, 200); linha((t.tell.mordeu[revelado] || t.mordeu2[revelado]), 'ler'); await espera(900); return; }
+      if (k === 'escudo' || k === 'manter') { if (!escudoUp) { escudoUp = true; escudoHP = 30; bpm += 5; linha(t.escudoUp); } else { bpm += 4; linha(t.escudoMantem); } pose('escudo', 1); sfx('escudo-impacto-1', .4); await espera(800); return; }
+      if (k === 'rodear') { rodeando = true; R.rodeou = true; bpm += 3; linha(t.rodear, 'ler'); await espera(900); return; }
+      if (k === 'soltar') {
+        bpm += 4; const r = await anel('eu', .8, [{ k: 'agora', rot: t.agora, cls: 'agora' }]);
+        const j = julga(r.err, .14 * janelaK());
+        if (j === 'perfeito' || j === 'bom') { presa = false; MOM.lateral(); popTxt(t.rot.bom, 'bom'); linha(t.soltou); } else { pose('atingido', .8); popTxt(t.rot[j] || t.rot.tarde, 'mal'); linha(t.naoSoltou, 'mal'); }
+        await espera(700); return;
+      }
+      if (k === 'lamina') { await golpeLamina(); return; }
+      const c = ATK[k]; bpm += c.c;
+      const jan = c.jan * janelaK() * lentoK() * (k === 'corte' && B.espada === 'deixar' ? 1.25 : 1);
+      if (k === 'curta') linha(t.curta);
+      const r = await anel('ele', c.dur, [{ k: 'agora', rot: t.agora, cls: 'agora' }]);
+      const j = julga(r.err, jan);
+      if (j === 'perfeito' || j === 'bom') {
+        const dano = c.d[j === 'perfeito' ? 0 : 1];
+        MOM.golpeDela(k === 'corte' || k === 'torso' || j === 'perfeito', k === 'perna' ? 'baixo' : 'golpe'); sfx('corte', .7); hp = Math.max(1, hp - dano); shake = .25;
+        popTxt(j === 'perfeito' ? t.rot.perfeito : t.rot.bom, 'bom'); anima('apanha').then(guarda); grunhe(Math.random() < .5 ? 'kronk-apanha1' : 'kronk-apanha2', .75); grunhe('acerta-leve', .5);
+        ganha(j === 'perfeito' ? 22 : 11);
+        if (k === 'estocada') { sangraT = 3; linha(t.abreSangra); }
+        else if (k === 'braco') { bracoT = 2; linha(t.acertoBraco); }
+        else if (k === 'perna') { pernaT = 2; linha(t.acertoPerna); }
+        else if (k === 'torso') linha(t.acertoTorso);
+        else linha(t.acertos[Math.floor(Math.random() * t.acertos.length)]);
+      } else {
+        MOM.erroDela(k === 'perna' ? 'baixo' : 'golpe'); sfx('golpe-ar', .6); popTxt(j === 'nada' ? t.rot.tarde : t.rot[j] || t.rot.defende, 'mal'); anima('esquiva').then(guarda); grunhe('kronk-esquiva', .55); linha(t.erro);
+        if (pesoT > 0) { await espera(600); empurra(CE, -60, 300); leva(10, t.pesoCastiga); }
+      }
+      await espera(800);
+    };
+    const golpeLamina = async () => {
+      lamina = 0; bpm += 10; faixasAlvo = 1; lento = .5; cinza = .5;
+      if (lamImg) { const ov = document.createElement('div'); ov.className = 'd8-ult'; ov.innerHTML = `<img src="${lamImg.src}" alt=""><b>${t.lamina}</b>`; root.querySelector('.d8').appendChild(ov); sfx('espada-desembainha', .9); await espera(1300); ov.classList.add('sai'); setTimeout(() => ov.remove(), 500); }
+      for (const l of t.laminaVai) { linha(l, 'cena'); await espera(900); }
+      const r = await anel('ele', 1.0, [{ k: 'agora', rot: t.lamina, cls: 'agora' }]);
+      const j = julga(r.err, .12 * janelaK());
+      const dano = j === 'perfeito' ? 40 : j === 'bom' ? 28 : 12;
+      MOM.golpeDela(true); soco(.1, KX - 80, CHAO - KH * .45, .22); sfx('corte', 1); grunhe('kronk-apanha2', .9); sangue(KX - 40, CHAO - KH * .5, 70, 1, 1.4); flash = .3; shake = .8;
+      hp = Math.max(1, hp - dano); anima('apanha').then(guarda); R.lamina = (R.lamina || 0) + 1;
+      popTxt(j === 'perfeito' ? t.rot.perfeito : j === 'bom' ? t.rot.bom : t.rot.defende, j === 'perfeito' || j === 'bom' ? 'bom' : 'meio');
+      linha(j === 'perfeito' ? t.laminaAcerta : j === 'bom' ? t.laminaMeio : t.laminaPouco);
+      await espera(1100); faixasAlvo = 0; lento = 1;
+    };
+
+    // as respostas aos golpes dele
+    const golpeRapido = async (lido, apertado = 1) => {
+      linha(t.tell.golpe, 'tell'); MOM.ataqueDele(); grunhe('kronk-golpe', .7);
+      const dur = (fase === 1 ? .95 : fase === 2 ? .78 : .82) * (lido ? 1.15 : 1) * lentoK() * apertado;
+      kAtk('golpe', dur);
+      const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }], 'escudo');
+      kSolta('golpe');
+      const jan = (r.k === 'lateral' ? .07 : .15 * (escudoUp ? 1.8 : 1)) * janelaK() * (lido ? 1.3 : 1), j = julga(r.err, jan);
+      if ((j === 'perfeito' || j === 'bom') && r.k === 'escudo') { MOM.escudo(false); sfx('escudo-impacto-1', .8); popTxt(t.rot.segurou, 'bom'); linha(t.segurou); bpm += escudoUp ? 1 : 2; R.respostas++; ganha(j === 'perfeito' ? 10 : 5); }
+      else if (j === 'perfeito' && r.k === 'lateral') { MOM.lateral(); sfx('golpe-ar', .6); popTxt(t.rot.passou, 'bom'); linha(t.passou); R.respostas++; ganha(12); }
+      else { popTxt(j === 'cedo' ? t.rot.cedo : t.rot.tarde, 'mal'); leva(fase === 3 ? 12 : 10, t.marca[Math.floor(Math.random() * 3)]); }
+    };
+    const golpePesado = async (lido) => {
+      const rapido = fase >= 2 || rodeando;
+      linha(rapido ? t.tell.pesadoRapido : t.tell.pesado, 'tell'); empurra(CE, 34, 1600, 0, .07); grunhe('kronk-pesado', .75);
+      await anima('pesado', { ate: KR.pesado.segura, fps: 22 });
+      const segura = rodeando ? rnd(.15, .35) : rapido ? rnd(.35, .8) : rnd(.7, 1.4);
+      const cedo = await new Promise((res) => {
+        menu.innerHTML = `<button class="d8-b" data-k="escudo">↑ ${t.escudo}</button><button class="d8-b" data-k="lateral">↓ ${t.lateral}</button>`;
+        let ok = false; const fim = (v) => { if (ok) return; ok = true; ouvinte = null; menu.innerHTML = ''; res(v); };
+        menu.querySelectorAll('.d8-b').forEach((b) => b.onpointerdown = (e) => { e.preventDefault(); fim(b.dataset.k); });
+        ouvinte = (k) => fim(k);
+        setTimeout(() => fim(null), (BOT() ? .02 : segura * lentoK()) * 1000);
+      });
+      if (cedo) { popTxt(t.rot.cedo, 'mal'); linha(t.cedoPesado, 'mal'); kAnim = { nome: 'pesado', f: KR.pesado.segura, play: true, fps: 40, fim: guarda }; await espera(250); leva(18); return; }
+      linha(t.tell.desce, 'tell');
+      const dur = (fase === 1 ? .62 : .5) * (lido ? 1.2 : 1) * lentoK();
+      kAnim = { nome: 'pesado', f: KR.pesado.segura, play: true, ate: KR.pesado.impacto, fps: (KR.pesado.impacto - KR.pesado.segura) / dur };
+      const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }], 'lateral');
+      kSolta('pesado');
+      const jan = (r.k === 'lateral' ? .09 : .14 * (escudoUp ? 1.8 : 1)) * janelaK() * (lido ? 1.3 : 1), j = julga(r.err, jan);
+      if ((j === 'perfeito' || j === 'bom') && r.k === 'lateral') {
+        MOM.lateral(); sfx('golpe-ar', .7); popTxt(t.rot.contra, 'bom'); linha(t.contra); R.laterais++; R.leituras++; R.respostas++; ganha(18);
+        await espera(650);
+        if (fimPronto) { await fim(); return; }
+        const dano = rodeando ? 24 : 14;
+        MOM.golpeDela(true); sfx('corte', .8); grunhe('kronk-apanha1', .8); hp = Math.max(1, hp - dano); shake = .35; anima('apanha').then(guarda); linha(t.contraGolpe);
+      } else if ((j === 'perfeito' || j === 'bom') && r.k === 'escudo') { MOM.escudo(true); sfx('escudo-impacto-2', .9); shake = .3; popTxt(t.rot.segurou, 'meio'); linha(t.segurouPesado); bpm += escudoUp ? 3 : 7; R.respostas++; ganha(6); }
+      else { popTxt(j === 'cedo' ? t.rot.cedo : t.rot.tarde, 'mal'); leva(18, t.marca[Math.floor(Math.random() * 3)]); }
+    };
+    const agarrar = async (lido) => {
+      linha(t.tell2.agarrar, 'tell'); empurra(CE, 30, 700, 0, .03); grunhe('kronk-golpe', .6);
+      const dur = .8 * (lido ? 1.2 : 1) * lentoK(); kAtk('golpe', dur);
+      const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }], 'lateral');
+      kSolta('golpe');
+      const j = julga(r.err, .12 * janelaK() * (lido ? 1.3 : 1));
+      if ((j === 'perfeito' || j === 'bom') && r.k === 'lateral') { MOM.lateral(); popTxt(t.rot.passou, 'bom'); linha(t.escapou); R.respostas++; ganha(8); }
+      else { presa = true; solta(); pose('atingido', 1.2); empurra(CL, 50, 900); empurra(CE, -40, 900); sfx('escudo-impacto-1', .6); popTxt(t.est.presa, 'mal'); linha(t.presa, 'mal'); vida = Math.max(0, vida - 3); bpm += 5; }
+    };
+    const macaCima = async (lido) => {
+      linha(t.tell2.maca, 'tell'); macaCD = 3; empurra(CE, 20, 900, 0, -.04); grunhe('kronk-pesado', .7);
+      const dur = .7 * (lido ? 1.2 : 1) * lentoK(); poseE = 'meio'; kAtk('golpe', dur);
+      const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }], 'lateral');
+      kSolta('golpe'); setTimeout(() => { poseE = null; }, BOT() ? 0 : 160);
+      const j = julga(r.err, (r.k === 'lateral' ? .1 : .12) * janelaK() * (lido ? 1.3 : 1));
+      if ((j === 'perfeito' || j === 'bom') && r.k === 'lateral') { MOM.lateral(); sfx('golpe-ar', .7); popTxt(t.rot.passou, 'bom'); linha(t.macaEsquiva); R.respostas++; ganha(12); }
+      else if ((j === 'perfeito' || j === 'bom') && r.k === 'escudo') { popTxt(t.rot.segurou, 'meio'); leva(7, t.macaEscudo); }
+      else { popTxt(t.rot.marca, 'mal'); leva(14, t.macaPega); if (!perdeu()) tonta = true; }
+    };
+    const turnoDele = async () => {
+      if (sangraT > 0) { sangraT--; hp = Math.max(1, hp - 3); CE.hit = .5; sangue(KX - 30, CHAO - KH * .5, 14, 1, .6); if (Math.random() < .5) linha(t.sangra); await espera(500); }
+      const tipo = revelado || tipoDele();
+      const lido = !!revelado || primeiroLido; revelado = null; primeiroLido = false;
+      if (presa && tipo !== 'peso' && tipo !== 'agarrar') {
+        linha(t.tell.golpe, 'tell'); kAtk('golpe', .6); await espera(650); kSolta('golpe'); presa = false; leva(fase === 3 ? 14 : 12, t.presaGolpe);
+      } else if (tipo === 'golpe') await golpeRapido(lido);
+      else if (tipo === 'pesado') await golpePesado(lido);
+      else if (tipo === 'agarrar') await agarrar(lido);
+      else if (tipo === 'maca') await macaCima(lido);
+      else if (tipo === 'peso') { pesoT = 4; linha(t.tell2.peso, 'tell'); empurra(CE, -20, 1200, 6, 0); areia(KX, 16, .6); await espera(1100); }
+      else if (tipo === 'duas') { linha(t.tell2.duas, 'tell'); await espera(500); await golpeRapido(lido, .9); if (!perdeu() && !acabou) { await espera(260); await golpeRapido(false, .8); } }
+      if (bracoT > 0) bracoT--; if (pernaT > 0) pernaT--; if (macaCD > 0) macaCD--;
+      if (pesoT > 0 && --pesoT === 0) linha(t.pesoFim);
+      if (rodeando) rodeando = false;
     };
     const cena = async (linhas, ms = 1500) => { menu.innerHTML = ''; for (const l of linhas) { linha(l, 'cena'); await espera(ms); } };
     const fim = async () => {
@@ -494,77 +758,108 @@ function start(root, opts) {
       MOM.lateral(); await espera(500);
       pose('golpe', 3); sfx('corte', .9); MOM.golpeDela(true); soco(.12, KX - 60, CHAO - KH * .35, .25); flash = .3; shake = .7;
       await cena(t.fim, 1700);
-      lento = 1; areia(KX, 40, 1.6); shake = .9;
-      sangue(KX - 30, CHAO - KH * .3, 60, 1, 1.3); grunhe('kronk-apanha2', .9);
+      lento = 1; areia(KX, 40, 1.6); shake = .9; hp = 0;
+      sangue(KX - 30, CHAO - KH * .3, 60, 1, 1.3); grunhe('kronk-mata2', .9);
       await anima('cai', { fps: 18 });
       await espera(600); faixasAlvo = 0;
       fecha();
     };
 
     const kronk = async () => {
-      linha(t.intro); await espera(1200);
-      while (!acabou) {
-        await turnoDela(); if (acabou) return;
-        if (fase === 1 && hp <= 78) {
-          fase = 2; hpFase = hp; marcas = 0;
+      linha(t.intro); await espera(1200); await abertura();
+      while (!acabou && !perdido) {
+        await turnoDela(); if (acabou) return; if (perdeu()) return derrota();
+        if (fase === 1 && hp <= HPMAX * .6) {
+          fase = 2;
           kAnim = { nome: 'pesado', f: 0, play: true, fps: 30 };
-          grunhe('kronk-mata2', .9); tocaLoop('tambores-furia-loop', .32).then((h) => { furia = h; });
+          grunhe('kronk-mata2', .9); if (!furia) tocaLoop('tambores-furia-loop', .32).then((h) => { furia = h; });
           await cena(t.fase2.slice(0, 2), 1400); pose('atingido', 1.5); flash = 1; shake = 1; sfx('escudo-impacto-2', 1); sangue(LX + 30, CHAO - LH * .62, 46, -1, 1.1); mancharTela();
-          base = 78; bpm = Math.max(bpm, 82); R.golpesRecebidos++; guarda();
+          vida = Math.max(1, vida - 6); base = 78; bpm = Math.max(bpm, 82); R.golpesRecebidos++; guarda();
           await cena(t.fase2.slice(2), 1500);
-        } else if (fase === 2 && hp <= 34) {
-          fase = 3; hpFase = hp; marcas = 0; await cena(t.fase3, 1500);
-        }
-        if (fase === 3 && hp <= 14 && !fimPronto) { fimPronto = true; linha(t.fimPronto, 'ler'); }
-        await turnoDele(); if (acabou) return;
+        } else if (fase === 2 && hp <= HPMAX * .25) { fase = 3; await cena(t.fase3, 1500); }
+        if (fase === 3 && hp <= HPMAX * .1 && !fimPronto) { fimPronto = true; linha(t.fimPronto, 'ler'); }
+        await turnoDele(); if (acabou) return; if (perdeu()) return derrota();
       }
     };
 
     // ------------------------------------------------------------ O MAIOR
-    // (v10) ele ataca em sequências (1, depois 2, depois 3 golpes); só fica aberto depois de uma sequência inteira bem respondida.
-    // A rajada é chamada no anel: na hora certa e com ele aberto, entra inteira; fora disso, entra pela metade, ou nada.
-    // A carne fecha: a cada rodada sem flecha nova, ele recupera um pouco.
+    // Ela só se defende. Os arqueiros soltam quando ele fica exposto: uma sequência inteira bem respondida, ou cego de areia.
     let aberto = false;
-    const ataqueM = async () => {
-      const tipo = Math.random() < .5 ? 'pesado' : 'golpe', confuso = Math.random() < (hp < HPMAX * .5 ? .38 : .25);
-      linha(confuso ? t.tellM.confuso : t.tellM[tipo], 'tell');
-      const dur = rnd(.55, .9) * (hp < HPMAX * .4 ? .88 : 1); empurra(CE, 40, dur * 900, 0, .06);
-      kAnim = tipo === 'pesado' ? { nome: 'pesado', f: 0, play: true, ate: KR.pesado.impacto, fps: KR.pesado.impacto / dur } : { nome: 'golpe', f: 0, play: true, ate: KR.golpe.impacto, fps: KR.golpe.impacto / dur };
-      const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }]);
-      kAnim = { nome: tipo, f: kAnim.f, play: true, fps: 30, fim: guarda };
-      const certo = tipo === 'pesado' ? 'lateral' : 'escudo', jan = (r.k === certo ? .14 : .07) * janelaK(), j = julga(r.err, jan);
-      if (j === 'perfeito' || j === 'bom') { if (r.k === 'lateral') MOM.lateral(); else MOM.escudo(tipo === 'pesado'); sfx('escudo-impacto-1', .8); popTxt(t.rot.segurou, 'bom'); R.respostas++; bpm += 2; return true; }
-      marcas++; R.marcas++; MOM.marca(); sfx('escudo-impacto-2', 1); shake = .7; flash = .6; bpm += 7; popTxt(t.rot.marca, 'mal');
-      if (marcas >= 3) { marcas = 0; R.quedas++; linha(t.quedaM, 'mal'); hp = Math.min(HPMAX, hp + .5); await espera(900); }
+    const CERTO = { golpe: 'escudo', pesado: 'lateral', varredura: 'escudo', pisao: 'lateral', agarrar: 'lateral' };
+    const DANO_M = { golpe: 8, pesado: 13, varredura: 11, pisao: 7, agarrar: 4 };
+    const ataqueM = async (lido) => {
+      const pool = [['golpe', 30], ['pesado', 30], ['varredura', 15], ['pisao', 15], ['agarrar', presa ? 0 : 10]];
+      let r0 = Math.random() * pool.reduce((s, p) => s + p[1], 0), tipo = 'golpe';
+      for (const [k, w] of pool) { if ((r0 -= w) < 0) { tipo = k; break; } }
+      const confuso = !lido && !cegoT && Math.random() < (hp < HPMAX * .5 ? .38 : .25);
+      if (presa) { linha(t.tellM2.golpe, 'tell'); kAtk('golpe', .6); await espera(650); kSolta('golpe'); presa = false; leva(10, t.presaM); return false; }
+      linha(confuso ? t.tellM.confuso : t.tellM2[tipo], 'tell');
+      const dur = rnd(.55, .9) * (hp < HPMAX * .4 ? .88 : 1) * (lido ? 1.2 : 1) * (cegoT ? 1.3 : 1); empurra(CE, 40, dur * 900, 0, .06);
+      const an = tipo === 'golpe' || tipo === 'agarrar' ? 'golpe' : 'pesado'; kAtk(an, dur);
+      poseE = tipo === 'varredura' || tipo === 'pisao' ? tipo : null;
+      if (tipo === 'pisao') areia(KX - 60, 10, .5);
+      const certo = CERTO[tipo];
+      const r = await anel('eu', dur, [{ k: 'escudo', rot: '↑ ' + t.escudo }, { k: 'lateral', rot: '↓ ' + t.lateral }], certo);
+      kSolta(an); if (poseE) setTimeout(() => { poseE = null; }, BOT() ? 0 : 220);
+      const flex = tipo === 'golpe' || tipo === 'pesado';   // nos dois braços, o lado errado ainda serve, com janela estreita
+      const jan = r.k === certo ? .14 * (certo === 'escudo' && escudoUp ? 1.8 : 1) : flex ? .07 : 0;
+      const j = jan ? julga(r.err, jan * janelaK() * (lido ? 1.3 : 1)) : 'tarde';
+      if (j === 'perfeito' || j === 'bom') {
+        if (r.k === 'lateral') MOM.lateral(); else MOM.escudo(tipo !== 'golpe');
+        sfx('escudo-impacto-1', .8); popTxt(t.rot.segurou, 'bom'); R.respostas++; bpm += tipo === 'varredura' ? 5 : 2;
+        linha(tipo === 'varredura' ? t.varrOk : tipo === 'pisao' ? t.pisaoOk : tipo === 'agarrar' ? t.agarraOkM : t.segurou);
+        return true;
+      }
+      if (tipo === 'agarrar') { presa = true; solta(); pose('atingido', 1.2); popTxt(t.est.presa, 'mal'); linha(t.agarraMalM, 'mal'); vida = Math.max(0, vida - DANO_M.agarrar); bpm += 5; return false; }
+      leva(DANO_M[tipo], tipo === 'varredura' ? t.varrMal : tipo === 'pisao' ? t.pisaoMal : t.acertoM[tipo]);
+      if (tipo === 'pisao') bpm += 6;
       return false;
     };
     const maiorLuta = async () => {
-      linha(t.introM); await espera(1300);
+      linha(t.introM); await espera(1300); await abertura();
       let atrasada = false, semFlecha = 0, rodadas = 0;
-      while (!acabou) {
-        // as flechas somam: passada a 16ª troca, o que ficou cravado nele já basta para a próxima rajada derrubar
+      while (!acabou && !perdido) {
         if (++rodadas >= 16 && hp > .5) hp = .5;
-        // o turno dele: uma sequência que cresce conforme ele sangra
         const n = hp > HPMAX * .66 ? 1 : hp > HPMAX * .33 ? 2 : 3;
+        const lido = lidoM; lidoM = false; R.turnos = (R.turnos || 0) + 1;
         let limpo = true;
-        for (let i = 0; i < n && !acabou; i++) { if (!(await ataqueM())) limpo = false; if (i < n - 1) await espera(380); }
-        aberto = limpo;
-        if (aberto) { linha(t.abertoM, 'ler'); CE.tr = -.05; }
-        // a mão no ombro
+        for (let i = 0; i < n && !acabou; i++) { if (!(await ataqueM(lido))) limpo = false; if (perdeu()) return derrota(); if (i < n - 1) await espera(380); }
+        aberto = limpo || cegoT > 0;
+        if (cegoT > 0) cegoT--;
+        if (aberto) { linha(limpo ? t.abertoM : t.cegoAberto, 'ler'); CE.tr = -.05; }
         if (bpm >= 150 && ombroUsado < (opts.ombro ? 1 : 0) + (opts.coragem ? 1 : 0)) {
           ombroUsado++; await espera(500);
           linha(ombroUsado === 1 && opts.ombro ? t.ombro : t.coragem, 'ler'); bpm -= opts.ombro && opts.coragem ? 30 : 22; pose('respirar', 1.2); await espera(1400);
         }
         if (atrasada) { atrasada = false; semFlecha = 0; await rajada(false); if (acabou) return; continue; }
         await espera(450);
-        // o turno dela
-        const tremida = bpm >= 130;
-        const k = await escolhe([tremida ? { k: 'tremido', nome: t.golpes.tremido[0], desc: t.golpes.tremido[1], cls: 'tremida' } : { k: 'chamar', nome: t.golpes.chamar[0], desc: t.golpes.chamar[1] }, { k: 'respirar', nome: t.golpes.respirarM[0], desc: t.golpes.respirarM[1] }]);
+        // o turno dela: só defesa; os arqueiros, se ele estiver exposto
+        let ops;
+        if (presa) ops = [Object.assign(opK('soltar')), opK('respirar')];
+        else {
+          ops = [];
+          if (aberto) ops.push(bpm >= 130 ? { k: 'tremido', nome: t.golpes.tremido[0], desc: t.golpes.tremido[1], cls: 'tremida' } : { k: 'chamar', nome: t.golpes.chamar[0], desc: t.golpes.chamar[1] });
+          ops.push(opK(escudoUp ? 'manter' : 'escudo'), opK('ler'));
+          if (areiaCD <= 0) ops.push(opK('areia'));
+          ops.push(Object.assign(opK('respirar'), { desc: t.golpes.respirarM[1] }));
+        }
+        const k = await escolhe(ops);
+        if (k !== 'escudo' && k !== 'manter') solta();
+        if (areiaCD > 0) areiaCD--;
         if (k === 'respirar') { base = Math.max(96, base - 10); bpm = Math.max(base, bpm - 14); pose('respirar', 1.1); linha(t.respirouM); semFlecha++; }
+        else if (k === 'escudo' || k === 'manter') { if (!escudoUp) { escudoUp = true; escudoHP = 30; bpm += 4; linha(t.escudoUp); } else { bpm += 3; linha(t.escudoMantem); } pose('escudo', 1); semFlecha++; }
+        else if (k === 'ler') { lidoM = true; bpm += 2; linha(t.lerOk, 'ler'); semFlecha++; }
+        else if (k === 'soltar') { bpm += 4; const r = await anel('eu', .8, [{ k: 'agora', rot: t.agora, cls: 'agora' }]); const j = julga(r.err, .14 * janelaK()); if (j === 'perfeito' || j === 'bom') { presa = false; MOM.lateral(); linha(t.soltouM); } else linha(t.naoSoltou, 'mal'); semFlecha++; }
+        else if (k === 'areia') {
+          areiaCD = 3; bpm += 4; pose('areia', .9); areia(LX + 80, 20, 1);
+          const r = await anel('ele', .85, [{ k: 'agora', rot: t.agora, cls: 'agora' }]); const j = julga(r.err, .12 * janelaK());
+          if (j === 'perfeito' || j === 'bom') { cegoT = 2; CE.hit = .6; areia(KX - 40, 30, 1.2); popTxt(t.est.cego, 'bom'); linha(t.areiaOk); } else { popTxt(t.rot[j] || t.rot.tarde, 'mal'); linha(t.areiaMal, 'mal'); }
+          semFlecha++;
+        }
         else if (k === 'tremido') { R.deslizes++; linha(t.chamouTremido, 'mal'); atrasada = true; await espera(700); }
         else { await rajada(true); semFlecha = 0; }
         if (acabou) return;
-        if (semFlecha >= 2 && hp < HPMAX) { hp = Math.min(HPMAX, hp + .25); linha(t.fechaM, 'mal'); CE.hit = .4; }
+        if (semFlecha >= 2 && hp < HPMAX) { hp = Math.min(HPMAX, hp + .25); linha(t.fechaM, 'mal'); CE.hit = .4; semFlecha = 0; }
         aberto = false;
       }
     };
@@ -576,7 +871,7 @@ function start(root, opts) {
         const j = julga(r.err, .11 * janelaK());
         forca = j === 'perfeito' ? 1 : j === 'bom' ? .75 : .25;
       }
-      if (aberto) forca *= 1.25; else forca *= .6;
+      forca *= aberto ? (cegoT > 0 || CE.hit > .3 ? 1.35 : 1.25) : .6;
       forca = Math.round(forca * 100) / 100;
       const ultima = hp - forca <= 0;
       if (ultima) { faixasAlvo = 1; lento = .5; cinza = .5; }
@@ -587,10 +882,15 @@ function start(root, opts) {
       if (hp <= 0) { await cena([t.fimM], 1600); lento = 1; areia(KX, 50, 2); shake = 1.2; soco(.06, KX, CHAO - 100, .15); await anima('cai', { fps: 16 }); await espera(800); faixasAlvo = 0; fecha(); }
     };
 
+    const encerra = () => {
+      if (acabou) return; acabou = true; removeEventListener('keydown', onKey);
+      if (A && A.stop) { if (musica) A.stop(musica, 1.5); if (furia) A.stop(furia, 1); }
+    };
+
     const fecha = () => {
       if (acabou) return; acabou = true; removeEventListener('keydown', onKey);
       if (A && A.stop) { if (musica) A.stop(musica, 2.5); if (furia) A.stop(furia, 1.5); }
-      R.tempo = Math.round((performance.now() - R.t0) / 1000); delete R.t0; R.bpmFinal = Math.round(bpm); R.bpm = R.bpmFinal;
+      R.tempo = Math.round((performance.now() - R.t0) / 1000); delete R.t0; R.bpmFinal = Math.round(bpm); R.bpm = R.bpmFinal; R.vida = Math.round(100 * vida / VMAX); R.derrotas = opts.derrotas || 0;
       setTimeout(() => resolve(R), BOT() ? 10 : 900);
     };
 

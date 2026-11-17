@@ -333,7 +333,7 @@ function vozesDe(p) {
   return [].concat(v);
 }
 // as falas dubladas de Laura tocam sozinhas
-const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3?v=15';
+const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3?v=17';
 const vozDeOpcao = (o, cid) => { const v = nervosa(o, cid) ? o.vozNervosa : o.voz; return typeof v === 'function' ? v(st) : v; };
 const ABAFA = /^$/;   // o elmo já vem gravado nos arquivos (efeito aplicado na edição)
 const fala = (nome, ms = 0) => { if (!nome || typeof nome !== 'string') return; later(() => { if (A.ctx && A.on) A.narrate(vozUrl(nome), null, ABAFA.test(nome)); }, ms); };
@@ -640,6 +640,8 @@ function renderMinijogo(p) {
 
 const pegaBpm = (r) => { if (r && Number.isFinite(r.bpm)) { st.bpm = r.bpm; Coracao.agora(r.bpm); } };
 const tx = (x) => (typeof x === 'function' ? x(st) : x);
+// (v16) o que a Laura fez no capítulo pesa no duelo
+const bonusDuelo = () => ({ espada: st.escolhas.espada || null, comer: st.escolhas.promessaMae === 'comer', agua: !!(st.f && st.f.guardou), pai: st.escolhas.pai === 'visitar', leu: !!(st.f && st.f.desmascarou === 'certo') });
 const MG = {
   // ---------- Ler o corpo: um suspeito por noite, quatro olhares em seis lugares
   ler(p) {
@@ -687,7 +689,7 @@ const MG = {
   },
   _duelo(p) {
     const o = abreOverlay('duelo8');
-    return window.DUELO8.start(o, { lang: LANG, A, modo: 'kronk', bpm: st.base || 52, fundo: 'assets/images/duelo-fundo.jpg',
+    return window.DUELO8.start(o, { lang: LANG, A, modo: 'kronk', bpm: st.base || 52, fundo: 'assets/images/duelo-fundo.jpg', bonus: bonusDuelo(),
       aoLado: (((window.AQV_ANTES || {}).cap6 || {}).aoLado || []) }).then((r) => {
       st.duelo = r; st.base = 78; pegaBpm({ bpm: Math.max(78, r.bpmFinal || 80) }); registrar('duelo', r.rodeou ? 'rodeou' : 'reto'); salvar(); fechaOverlay();
     });
@@ -695,7 +697,7 @@ const MG = {
   maior(p) {
     const o = abreOverlay('duelo8 maior'), D = window.LIVRO_DADOS;
     const n = D.sobreviventes(st);
-    return window.DUELO8.start(o, { lang: LANG, A, modo: 'maior', bpm: Math.max(150, st.bpm || 150), fundo: 'assets/images/maior-fundo.jpg',
+    return window.DUELO8.start(o, { lang: LANG, A, modo: 'maior', bpm: Math.max(150, st.bpm || 150), fundo: 'assets/images/maior-fundo.jpg', bonus: bonusDuelo(),
       rajadas: n >= 48 ? 3 : n >= 36 ? 4 : 5, ombro: !!(((window.AQV_ANTES || {}).cap3 || {}).correcoes >= 3), coragem: st.escolhas.prece === 'perdao' }).then((r) => {
       st.maior = r; st.base = 70; pegaBpm({ bpm: 96 }); registrar('maior', String(r.deslizes || 0)); salvar(); fechaOverlay();
     });

@@ -214,3 +214,32 @@ body.fx-sol::before { background: radial-gradient(ellipse at 70% 18%, rgba(255,2
 .j8-aba.chama { animation: abaChama 1.6s ease-in-out infinite; }
 @keyframes abaChama { 0%, 100% { box-shadow: 0 0 0 0 rgba(242,200,140,0); border-color: rgba(242,220,192,.22); } 50% { box-shadow: 0 0 22px 2px rgba(242,200,140,.45); border-color: var(--gold-hot); } }
 .j8-visto p.j8-antes { opacity: .6; font-style: italic; }
+/* (v16) duelo híbrido: vida, pulso, A Lâmina, estados */
+#mg.duelo8 .d8-eu { width: min(300px, 42%); align-items: stretch; gap: 5px; }
+.d8-nome { font-family: var(--serif-d); font-weight: 400; letter-spacing: .1em; color: var(--frost); font-size: 15px; text-align: right; }
+.d8-vida em { background: linear-gradient(90deg, #6e5a2c, #c9a24a); }
+.d8-lin { display: flex; align-items: center; gap: 8px; }
+.d8-lin .d8-bar { flex: 1; height: 4px; }
+.d8-pulso em { background: linear-gradient(90deg, #6a6460, #c2423a); transition: width .3s; }
+.d8-lam small { font-family: var(--sans); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--mist); white-space: nowrap; }
+.d8-lamb em { background: linear-gradient(90deg, #5d6a78, #e8ecf0); }
+#mg.duelo8.d8-cheia .d8-lamb { box-shadow: 0 0 10px rgba(232,236,240,.7); animation: d8brilho 1.2s ease-in-out infinite; }
+@keyframes d8brilho { 50% { box-shadow: 0 0 2px rgba(232,236,240,.2); } }
+.d8-est { display: flex; flex-wrap: wrap; gap: 4px; min-height: 18px; }
+.d8-estL { justify-content: flex-end; }
+.d8-est i { font-style: normal; font-family: var(--sans); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 8px; border-radius: 9px; border: 1px solid rgba(242,220,192,.3); color: var(--frost); background: rgba(14,10,8,.7); }
+.d8-est i.mal { border-color: rgba(184,56,47,.8); color: #ffb0a5; }
+.d8-est i.bom { border-color: rgba(201,162,74,.7); color: #f3dcae; }
+.d8-est i.frio { border-color: rgba(143,170,200,.6); color: #cfd9e6; }
+.d8-op.lamina { border-color: #e8ecf0; box-shadow: 0 0 12px rgba(232,236,240,.35); }
+.d8-op.lamina b { color: #fff; }
+.d8-op.voltar { border-style: dashed; opacity: .8; }
+.d8-ult { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; background: #000; animation: d8ult .35s ease both; }
+.d8-ult img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.d8-ult b { position: relative; font-family: var(--serif-d); font-weight: 400; letter-spacing: .3em; text-transform: uppercase; color: #f3dcae; font-size: clamp(24px, 4vw, 44px); text-shadow: 0 0 18px #000, 0 0 30px rgba(0,0,0,.9); }
+.d8-ult.sai { opacity: 0; transition: opacity .45s; }
+@keyframes d8ult { from { opacity: 0; } }
+.d8-perdeu h2 { color: #ff8f80 !important; }
+@media (max-width: 720px) { #mg.duelo8 .d8-eu { width: 46%; } .d8-est i { font-size: 9px; padding: 1px 6px; } }
+@media (min-width: 721px) { #mg.duelo8 .d8-menu { width: min(1180px, 100%); } #mg.duelo8 .d8-op { flex: 1 1 128px; max-width: 168px; } }
+@media (max-width: 720px) { #mg.duelo8 .d8-op { padding: 8px 10px; } }

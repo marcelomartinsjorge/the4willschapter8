@@ -17,7 +17,7 @@
 window.LIVRO_EN = window.LIVRO_EN || {};
 const T = (pt, en) => { if (en != null) window.LIVRO_EN[pt] = en; return pt; };
 const se = (cond, t) => ({ se: cond, t });
-const VER = '?v=15';   // muda a cada entrega: o navegador não guarda imagem velha
+const VER = '?v=17';   // muda a cada entrega: o navegador não guarda imagem velha
 const IMG = (n) => 'assets/images/' + n + '.jpg' + VER;
 const FD = (n, foco, clima) => Object.assign({ img: IMG(n), kb: 'in', foco: foco || '50% 45%', dim: .5 }, clima ? { clima: clima } : {});
 const SFX = (n) => 'assets/audio/sfx/' + n + '.mp3' + VER;
@@ -958,7 +958,7 @@ window.LIVRO = {
     const viuDela = pistasDela(st);
     const caca = Math.max(800, 1200 * viuDela + (fugiu(st) || st.f.desmascarou === 'certo' ? 6000 : 0) + (st.f.ladraoMorto ? 1500 : 0) + (st.f.guardou ? 1500 : 0) - 2500 * (st.inocentes || []).length);
     const d = st.duelo || {};
-    const duelo = Math.max(2000, Math.round(900 * (d.leituras || 0) + 1500 * (d.laterais || 0) + (d.rodeou ? 2500 : 0) - 600 * (d.marcas || 0) - 3000 * (d.recomecos || 0) + 4000));
+    const duelo = Math.max(2000, Math.round(900 * (d.leituras || 0) + 1500 * (d.laterais || 0) + (d.rodeou ? 2500 : 0) - 600 * (d.marcas || 0) - 3000 * (d.derrotas || 0) + 4000));
     const m = st.maior || {};
     const maior = Math.max(1500, Math.round(5000 - 700 * (m.marcas || 0) - 500 * (m.deslizes || 0) + 600 * (m.respostas || 0)));
     const vivos = sobreviventes(st) * 120;
