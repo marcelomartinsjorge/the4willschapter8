@@ -17,7 +17,7 @@
 window.LIVRO_EN = window.LIVRO_EN || {};
 const T = (pt, en) => { if (en != null) window.LIVRO_EN[pt] = en; return pt; };
 const se = (cond, t) => ({ se: cond, t });
-const VER = '?v=17';   // muda a cada entrega: o navegador não guarda imagem velha
+const VER = '?v=18';   // muda a cada entrega: o navegador não guarda imagem velha
 const IMG = (n) => 'assets/images/' + n + '.jpg' + VER;
 const FD = (n, foco, clima) => Object.assign({ img: IMG(n), kb: 'in', foco: foco || '50% 45%', dim: .5 }, clima ? { clima: clima } : {});
 const SFX = (n) => 'assets/audio/sfx/' + n + '.mp3' + VER;
@@ -858,7 +858,8 @@ window.LIVRO = {
 
     { id: 'f07b', zona: 'eclipse', escuro: true, sons: [{ s: SFX('linha-fecha'), em: ['A linha fecha', 'The line closes'], v: .85 }], fundo: { img: IMG('f-eclipse-luta'), kb: 'in', foco: '50% 40%', dim: .55 },
       texto: [
-        (st) => { const h = st.erguer && st.erguer.altura != null ? st.erguer.altura : 100;
+        (st) => { const h = st.erguer && st.erguer.altura != null ? st.erguer.altura : 100, pico = st.erguer && st.erguer.pico != null ? st.erguer.pico : h;   // (v18) altura = onde ela está no fim
+          if (h < 40 && pico >= 75) return T('A espada chegou ao alto, mas o braço cedeu antes do escuro. Me viro para eles com a ponta descendo, e levanto a voz no lugar dela.', 'The sword reached the top, but my arm gave out before the dark. I turn toward them with the point sinking, and I raise my voice in its place.');
           return h >= 75 ? T('Me viro para eles com a espada no alto.', 'I turn toward them with my sword held high.')
             : h >= 40 ? T('Me viro para eles com a espada à altura do ombro. O braço treme, mas a ponta não cai.', 'I turn toward them with my sword at shoulder height. The arm shakes, but the point does not drop.')
               : T('Me viro para eles com a espada baixa, a ponta quase na areia, e levanto a voz no lugar dela.', 'I turn toward them with my sword low, the point almost in the sand, and I raise my voice in its place.'); },

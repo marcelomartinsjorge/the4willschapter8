@@ -356,3 +356,12 @@ Esboço aprovado em `claude/DUELO8_HIBRIDO_v1.md` (projeto). O que entrou:
 - Agarrão: `kronk/presa.webp` e `maior/presa.webp`. Enquanto ela está presa, os dois sprites somem e entra a imagem única.
 - `assets/images/d-lamina.jpg` (1920 px): a arte antes do golpe da Lâmina.
 - Limpeza: a mancha cinza no alto da `laura-caida` foi apagada no recorte.
+
+## v18 — a espada, a contagem e a sensação dos três "segurar"
+
+- **Erguer a espada:** o jogo agora guarda onde a espada está quando o sol fecha (`altura`) e o ponto mais alto que ela chegou (`pico`). O texto da f07b usa a altura final. Caso novo: se ela chegou ao alto e o braço cedeu (pico ≥ 75, fim < 40), "A espada chegou ao alto, mas o braço cedeu antes do escuro…".
+- **Contar os vivos:** a primeira volta continua devagar, mas não passa de ~18 s; a segunda confere depressa (~5 s). Com 48 vivos, de ~39 s para ~30 s, com os retratos.
+- **Cada "segurar" com corpo próprio:**
+  - Roda (esforço e peso): a manivela pesa na subida e cede na descida; a roda treme no ponto duro, a corda vibra, um baque grave a cada volta; o balde sobe batendo nas últimas voltas.
+  - Espada (resistência e urgência): quanto mais alto, mais devagar sobe; o braço treme mais com a altura e o tempo; um zumbido grave que sobe com o eclipse; o escuro fecha pelas beiradas.
+  - Contagem (presença e tempo): a mão dela acende no ombro de quem é contado; passos na areia; a luz volta enquanto ela conta; o sol volta no fim. A segunda volta é mais baixa.

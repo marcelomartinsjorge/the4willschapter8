@@ -151,7 +151,7 @@ function roda(root, o) {
   return new Promise(async (resolve) => {
     const S = palco(root, 'j8-roda', L(o, 'A roda do poço', 'The well wheel'), L(o, 'Segure para girar. Solte quando quiser.', 'Hold to turn. Let go when you want.'));
     const img = await load(o.img), CHEIO = 12;
-    let ang = 0, vel = 0, voltas = 0, meia = 0, parado = 0, comecou = false, fim = false, last = performance.now();
+    let ang = 0, vel = 0, voltas = 0, meia = 0, parado = 0, comecou = false, fim = false, last = performance.now(), tranco = 0, baldeSoou = false;
     const h = segurar(S.p, () => {});
     const range = () => sfx(o, 'rangido-roda', .55, () => { o.A && o.A.tone && (o.A.tone(180, .45, 'sawtooth', .025, 0, .7), o.A.hiss(.4, 900, 4, .03)); });
     const desenha = () => {
@@ -159,14 +159,16 @@ function roda(root, o) {
       const X = 640, Y = 300, R = 150;
       // corda e balde
       const prof = clamp(1 - voltas / CHEIO - (ang % (Math.PI * 2)) / (Math.PI * 2) / CHEIO, 0, 1);
-      cx.strokeStyle = '#8a6f4d'; cx.lineWidth = 5; cx.beginPath(); cx.moveTo(X + R * .25, Y); cx.lineTo(X + R * .25, 470 + prof * 220); cx.stroke();
+      const vib = h.on ? Math.sin(performance.now() / 22) * tranco * 2.5 : 0;   // a corda esticada vibra com o peso
+      cx.strokeStyle = '#8a6f4d'; cx.lineWidth = 5; cx.beginPath(); cx.moveTo(X + R * .25, Y); cx.quadraticCurveTo(X + R * .25 + vib, (Y + 470 + prof * 220) / 2, X + R * .25, 470 + prof * 220); cx.stroke();
       cx.fillStyle = 'rgba(0,0,0,.6)'; cx.fillRect(470, 470, 340, 260);
       cx.fillStyle = '#5a4430'; cx.fillRect(X + R * .25 - 26, 470 + prof * 220, 52, 44);
       if (voltas >= CHEIO) { cx.fillStyle = 'rgba(120,160,190,.7)'; cx.fillRect(X + R * .25 - 22, 470 + prof * 220 + 4, 44, 8); }
       // a boca do poço
       cx.fillStyle = '#3b2f25'; cx.fillRect(450, 450, 380, 24);
       // a roda
-      cx.save(); cx.translate(X, Y); cx.rotate(ang);
+      // (v18) o peso: a roda treme no ponto duro da volta
+      cx.save(); cx.translate(X + (h.on ? (Math.random() - .5) * tranco * 4 : 0), Y + (h.on ? (Math.random() - .5) * tranco * 3 : 0)); cx.rotate(ang);
       cx.strokeStyle = '#6e5538'; cx.lineWidth = 16; cx.beginPath(); cx.arc(0, 0, R, 0, Math.PI * 2); cx.stroke();
       cx.lineWidth = 9; for (let k = 0; k < 8; k++) { cx.beginPath(); cx.moveTo(0, 0); cx.lineTo(Math.cos(k * Math.PI / 4) * R, Math.sin(k * Math.PI / 4) * R); cx.stroke(); }
       cx.fillStyle = '#4a3a28'; cx.beginPath(); cx.arc(0, 0, 18, 0, Math.PI * 2); cx.fill();
@@ -182,9 +184,13 @@ function roda(root, o) {
       const dt = Math.min(.05, (now - last) / 1000); last = now;
       const quer = h.on || (BOT() && voltas < 5);
       if (quer) comecou = true;
-      vel += ((quer ? 5.4 : 0) - vel) * dt * (quer ? 1.6 : 3.2);
+      // (v18) a manivela pesa mais na subida: a volta tem um ponto duro e um ponto que cede
+      const subida = (1 + Math.sin(ang)) / 2;
+      tranco = quer ? subida : 0;
+      vel += ((quer ? 5.4 * (1.25 - subida * .7) : 0) - vel) * dt * (quer ? 1.6 : 3.2);
       const antes = ang; ang += vel * dt;
-      const m = Math.floor(ang / Math.PI); if (m > meia) { meia = m; range(); }
+      const m = Math.floor(ang / Math.PI); if (m > meia) { meia = m; range(); if (m % 2 === 0 && o.A && o.A.tone) { o.A.tone(62, .3, 'sine', .07, 0, .8); o.A.hiss(.25, 140, .7, .03, 0, 'lowpass'); } }
+      if (!baldeSoou && voltas >= CHEIO - 2) { baldeSoou = true; sfx(o, 'balde-poco', .5); }
       voltas = Math.floor(ang / (Math.PI * 2));
       S.num.textContent = voltas > 0 ? String(voltas) : '';
       if (voltas >= CHEIO) { S.linha.innerHTML = `<p>${L(o, 'O balde bate na boca do poço, cheio.', 'The bucket knocks against the lip of the well, full.')}</p>`; return acaba(1200); }
@@ -254,7 +260,7 @@ function erguer(root, o) {
     const S = palco(root, 'j8-erguer', L(o, 'Erguer a espada', 'Raise the sword'), L(o, 'Segure.', 'Hold.'));
     const img = await load(o.img);
     const DUR = 9;                                   // o sol não espera a espada
-    let alt = 0, maxAlt = 0, t0 = null, fim = false, last = performance.now(), batT = 0;
+    let alt = 0, maxAlt = 0, t0 = null, fim = false, last = performance.now(), batT = 0, zumbe = 0;
     const h = segurar(S.p, (v) => { if (v && t0 == null) t0 = performance.now(); });
     const desenha = (p) => {
       const cx = S.cx; fundo(cx, img, .35 + p * .55);
@@ -267,7 +273,9 @@ function erguer(root, o) {
       cx.restore();
       // a espada: a lâmina sobe de baixo, com a guarda e o punho na mão que não se vê
       const ponta = 720 - (180 + alt * 430), guarda = Math.min(700, ponta + 400);
-      cx.save(); cx.translate(600, 0);
+      // (v18) o braço treme mais quanto mais alto e quanto mais tempo
+      const treme = h.on || BOT() ? (alt * .7 + p * .6) * 3.2 : alt * 1.2;
+      cx.save(); cx.translate(600 + (Math.random() - .5) * treme, (Math.random() - .5) * treme * .6); cx.rotate((Math.random() - .5) * treme * .002);
       const brilho = .9 - p * .55;
       cx.fillStyle = `rgba(196,194,188,${brilho})`;
       cx.beginPath(); cx.moveTo(0, ponta); cx.lineTo(13, ponta + 40); cx.lineTo(11, guarda); cx.lineTo(-11, guarda); cx.lineTo(-13, ponta + 40); cx.closePath(); cx.fill();
@@ -275,20 +283,23 @@ function erguer(root, o) {
       cx.fillStyle = '#2f241a'; cx.fillRect(-58, guarda, 116, 12);
       cx.fillStyle = '#4a3726'; cx.fillRect(-9, guarda + 12, 18, 74);
       cx.restore();
-      // as sombras ganham borda
+      // as sombras ganham borda, e o escuro fecha pelas beiradas
       cx.fillStyle = `rgba(0,0,0,${p * .5})`; cx.fillRect(0, 600, 1280, 120);
+      const vg = cx.createRadialGradient(640, 360, 260 - p * 120, 640, 360, 820 - p * 260); vg.addColorStop(0, 'rgba(0,0,0,0)'); vg.addColorStop(1, `rgba(0,0,0,${.25 + p * .6})`); cx.fillStyle = vg; cx.fillRect(0, 0, 1280, 720);
     };
     const loop = (now) => {
       if (fim) return;
       const dt = Math.min(.05, (now - last) / 1000); last = now;
       const quer = h.on || BOT();
       if (quer && t0 == null) t0 = now;
-      alt = clamp(alt + (quer ? dt * .14 : -dt * .2), 0, 1); maxAlt = Math.max(maxAlt, alt);
+      // (v18) quanto mais alto, mais pesa (chega ao topo em ~7 s; o sol leva 9)
+      alt = clamp(alt + (quer ? dt * .2 * (1 - alt * .55) : -dt * .2), 0, 1); maxAlt = Math.max(maxAlt, alt);
+      zumbe -= dt; if (quer && t0 != null && zumbe <= 0 && o.A && o.A.tone) { zumbe = .5; o.A.tone(70 + p * 50, .55, 'sawtooth', .012 + p * .02, 0, 1.03); }
       const p = t0 == null ? 0 : clamp((now - t0) / 1000 / (BOT() ? .2 : DUR), 0, 1);
       batT -= dt; if (batT <= 0 && o.A && o.A.batida) { batT = 60 / (88 + p * 70); o.A.batida(.4 + p * .5); }
       S.linha.innerHTML = t0 == null ? `<p>${L(o, 'Ele respira de boca aberta.', 'He breathes through his open mouth.')}</p>` : p > .55 ? `<p>${L(o, 'A luz fica rala.', 'The light thins.')}</p>` : '';
       desenha(p);
-      if (p >= 1) { fim = true; h.solta(); setTimeout(() => resolve({ altura: Math.round(maxAlt * 100) }), BOT() ? 10 : 1100); return; }
+      if (p >= 1) { fim = true; h.solta(); setTimeout(() => resolve({ altura: Math.round(alt * 100), pico: Math.round(maxAlt * 100) }), BOT() ? 10 : 1100); return; }   // (v18) altura = onde a espada está quando o sol fecha
       requestAnimationFrame(loop);
     };
     requestAnimationFrame(loop);
@@ -302,11 +313,15 @@ function conta(root, o) {
     const img = await load(o.img), total = Math.max(1, o.total || 1);
     const rostos = await Promise.all((o.rostos || []).map(async (r) => ({ nome: r.nome, im: await load(r.img) })));
     const marcas = rostos.map((_, k) => Math.round(total * (k + 1) / (rostos.length + 1)));
-    let n = 0, f = 0, volta = 1, fim = false, last = performance.now(), mostra = null, pausa = 0;
+    let n = 0, f = 0, volta = 1, fim = false, last = performance.now(), mostra = null, pausa = 0, toque = 0;
+    // (v18) a primeira volta é devagar, mas não passa de ~18 s; a segunda confere depressa (~5 s)
+    const V1 = Math.max(2.2, total / 18), V2 = Math.max(9, total / 5);
     const h = segurar(S.p, () => {});
     const gente = []; for (let k = 0; k < 14; k++) gente.push({ x: 120 + k * 92, h: 170 + Math.random() * 50, ferido: Math.random() < .3, faixa: Math.random() < .3, tipoia: Math.random() < .2 });
     const desenha = () => {
-      const cx = S.cx; fundo(cx, img, .55);
+      // (v18) a luz volta enquanto ela conta: o escuro do eclipse vira dia
+      const luz = volta === 1 ? n / total : 1;
+      const cx = S.cx; fundo(cx, img, .72 - luz * .3);
       gente.forEach((g) => {
         const x = ((g.x - f * 92) % 1300 + 1300) % 1300 - 10, b = 642, h = g.h;
         cx.save(); cx.translate(x, b); if (g.ferido) cx.rotate(-.12);
@@ -315,6 +330,7 @@ function conta(root, o) {
         cx.beginPath(); cx.moveTo(-24, -h * .8); cx.quadraticCurveTo(0, -h * .86, 24, -h * .8); cx.lineTo(18, -h * .43); cx.lineTo(-18, -h * .43); cx.closePath(); cx.fill();   // tronco e ombros
         cx.fillRect(-30, -h * .79, 8, h * .34); if (!g.tipoia) cx.fillRect(22, -h * .79, 8, h * .34); // braços
         cx.beginPath(); cx.arc(0, -h * .9, 13, 0, Math.PI * 2); cx.fill();                               // cabeça
+        if (volta === 1 && toque > 0 && Math.abs(x - 640) < 46) { cx.fillStyle = `rgba(255,214,160,${toque * .5})`; cx.beginPath(); cx.arc(-30 + 4, -h * .62, 10, 0, Math.PI * 2); cx.fill(); cx.globalAlpha = toque * .25; cx.fillRect(-24, -h * .8, 48, h * .37); cx.globalAlpha = 1; }   // a mão dela no ombro de quem conta
         if (g.faixa) { cx.fillStyle = 'rgba(214,200,176,.55)'; cx.fillRect(-13, -h * .93, 26, 6); }
         if (g.tipoia) { cx.fillStyle = 'rgba(214,200,176,.45)'; cx.beginPath(); cx.moveTo(-20, -h * .8); cx.lineTo(24, -h * .62); cx.lineTo(18, -h * .56); cx.lineTo(-22, -h * .74); cx.fill(); }
         cx.restore();
@@ -336,19 +352,21 @@ function conta(root, o) {
       if (pausa > 0) { pausa -= dt; if (mostra) mostra.t += dt; desenha(); return requestAnimationFrame(loop); }
       if (mostra) { mostra.t += dt; if (mostra.t > 1.8) mostra = null; }
       const quer = h.on || BOT();
-      const vel = (volta === 1 ? 2.2 : 4.5) * (BOT() ? 40 : 1);
+      const vel = (volta === 1 ? V1 : V2) * (BOT() ? 40 : 1);
+      toque = Math.max(0, toque - dt * 2.2);
       if (quer && !mostra) {
         f += dt * vel;
         const novo = Math.min(total, Math.floor(f));
         if (novo > n) {
-          n = novo; o.A && o.A.tone && o.A.tone(volta === 1 ? 220 : 196, .12, 'sine', .025);
+          n = novo; o.A && o.A.tone && o.A.tone(volta === 1 ? 220 : 196, .12, 'sine', volta === 1 ? .025 : .012);
+          if (volta === 1) { toque = 1; if (n % 2) sfx(o, 'passo-areia', .25, () => { o.A && o.A.hiss && o.A.hiss(.18, 600, .6, .03); }); }
           if (volta === 1) { const k = marcas.indexOf(n); if (k >= 0) { mostra = { r: rostos[k], t: 0 }; } }
         }
       }
       S.num.textContent = n ? String(n) : '';
       if (n >= total && !mostra) {
         if (volta === 1) { volta = 2; n = 0; f = 0; pausa = BOT() ? .01 : 1.6; S.linha.innerHTML = `<p>${L(o, 'Conto outra vez.', 'I count again.')}</p>`; }
-        else { fim = true; h.solta(); desenha(); setTimeout(() => resolve({ total }), BOT() ? 10 : 1400); return; }
+        else { fim = true; h.solta(); desenha(); sfx(o, 'sol-volta', .35); setTimeout(() => resolve({ total }), BOT() ? 10 : 1400); return; }
       } else if (volta === 1 && !n) S.linha.innerHTML = `<p>${L(o, 'Encosto a mão em cada um.', 'I put my hand on each one.')}</p>`;
       else if (volta === 1) S.linha.innerHTML = '';
       desenha(); requestAnimationFrame(loop);
