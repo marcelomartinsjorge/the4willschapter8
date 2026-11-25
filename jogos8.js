@@ -294,8 +294,8 @@ function erguer(root, o) {
       if (quer && t0 == null) t0 = now;
       // (v18) quanto mais alto, mais pesa (chega ao topo em ~7 s; o sol leva 9)
       alt = clamp(alt + (quer ? dt * .2 * (1 - alt * .55) : -dt * .2), 0, 1); maxAlt = Math.max(maxAlt, alt);
-      zumbe -= dt; if (quer && t0 != null && zumbe <= 0 && o.A && o.A.tone) { zumbe = .5; o.A.tone(70 + p * 50, .55, 'sawtooth', .012 + p * .02, 0, 1.03); }
       const p = t0 == null ? 0 : clamp((now - t0) / 1000 / (BOT() ? .2 : DUR), 0, 1);
+      zumbe -= dt; if (quer && t0 != null && zumbe <= 0 && o.A && o.A.tone) { zumbe = .5; o.A.tone(70 + p * 50, .55, 'sawtooth', .012 + p * .02, 0, 1.03); }
       batT -= dt; if (batT <= 0 && o.A && o.A.batida) { batT = 60 / (88 + p * 70); o.A.batida(.4 + p * .5); }
       S.linha.innerHTML = t0 == null ? `<p>${L(o, 'Ele respira de boca aberta.', 'He breathes through his open mouth.')}</p>` : p > .55 ? `<p>${L(o, 'A luz fica rala.', 'The light thins.')}</p>` : '';
       desenha(p);

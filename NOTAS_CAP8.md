@@ -365,3 +365,16 @@ Esboço aprovado em `claude/DUELO8_HIBRIDO_v1.md` (projeto). O que entrou:
   - Roda (esforço e peso): a manivela pesa na subida e cede na descida; a roda treme no ponto duro, a corda vibra, um baque grave a cada volta; o balde sobe batendo nas últimas voltas.
   - Espada (resistência e urgência): quanto mais alto, mais devagar sobe; o braço treme mais com a altura e o tempo; um zumbido grave que sobe com o eclipse; o escuro fecha pelas beiradas.
   - Contagem (presença e tempo): a mão dela acende no ombro de quem é contado; passos na areia; a luz volta enquanto ela conta; o sol volta no fim. A segunda volta é mais baixa.
+
+## v19 — incoerências e mapa de emoções (aprovado em 24/11)
+
+Tudo resolvido só com texto: nenhuma dublagem nova, nenhuma imagem nova.
+- **Quarto do templo:** "Semanas" no lugar de "Três noites"; catre amassado só na beirada; as marcas dos pés do catre em volta da laje (no Cap. VII a laje fica embaixo da cama); a cisterna sem degraus e sem cheiro.
+- **Rota `sombra-matar`:** o homem do Aubert "não voltou" e foi achado num beco perto do mercado; a Laura pensa que a fugitiva está "aqui dentro da Capital"; na noite da areia, "sumiu num beco da Capital" (na `sombra-trocar`, "no porto"). Saiu "Tenho areia nos dentes."
+- **Dois mil:** linha nova depois da L02: os dois mil melhores, escolhidos a dedo, e nenhum menino.
+- **Pendências do Cap. IV:** "orangery" nas três linhas; a morte do pai sem a repetição do Cap. II.
+- **E1** (a janela e os mapas), **E2** (Justine escreveu a lei), **E3** (o cinzento do Simon), **E4** (A Rainha de Duas Coroas na ida; na volta a Terceira não canta), **E5** (o pão do laranjal), **E7** (ele fareja o ar), **E8** (a argila branca). A E6 ficou para depois, com versão nova.
+
+
+## v20 (24/11/2026)
+- E6 v2 aplicada na d04 (PT+EN): "A última vez que chorei foi na semana do Torneio Real…" + "Os homens do posto estão olhando… A Lâmina não chora na frente dos seus. Fico de costas para eles até o vento secar os meus olhos." Resolve a pendência do "quase chorei" (Cap. IV). Cache ?v=20.
