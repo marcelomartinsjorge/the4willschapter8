@@ -386,3 +386,6 @@ Documento: `claude/CAP8_AUDITORIA_DIALOGOS_HUD_E_JOGOS.md` (Passagem 3, com toda
 - **O Maior:** confuso só no rápido/pesado; 1ª varredura e 1º pisão com dica; ler/areia não fecham a carne.
 - **Minijogos:** a laje só abre com catre+laje; Ler o corpo com o tom (dura/baixa/calada) nas duas noites; Contar o chão no lugar de Ouvir o chão; a roda mostra as lembranças e soltar antes corta (E6 seca); Erguer virou cena (altura pela vida do duelo); Contar os vivos por toque.
 - **Texto:** O1 a O8 e o pente fino (O11); ouro para as noites *cheias* do Cap. VII (lê `cap7.alvos`); Joseph lê `cap4.entrada`; `estadoFinal` com `aubert`, `tons`, `chao`, `rodaLembrou`. Cache `?v=21`.
+
+## v22 (27/11/2026)
+- Imagens novas ligadas: `f01a-moeda.jpg` (Continuar com o som `moeda` antes da linha da moeda; volta ao rosto no Continuar da água) e `a04-caderno.jpg` (fundo da opção "Estender a mão para o caderno"). Conferido: "orangery" igual ao Cap. IV nas 4 linhas; "galera/galé" não aparece no Cap. VIII. Cache ?v=22.

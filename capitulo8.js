@@ -17,7 +17,7 @@
 window.LIVRO_EN = window.LIVRO_EN || {};
 const T = (pt, en) => { if (en != null) window.LIVRO_EN[pt] = en; return pt; };
 const se = (cond, t) => ({ se: cond, t });
-const VER = '?v=21';   // muda a cada entrega: o navegador não guarda imagem velha
+const VER = '?v=22';   // muda a cada entrega: o navegador não guarda imagem velha
 const IMG = (n) => 'assets/images/' + n + '.jpg' + VER;
 const FD = (n, foco, clima) => Object.assign({ img: IMG(n), kb: 'in', foco: foco || '50% 45%', dim: .5 }, clima ? { clima: clima } : {});
 const SFX = (n) => 'assets/audio/sfx/' + n + '.mp3' + VER;
@@ -384,7 +384,7 @@ window.LIVRO = {
       ],
       escolha: { id: 'aubert', pergunta: T('O caderno', 'The notebook'), opcoes: [   // (v21) O4: como ela comanda um subordinado
         { id: 'perguntar', txt: T('— E a Orla?', '— And the Shore?'), resultado: () => [orlaChefes(), T('Reparo nos olhos dele, ainda baixos. Ele não sabe mais o que dizer.', 'I watch his eyes, still lowered. He doesn’t know what else to say.')] },
-        { id: 'caderno', txt: T('Estender a mão para o caderno.', 'Hold out my hand for the notebook.'),
+        { id: 'caderno', fundo: FD('a04-caderno', '45% 45%'), txt: T('Estender a mão para o caderno.', 'Hold out my hand for the notebook.'),
           resultado: () => [T('Estendo a mão. Ele me dá o caderno aberto na página da Orla.', 'I hold out my hand. He gives me the notebook open at the Shore’s page.'), cadernoAubert(), T('A letra dele é mais apertada nessa linha.', 'His hand is tighter on that line.'), orlaChefes()] },
         { id: 'calada', txt: T('Não perguntar. Esperar.', 'Ask nothing. Wait.'),
           resultado: () => [T('Não pergunto. Espero.', 'I don’t ask. I wait.'), orlaChefes(), T('— A Orla não está com medo de nós, General-Rainha. Está com medo dela.', '— The Shore isn’t afraid of us, General-Queen. It is afraid of her.')] },
@@ -796,12 +796,13 @@ window.LIVRO = {
       texto: [
         T('O rosto escorrega.', 'The face slips.'), // N
         T('Primeiro a pele do pescoço, em placas finas, azul-cinza. Depois as orelhas, que descolam da cabeça e abrem em nadadeira. O corpo encolhe dentro da roupa de servo até a manga cobrir a mão. Os dois soldados soltam os braços ao mesmo tempo.', 'First the skin of the neck, in thin blue-grey plates. Then the ears, which peel away from the head and open into fins. The body shrinks inside the servant’s clothes until the sleeve covers the hand. The two soldiers let go of the arms at the same moment.'), // N
+        { continuar: true, s: SFX('moeda'), fundo: FD('f01a-moeda', '30% 50%') },   // (v22) a moeda na areia
         T('Alguma coisa cai da manga na areia. Uma moeda de prata, com a balança para cima. Do outro lado, sou eu.', 'Something falls from the sleeve onto the sand. A silver coin, scales up. On the other side, it’s me.'), // N v21
         (st) => (sabeNome() ? T('A Madrinha. Conheço esse rosto de uma tarde inteira na Ala Funda.', 'The Godmother. I know this face from a whole afternoon in the Deep Ward.')
           : T('Conheço esse rosto de uma tarde inteira na Ala Funda.', 'I know this face from a whole afternoon in the Deep Ward.')), // N
         T('Ela olha para mim, depois para a coluna na crista, de uma ponta à outra, devagar, como eu olhei no portão sul.', 'She looks at me, then at the column on the crest, from one end to the other, slowly, the way I looked at it at the south gate.'), // N
         T('— Você trouxe os melhores, Laura.', '— You brought the best, Laura.'), // N
-        { continuar: true, s: SFX('agua-sobe'), fx: [{ fx: 'tremor', ms: 300, dur: 1600, forca: .6 }] },
+        { continuar: true, s: SFX('agua-sobe'), fundo: { img: IMG('f-rosto'), kb: 'in', foco: '48% 35%', dim: .45 }, fx: [{ fx: 'tremor', ms: 300, dur: 1600, forca: .6 }] },
         T('Ela abre as mãos.', 'She opens her hands.'), // N
         { continuar: true, cala: true },   // (v21) S2: o fundo some antes da frase
         T('— E a Boca Seca bebe todos.', '— And the Dry Mouth drinks them all.'), // N
