@@ -42,6 +42,18 @@ const fala = (el, s) => { el.innerHTML = `<p>${esc(s)}</p>`; el.classList.remove
 
 /* ------------------------------------------------------------------ LER O CORPO */
 function ler(root, o) {
+  // (v21) antes de olhar, como ela pergunta: dura, baixa ou calada. O tom muda o que o corpo mostra.
+  if (o.tons && !o.tom) return new Promise((resolve) => {
+    root.innerHTML = `<div class="j8-ler j8-tom"><div class="j8-ler-bg" style="${o.fundo ? `background-image:url('${esc(o.fundo)}')` : ''}"></div>
+      <div class="j8-tom-in"><p class="eyebrow">${esc(o.tomTitulo || '')}</p>${o.tons.map((t) => `<button class="opt j8-tom-b" data-k="${t.k}"><b>${esc(t.rot)}</b><small>${esc(t.desc || '')}</small></button>`).join('')}</div></div>`;
+    const vai = (k) => {
+      const troca = (o.olharPorTom || {})[k] || {};
+      const lista = (o.lista || []).map((sx) => Object.assign({}, sx, { olhar: Object.assign({}, sx.olhar, troca[sx.id] || {}) }));
+      ler(root, Object.assign({}, o, { tom: k, lista, max: (o.max || 6) + (k === 'calada' ? 1 : 0) })).then((r) => resolve(Object.assign(r, { tom: k })));
+    };
+    root.querySelectorAll('.j8-tom-b').forEach((b) => b.onclick = () => vai(b.dataset.k));
+    if (BOT()) setTimeout(() => vai(window.__JOGO_BOT_TOM || 'dura'), 5);
+  });
   return new Promise((resolve) => {
     const lista = o.lista || [], rot = o.rotulos || {}, ja = o.ja || {};
     const LUG = ['testa', 'orelhas', 'boca', 'pescoco', 'maos', 'pulso'];
@@ -137,12 +149,13 @@ function sala(root, o) {
     root.querySelectorAll('.j8-sp').forEach((b) => b.onclick = () => {
       const k = b.dataset.k; b.classList.add('visto'); if (!vistos.includes(k)) vistos.push(k);
       diz((P[k] || {}).txt || '');
-      lev.hidden = !(k === 'laje' && !cisterna);
+      // (v21) a laje só abre para quem juntou as duas pistas: o catre amassado na beirada e as marcas em volta da pedra
+      lev.hidden = !(vistos.includes('laje') && vistos.includes('esteira') && !cisterna && (k === 'laje' || k === 'esteira'));
       o.A && o.A.tone && o.A.tone(300, .2, 'sine', .03);
     });
     lev.onclick = () => { cisterna = true; lev.hidden = true; diz(o.cisterna || ''); o.A && o.A.sfx && o.A.sfx('pedra-arrasta', .7, () => o.A.hiss && o.A.hiss(.6, 300, 1, .08)); };
     $('.j8-subir').onclick = () => { window.removeEventListener('resize', ajusta); resolve({ cisterna, vistos }); };
-    if (BOT()) { root.querySelector('.j8-sp[data-k="laje"]').click(); if (window.__JOGO_BOT_LAJE !== false) lev.click(); setTimeout(() => $('.j8-subir').click(), 10); }
+    if (BOT()) { root.querySelector('.j8-sp[data-k="esteira"]').click(); root.querySelector('.j8-sp[data-k="laje"]').click(); if (window.__JOGO_BOT_LAJE !== false) lev.click(); setTimeout(() => $('.j8-subir').click(), 10); }
   });
 }
 
@@ -150,7 +163,8 @@ function sala(root, o) {
 function roda(root, o) {
   return new Promise(async (resolve) => {
     const S = palco(root, 'j8-roda', L(o, 'A roda do poço', 'The well wheel'), L(o, 'Segure para girar. Solte quando quiser.', 'Hold to turn. Let go when you want.'));
-    const img = await load(o.img), CHEIO = 12;
+    const img = await load(o.img), CHEIO = 12, LEMBRA = o.lembra || [];   // (v21) a cada três voltas, uma lembrança do Simon
+    let lembrou = 0;
     let ang = 0, vel = 0, voltas = 0, meia = 0, parado = 0, comecou = false, fim = false, last = performance.now(), tranco = 0, baldeSoou = false;
     const h = segurar(S.p, () => {});
     const range = () => sfx(o, 'rangido-roda', .55, () => { o.A && o.A.tone && (o.A.tone(180, .45, 'sawtooth', .025, 0, .7), o.A.hiss(.4, 900, 4, .03)); });
@@ -182,7 +196,7 @@ function roda(root, o) {
     const loop = (now) => {
       if (fim) return;
       const dt = Math.min(.05, (now - last) / 1000); last = now;
-      const quer = h.on || (BOT() && voltas < 5);
+      const quer = h.on || (BOT() && voltas < (window.__JOGO_BOT_RODA || 5));
       if (quer) comecou = true;
       // (v18) a manivela pesa mais na subida: a volta tem um ponto duro e um ponto que cede
       const subida = (1 + Math.sin(ang)) / 2;
@@ -193,75 +207,99 @@ function roda(root, o) {
       if (!baldeSoou && voltas >= CHEIO - 2) { baldeSoou = true; sfx(o, 'balde-poco', .5); }
       voltas = Math.floor(ang / (Math.PI * 2));
       S.num.textContent = voltas > 0 ? String(voltas) : '';
+      { const n = Math.min(LEMBRA.length, Math.floor(voltas / 3)); if (n > lembrou && voltas < CHEIO) { lembrou = n; fala(S.linha, LEMBRA[n - 1]); } }
       if (voltas >= CHEIO) { S.linha.innerHTML = `<p>${L(o, 'O balde bate na boca do poço, cheio.', 'The bucket knocks against the lip of the well, full.')}</p>`; return acaba(1200); }
       if (comecou && vel < .25 && !quer) { parado += dt; if (parado > (BOT() ? .05 : 2.2)) return acaba(200); } else parado = 0;
       desenha(); requestAnimationFrame(loop);
     };
-    const acaba = (ms) => { fim = true; h.solta(); desenha(); setTimeout(() => resolve({ voltas }), BOT() ? 10 : ms); };
+    const acaba = (ms) => { fim = true; h.solta(); desenha(); setTimeout(() => resolve({ voltas, lembrou: voltas >= CHEIO ? LEMBRA.length : lembrou }), BOT() ? 10 : ms); };
     requestAnimationFrame(loop);
   });
 }
 
-/* ------------------------------------------------------------------ OUVIR O CHÃO */
+/* ------------------------------------------------------------------ CONTAR O CHÃO (v21)
+   Ela não acompanha o ritmo: conta e compara. Primeiro o batedor mostra o galope e a marcha,
+   limpos. Depois vem o que bate no poente, no meio do vento. Ela diz o que é. Ouvir de novo
+   dá certeza, mas a noite anda (cada repetição custa um dos reforços da vigia). */
 function chao(root, o) {
   return new Promise(async (resolve) => {
-    const S = palco(root, 'j8-chao', L(o, 'O ouvido na areia', 'An ear to the sand'), L(o, 'Toque junto com as batidas.', 'Tap along with the beats.'));
-    const img = await load(o.img);
-    const A = o.A, T0 = performance.now() + 1800;
-    const PASSO = .62, CICLO = 4, CICLOS = 5;            // três batidas e um silêncio; o primeiro ciclo só se ouve
-    const batidas = []; for (let c = 0; c < CICLOS; c++) for (let b = 0; b < 3; b++) batidas.push({ t: (c * CICLO + b) * PASSO, c, ok: false, vale: c > 0 });
-    const fimT = CICLOS * CICLO * PASSO + 1;
-    let acertos = 0, erros = 0, prox = 0, fim = false, ondas = [], toques = [], rajadas = [];
-    for (let k = 0; k < 4; k++) rajadas.push({ t: 1.4 + k * 2.6 + Math.random() * 1.2, d: .8 + Math.random() * .7 });
-    const tum = (forte) => { if (!A || !A.ctx) return; A.tone(46, .32, 'sine', forte ? .32 : .2, 0, .6); A.hiss(.22, 110, .8, forte ? .12 : .07, 0, 'lowpass'); };
-    const vento = (d) => { A && A.hiss && A.hiss(d, 700 + Math.random() * 500, .5, .06); };
-    const agora = () => (performance.now() - T0) / 1000 * (BOT() ? 4 : 1);
-    const toca = (e) => {
-      if (fim) return; if (e && e.target && e.target.closest && e.target.closest('button')) return;
-      const t = agora(); toques.push({ t, x: 640 + (Math.random() - .5) * 60 });
-      let melhor = null; batidas.forEach((b) => { if (!b.ok && b.vale && Math.abs(b.t - t) < .17 && (!melhor || Math.abs(b.t - t) < Math.abs(melhor.t - t))) melhor = b; });
-      if (melhor) { melhor.ok = true; acertos++; S.p.classList.add('j8-ok'); setTimeout(() => S.p.classList.remove('j8-ok'), 140); }
-      else { erros++; }
+    const S = palco(root, 'j8-chao', L(o, 'O ouvido na areia', 'An ear to the sand'), L(o, 'Ouça e compare. Depois diga o que é.', 'Listen and compare. Then say what it is.'));
+    const img = await load(o.img), A = o.A;
+    const RIT = {   // tempos das batidas dentro de um ciclo (s) e o tamanho do ciclo
+      cavalo: { b: [0, .14, .3, .42], c: 1.0, rot: L(o, 'Cavalo', 'Horse'), diz: L(o, 'Isto é cavalo. Quatro, tropeçando.', 'This is a horse. Four, stumbling.') },
+      homem: { b: [0, .5], c: 1.0, rot: L(o, 'Homem a pé', 'Men on foot'), diz: L(o, 'Isto é homem a pé. Dois, iguais.', 'This is men on foot. Two, even.') },
+      outro: { b: [0, .62, 1.24], c: 2.48, rot: L(o, 'Outra coisa', 'Something else') },
     };
-    S.p.addEventListener('pointerdown', toca);
-    const kd = (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toca(); } };
-    addEventListener('keydown', kd);
-    const desenha = (t) => {
-      const cx = S.cx; fundo(cx, img, .74);
-      // a areia de perto: grãos que tremem com a batida
+    let fim = false, ondas = [], tremor = 0, ouvidas = 0, tocando = false, rajadas = [];
+    const tum = (forte) => { tremor = 1; ondas.push(performance.now()); if (!A || !A.ctx) return; A.tone(46, .32, 'sine', forte ? .32 : .14, 0, .6); A.hiss(.22, 110, .8, forte ? .12 : .05, 0, 'lowpass'); };
+    const vento = (d) => { A && A.hiss && A.hiss(d, 700 + Math.random() * 500, .5, .07); };
+    const espera = (ms) => new Promise((r) => setTimeout(r, BOT() ? 5 : ms));
+    // toca um ritmo por n ciclos; com vento, algumas batidas somem embaixo dele
+    const toca = async (k, ciclos, comVento) => {
+      tocando = true; const r = RIT[k], t0 = performance.now();
+      const evs = []; for (let c = 0; c < ciclos; c++) r.b.forEach((x) => evs.push(c * r.c + x));
+      const cobre = comVento ? [[r.c * .9 + Math.random() * .4, .9 + Math.random() * .5]] : [];
+      if (comVento && ouvidas === 0) cobre.push([r.c * (ciclos - 1) + .2, .8]);   // na primeira escuta o vento cobre mais
+      rajadas = cobre.map(([t, d]) => ({ t0: t0 + t * 1000, d: d * 1000 }));
+      cobre.forEach(([t, d]) => setTimeout(() => vento(d), BOT() ? 0 : t * 1000));
+      for (const t of evs) {
+        await new Promise((res) => setTimeout(res, BOT() ? 1 : Math.max(0, t0 + t * 1000 - performance.now())));
+        const abafa = cobre.some(([a, d]) => t > a && t < a + d);
+        if (!abafa) tum(true); else if (Math.random() < .35) tum(false);
+      }
+      await espera(700); tocando = false;
+    };
+    const desenha = () => {
+      if (fim) return;
+      const cx = S.cx, agora = performance.now(); fundo(cx, img, .74);
       const g = cx.createRadialGradient(640, 420, 40, 640, 420, 520); g.addColorStop(0, 'rgba(120,96,70,.35)'); g.addColorStop(1, 'rgba(0,0,0,0)'); cx.fillStyle = g; cx.fillRect(0, 0, 1280, 720);
-      let tremor = 0; batidas.forEach((b) => { const d = t - b.t; if (d >= 0 && d < .3) tremor = Math.max(tremor, 1 - d / .3); });
+      tremor = Math.max(0, tremor - .06);
       cx.fillStyle = 'rgba(214,186,140,.55)';
       for (let k = 0; k < 220; k++) { const a = k * 2.399, r = 30 + (k % 37) * 13; const x = 640 + Math.cos(a) * r, y = 420 + Math.sin(a) * r * .45; cx.fillRect(x + (Math.random() - .5) * tremor * 5, y + (Math.random() - .5) * tremor * 3, 2, 2); }
-      ondas = ondas.filter((w) => t - w < 1.1);
-      ondas.forEach((w) => { const d = t - w; cx.strokeStyle = `rgba(230,205,160,${.35 * (1 - d / 1.1)})`; cx.lineWidth = 2; cx.beginPath(); cx.ellipse(640, 420, 60 + d * 380, (60 + d * 380) * .4, 0, 0, Math.PI * 2); cx.stroke(); });
-      toques = toques.filter((x) => t - x.t < .5);
-      toques.forEach((x) => { cx.fillStyle = `rgba(242,228,200,${.5 * (1 - (t - x.t) / .5)})`; cx.beginPath(); cx.arc(x.x, 420, 14, 0, Math.PI * 2); cx.fill(); });
-      // o vento: um véu que passa
-      rajadas.forEach((r) => { const d = t - r.t; if (d > 0 && d < r.d) { cx.fillStyle = `rgba(190,170,140,${.14 * Math.sin(Math.PI * d / r.d)})`; cx.fillRect(0, 0, 1280, 720); } });
+      ondas = ondas.filter((w) => agora - w < 1100);
+      ondas.forEach((w) => { const d = (agora - w) / 1000; cx.strokeStyle = `rgba(230,205,160,${.35 * (1 - d / 1.1)})`; cx.lineWidth = 2; cx.beginPath(); cx.ellipse(640, 420, 60 + d * 380, (60 + d * 380) * .4, 0, 0, Math.PI * 2); cx.stroke(); });
+      rajadas.forEach((r) => { const d = agora - r.t0; if (d > 0 && d < r.d) { cx.fillStyle = `rgba(190,170,140,${.16 * Math.sin(Math.PI * d / r.d)})`; cx.fillRect(0, 0, 1280, 720); } });
+      requestAnimationFrame(desenha);
     };
-    const loop = () => {
-      if (fim) return;
-      const t = agora();
-      while (prox < batidas.length && t >= batidas[prox].t) { const b = batidas[prox]; const abafa = rajadas.some((r) => b.t > r.t && b.t < r.t + r.d); tum(!abafa); ondas.push(b.t); if (BOT() && b.vale && Math.random() < .9) setTimeout(toca, 5); prox++; }
-      rajadas.forEach((r) => { if (!r.soou && t >= r.t) { r.soou = true; vento(r.d); } });
-      S.linha.innerHTML = t < 0 ? `<p>${L(o, 'Encosto o ouvido na areia.', 'I put my ear to the sand.')}</p>` : t < CICLO * PASSO ? `<p>${L(o, 'Escuto.', 'I listen.')}</p>` : '';
-      desenha(t);
-      if (t > fimT) { fim = true; removeEventListener('keydown', kd); setTimeout(() => resolve({ acertos, erros }), BOT() ? 10 : 400); return; }
-      requestAnimationFrame(loop);
-    };
-    requestAnimationFrame(loop);
+    requestAnimationFrame(desenha);
+    const pe = S.pe;
+    const botoes = (lista) => new Promise((res) => {
+      pe.innerHTML = lista.map((b) => `<button class="opt j8-bt" data-k="${b.k}">${esc(b.rot)}</button>`).join('');
+      pe.querySelectorAll('.j8-bt').forEach((el) => el.onclick = () => { pe.innerHTML = ''; res(el.dataset.k); });
+      if (BOT()) setTimeout(() => res(window.__JOGO_BOT_CHAO || 'outro'), 5);
+    });
+    // 1 · o batedor ensina
+    fala(S.linha, L(o, 'Encosto o ouvido na areia.', 'I put my ear to the sand.')); await espera(1400);
+    fala(S.linha, RIT.cavalo.diz); await toca('cavalo', 3, false);
+    fala(S.linha, RIT.homem.diz); await toca('homem', 3, false);
+    // 2 · o que vem do poente
+    let resp = null;
+    while (!resp) {
+      fala(S.linha, ouvidas ? L(o, 'Escuto outra vez. A noite anda.', 'I listen again. The night moves on.') : L(o, 'Agora o poente.', 'Now the west.'));
+      await espera(900); await toca('outro', 3, true); ouvidas++;
+      fala(S.linha, L(o, 'O que bate no poente?', 'What is beating in the west?'));
+      const ops = [{ k: 'cavalo', rot: RIT.cavalo.rot }, { k: 'homem', rot: RIT.homem.rot }, { k: 'outro', rot: RIT.outro.rot }];
+      if (ouvidas < 3) ops.push({ k: 'denovo', rot: L(o, 'Ouvir de novo', 'Listen again') });
+      const k = await botoes(ops);
+      if (k !== 'denovo') resp = k;
+    }
+    const certo = resp === 'outro';
+    fala(S.linha, certo ? L(o, 'Três batidas e um silêncio. Não é cavalo, nem homem.', 'Three beats and a silence. Not horse, not men.') : L(o, 'Levanto a cabeça. Não tenho certeza.', 'I lift my head. I am not sure.'));
+    await espera(1500); fim = true;
+    resolve({ acertos: certo ? 6 : 0, resposta: resp, ouvidas });
   });
 }
 
 /* ------------------------------------------------------------------ ERGUER A ESPADA */
 function erguer(root, o) {
   return new Promise(async (resolve) => {
-    const S = palco(root, 'j8-erguer', L(o, 'Erguer a espada', 'Raise the sword'), L(o, 'Segure.', 'Hold.'));
+    const S = palco(root, 'j8-erguer', L(o, 'Erguer a espada', 'Raise the sword'), '');
+    // (v21) sem jogo: a espada sobe sozinha até onde o braço ainda deixa (o duelo cobra aqui), e o sol é comido antes
+    const ALVO = clamp(o.alvo != null ? o.alvo : 1, .1, 1), CEDE = !!o.cede;
     const img = await load(o.img);
     const DUR = 9;                                   // o sol não espera a espada
     let alt = 0, maxAlt = 0, t0 = null, fim = false, last = performance.now(), batT = 0, zumbe = 0;
-    const h = segurar(S.p, (v) => { if (v && t0 == null) t0 = performance.now(); });
+    const h = { on: false, solta() {} };
     const desenha = (p) => {
       const cx = S.cx; fundo(cx, img, .35 + p * .55);
       // o sol, e o pedaço preto que entra pela borda (a lua só aparece onde cobre o sol)
@@ -274,7 +312,7 @@ function erguer(root, o) {
       // a espada: a lâmina sobe de baixo, com a guarda e o punho na mão que não se vê
       const ponta = 720 - (180 + alt * 430), guarda = Math.min(700, ponta + 400);
       // (v18) o braço treme mais quanto mais alto e quanto mais tempo
-      const treme = h.on || BOT() ? (alt * .7 + p * .6) * 3.2 : alt * 1.2;
+      const treme = (alt * .7 + p * .6) * 3.2;
       cx.save(); cx.translate(600 + (Math.random() - .5) * treme, (Math.random() - .5) * treme * .6); cx.rotate((Math.random() - .5) * treme * .002);
       const brilho = .9 - p * .55;
       cx.fillStyle = `rgba(196,194,188,${brilho})`;
@@ -290,12 +328,13 @@ function erguer(root, o) {
     const loop = (now) => {
       if (fim) return;
       const dt = Math.min(.05, (now - last) / 1000); last = now;
-      const quer = h.on || BOT();
-      if (quer && t0 == null) t0 = now;
+      if (t0 == null) t0 = now;
+      const tt = (now - t0) / 1000, alvoAgora = CEDE && tt > 5.6 ? .2 : CEDE ? .95 : ALVO;
+      const quer = alt < alvoAgora;
       // (v18) quanto mais alto, mais pesa (chega ao topo em ~7 s; o sol leva 9)
-      alt = clamp(alt + (quer ? dt * .2 * (1 - alt * .55) : -dt * .2), 0, 1); maxAlt = Math.max(maxAlt, alt);
+      alt = clamp(alt + (quer ? dt * .2 * (1 - alt * .55) : -dt * (CEDE ? .24 : .12)), 0, 1); maxAlt = Math.max(maxAlt, alt);
       const p = t0 == null ? 0 : clamp((now - t0) / 1000 / (BOT() ? .2 : DUR), 0, 1);
-      zumbe -= dt; if (quer && t0 != null && zumbe <= 0 && o.A && o.A.tone) { zumbe = .5; o.A.tone(70 + p * 50, .55, 'sawtooth', .012 + p * .02, 0, 1.03); }
+      
       batT -= dt; if (batT <= 0 && o.A && o.A.batida) { batT = 60 / (88 + p * 70); o.A.batida(.4 + p * .5); }
       S.linha.innerHTML = t0 == null ? `<p>${L(o, 'Ele respira de boca aberta.', 'He breathes through his open mouth.')}</p>` : p > .55 ? `<p>${L(o, 'A luz fica rala.', 'The light thins.')}</p>` : '';
       desenha(p);
@@ -309,14 +348,20 @@ function erguer(root, o) {
 /* ------------------------------------------------------------------ CONTAR OS VIVOS */
 function conta(root, o) {
   return new Promise(async (resolve) => {
-    const S = palco(root, 'j8-conta', L(o, 'Os vivos', 'The living'), L(o, 'Segure para andar entre eles.', 'Hold to walk among them.'));
+    const S = palco(root, 'j8-conta', L(o, 'Os vivos', 'The living'), L(o, 'Toque em cada um.', 'Touch each one.'));
     const img = await load(o.img), total = Math.max(1, o.total || 1);
     const rostos = await Promise.all((o.rostos || []).map(async (r) => ({ nome: r.nome, im: await load(r.img) })));
     const marcas = rostos.map((_, k) => Math.round(total * (k + 1) / (rostos.length + 1)));
     let n = 0, f = 0, volta = 1, fim = false, last = performance.now(), mostra = null, pausa = 0, toque = 0;
     // (v18) a primeira volta é devagar, mas não passa de ~18 s; a segunda confere depressa (~5 s)
     const V1 = Math.max(2.2, total / 18), V2 = Math.max(9, total / 5);
-    const h = segurar(S.p, () => {});
+    // (v21) um toque por homem na primeira volta (depois do trigésimo, cada toque vale dois); a segunda volta anda sozinha
+    let pedido = 0;
+    const toque1 = (e) => { if (fim || volta !== 1 || mostra || pausa > 0) return; if (e && e.target && e.target.closest && e.target.closest('button')) return; if (e && e.preventDefault) e.preventDefault(); pedido += n >= 30 ? 2 : 1; };
+    S.p.addEventListener('pointerdown', toque1);
+    const kd1 = (e) => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); if (!e.repeat) toque1(); } };
+    addEventListener('keydown', kd1);
+    const h = { on: false, solta() { S.p.removeEventListener('pointerdown', toque1); removeEventListener('keydown', kd1); } };
     const gente = []; for (let k = 0; k < 14; k++) gente.push({ x: 120 + k * 92, h: 170 + Math.random() * 50, ferido: Math.random() < .3, faixa: Math.random() < .3, tipoia: Math.random() < .2 });
     const desenha = () => {
       // (v18) a luz volta enquanto ela conta: o escuro do eclipse vira dia
@@ -351,11 +396,13 @@ function conta(root, o) {
       const dt = Math.min(.05, (now - last) / 1000); last = now;
       if (pausa > 0) { pausa -= dt; if (mostra) mostra.t += dt; desenha(); return requestAnimationFrame(loop); }
       if (mostra) { mostra.t += dt; if (mostra.t > 1.8) mostra = null; }
-      const quer = h.on || BOT();
-      const vel = (volta === 1 ? V1 : V2) * (BOT() ? 40 : 1);
+      if (BOT() && volta === 1 && !mostra) pedido = total;
+      const quer = volta === 1 ? f < Math.min(total, pedido) : true;
+      const vel = (volta === 1 ? Math.max(V1 * 4, 14) : V2) * (BOT() ? 40 : 1);
       toque = Math.max(0, toque - dt * 2.2);
       if (quer && !mostra) {
         f += dt * vel;
+        if (volta === 1 && f > pedido) f = pedido;
         const novo = Math.min(total, Math.floor(f));
         if (novo > n) {
           n = novo; o.A && o.A.tone && o.A.tone(volta === 1 ? 220 : 196, .12, 'sine', volta === 1 ? .025 : .012);

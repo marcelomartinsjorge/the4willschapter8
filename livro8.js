@@ -84,7 +84,11 @@ const A = {
   async vozAbafada(url) { const b = await this.buf(url); if (!b) return; const s = this.ctx.createBufferSource(); s.buffer = b; const f = this.ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = 1900; const g = this.ctx.createGain(); g.gain.value = 1.1; s.connect(f); f.connect(g); g.connect(this.master); s.start(); },
   stopNarr() { if (this.narr) { const s = this.narr; this.narr = null; try { s.stop(); } catch (e) {} this.duck(false); } },
   abafa(x) { if (!this.lpBed) return; this.lpBed.frequency.setTargetAtTime(18000 - clamp(x, 0, 1) * 16600, this.ctx.currentTime, .6); },
-  duck(on) { if (!this.ctx) return; const t = this.ctx.currentTime; this.bed.gain.cancelScheduledValues(t); this.bed.gain.setTargetAtTime(on ? .25 : 1, t, .25); },
+  duck(on) { if (this.calado) return; if (!this.ctx) return; const t = this.ctx.currentTime; this.bed.gain.cancelScheduledValues(t); this.bed.gain.setTargetAtTime(on ? .25 : 1, t, .25); },
+  // (v21, do Cap. VII) cala: o som de fundo vai a zero até um parágrafo marcado ou a página seguinte
+  cala(on) { if (!this.ctx || !this.bed) return; const t = this.ctx.currentTime; this.calado = !!on; this.bed.gain.cancelScheduledValues(t); this.bed.gain.setTargetAtTime(on ? 0 : 1, t, on ? .6 : 1.2); },
+  // (v21, do Cap. VII) o tom de ouro: a ideia da Nymae na boca de alguém
+  ouro(v = .04) { this.tone(784, 1.6, 'sine', v); this.tone(1175, 1.9, 'sine', v * .5, .12); },
   setOn(on) { this.on = on; if (this.master) this.master.gain.setTargetAtTime(on ? 1 : 0, this.ctx.currentTime, .1); },
   tone(f, d, type = 'sine', v = .08, when = 0, bend = 0) {
     if (!this.ctx) return; const t = this.ctx.currentTime + when, o = this.ctx.createOscillator(), g = this.ctx.createGain();
@@ -285,7 +289,9 @@ const umPara = (p) => (typeof p === 'string' ? p : typeof p === 'function' ? p(s
 const paras = (list) => [].concat(list || []).map(umPara).flat(2).filter(Boolean).map((t) => (t === CONT ? t : tr(t)));
 const itensCont = (p) => [].concat(typeof p.texto === 'function' ? [] : (p.texto || [])).filter((x) => x && x.continuar);
 const temContinuar = (p) => itensCont(p).length > 0;
-function pHTML(p, extra = '') { const dlg = p.startsWith('—'); return `<p class="${dlg ? 'dlg' : ''} ${extra}">${linkify(p)}</p>`; }
+// (v21) ⟦palavra⟧: a ideia que a Nymae plantou no Cap. VII, em ouro. Só o jogador vê.
+const planta = (h) => String(h).replace(/⟦([^⟧]+)⟧/g, '<span class="planta">$1</span>');
+function pHTML(p, extra = '') { const dlg = p.startsWith('—'); return planta(`<p class="${dlg ? 'dlg' : ''} ${extra}">${linkify(p)}</p>`); }
 let timers = [];
 const clearTimers = () => { timers.forEach(clearTimeout); timers = []; };
 const later = (fn, ms) => timers.push(setTimeout(fn, ms));
@@ -319,7 +325,7 @@ const FX = {
 function agendaItens(itens, els, base = 0) {
   (itens || []).forEach((it) => {
     const c = { done: false, fim: !!it.fim };
-    c.tocar = () => { if (c.done) return; c.done = true; if (it.fundo) setFundo(it.fundo); if (it.cena) cutscene(it.cena); if (it.fx) FX.go(it.fx, it.dur, it.forca); if (window.__VOZLOG && it.voz) window.__VOZLOG.push(typeof it.voz === 'function' ? it.voz(st) : it.voz); if (!A.ctx || !A.on) return; const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz; if (vz) A.narrate(vozUrl(vz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .7); };
+    c.tocar = () => { if (c.done) return; c.done = true; if (it.fundo) setFundo(it.fundo); if (it.cena) cutscene(it.cena); if (it.fx) FX.go(it.fx, it.dur, it.forca); if (it.cala != null && A.ctx) A.cala(it.cala); if (window.__VOZLOG && it.voz) window.__VOZLOG.push(typeof it.voz === 'function' ? it.voz(st) : it.voz); if (!A.ctx || !A.on) return; const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz; if (vz) A.narrate(vozUrl(vz), null, false); else if (it.s) A.once(it.s, it.v != null ? it.v : .7); };
     if (c.fim) cuesPend.push(c);
     let alvo = it.p;
     if (it.em) { const ks = [].concat(it.em); alvo = els.findIndex((e) => ks.some((k) => (e.textContent || '').includes(k))); if (alvo < 0) return; }   // em: toca quando o parágrafo que contém o trecho (PT ou EN) aparece
@@ -333,13 +339,14 @@ function vozesDe(p) {
   return [].concat(v);
 }
 // as falas dubladas de Laura tocam sozinhas
-const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3?v=20';
+const vozUrl = (n) => 'assets/audio/voz/' + n + '.mp3?v=21';
 const vozDeOpcao = (o, cid) => { const v = nervosa(o, cid) ? o.vozNervosa : o.voz; return typeof v === 'function' ? v(st) : v; };
 const ABAFA = /^$/;   // o elmo já vem gravado nos arquivos (efeito aplicado na edição)
 const fala = (nome, ms = 0) => { if (!nome || typeof nome !== 'string') return; later(() => { if (A.ctx && A.on) A.narrate(vozUrl(nome), null, ABAFA.test(nome)); }, ms); };
 
 function render(dir = 1) {
   clearTimers(); cuesPend = []; A.stopNarr(); linkUsados.clear();
+  if (A.calado) A.cala(false);
   const p = P[st.i]; if (!p) return;
   setFundo(resolveFundo(p));
   if (A.ctx) { A.setZone(p.zona); if (p.som && dir > 0) A.once(p.som, .55); }
@@ -348,6 +355,11 @@ function render(dir = 1) {
   Coracao.extra(0); Coracao.repouso();
   const pico = valP(p.pico); if (pico && dir >= 0 && !temContinuar(p)) later(() => { if (P[st.i] === p) Coracao.alvo(pico.bpm); }, pico.ms || 0);
   Sensa.quente(valP(p.quente));
+  // (v21) H4: o rosto que ela usava (o mesmo do Ler o corpo) escorre e some, visto de fora
+  if (p.rostoEscorrega && dir >= 0 && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const D = window.LIVRO_DADOS, sx = D.SUSPEITOS[D.ELA()];
+    if (sx) later(() => { document.querySelectorAll('.rosto-esc').forEach((n) => n.remove()); document.body.insertAdjacentHTML('beforeend', `<div class="rosto-esc" aria-hidden="true" style="background-image:url('${sx.img}')"></div>`); later(() => document.querySelectorAll('.rosto-esc').forEach((n) => n.remove()), 2600); }, 400);
+  }
   { let k = st.i; while (k > 0 && !P[k].parte) k--; $('#parte').textContent = U('parte') + ' ' + (P[k].parte || 'I'); }
   const vis = P.filter(visivel), n = vis.indexOf(p) + 1; $('#pnum').textContent = `${n}`;
   $('#prog').style.setProperty('--p', (n / vis.length).toFixed(3));
@@ -371,7 +383,7 @@ function render(dir = 1) {
       else if (typeof it.p === 'number') k = it.p < 0 ? pos.length + it.p : it.p;
       else return;
       if (k <= 0 || k >= pos.length) return;   // 0 = toca na abertura da página (a virada é o toque do leitor)
-      const q = pos[k], dado = { voz: it.voz, s: it.s, v: it.v, fx: it.fx, dur: it.dur, forca: it.forca, cena: it.cena, fundo: it.fundo };
+      const q = pos[k], dado = { voz: it.voz, s: it.s, v: it.v, fx: it.fx, dur: it.dur, forca: it.forca, cena: it.cena, fundo: it.fundo, cala: it.cala, pico: it.pico };
       p._gated.add(it);
       const ant = lista[q - 1];
       if (ant && ant.cont && !(ant.cont.voz && dado.voz) && !(ant.cont.s && dado.s)) { Object.keys(dado).forEach((c) => { if (dado[c] != null) ant.cont[c] = dado[c]; }); }
@@ -383,6 +395,7 @@ function render(dir = 1) {
     p._blocos = blocos; p._bloco = (st.feitos['cont:' + p.id] || dir < 0) ? blocos.length : 1;
     if (p._bloco > 1) for (let b = 1; b < blocos.length; b++) blocos[b].forEach((t) => txt.insertAdjacentHTML('beforeend', pHTML(t)));
   }
+  if (txt.querySelector('.planta')) later(() => { if (A.ctx && A.on) A.ouro(.04); }, 1500);
   box.innerHTML = ''; box.classList.remove('urgente', 'sobPressao');
   document.querySelectorAll('.numeral').forEach((n) => n.remove());
   { const passo = document.body.classList.contains('quente') ? .6 : .35; [...txt.children].forEach((el, k) => { el.style.animationDelay = (k * passo) + 's'; }); }
@@ -420,11 +433,14 @@ function renderContinuar(p) {
     const novos = p._blocos[p._bloco]; p._bloco++;
     box.innerHTML = '';
     novos.forEach((t, k) => { txt.insertAdjacentHTML('beforeend', pHTML(t, 'novo')); txt.lastElementChild.style.animationDelay = (k * .35) + 's'; });
+    if (novos.some((t) => t.includes('⟦'))) later(() => { if (A.ctx && A.on) A.ouro(.04); }, 1500);
     const vzc = typeof it.voz === 'function' ? it.voz(st) : it.voz;
     if (window.__VOZLOG && vzc) window.__VOZLOG.push(vzc);
     if (A.ctx && A.on) { if (vzc) A.narrate(vozUrl(vzc), null, false); if (it.s) A.once(it.s, it.v != null ? it.v : .8); }
     if (it.cena) cutscene(it.cena);
     if (it.fundo) setFundo(it.fundo);
+    if (it.cala != null && A.ctx) A.cala(it.cala);
+    if (it.pico) { const pk = it.pico; later(() => { if (P[st.i] === p) Coracao.alvo(pk); }, 200); }
     if (it.fx) [].concat(it.fx).forEach((f) => (typeof f === 'string' ? FX.go(f, it.dur, it.forca) : later(() => FX.go(f.fx, f.dur, f.forca), f.ms || 0)));
     const pico = valP(p.pico); if (pico && p._bloco === 2) later(() => { if (P[st.i] === p) Coracao.alvo(pico.bpm); }, 300);
     if (p._bloco < p._blocos.length) return renderContinuar(p);
@@ -443,9 +459,9 @@ function ligaNarr(p, url) {
   };
 }
 function setNext(on) { btnNext.disabled = !on; btnNext.classList.toggle('pulse', on); }
-function appendParas(list, cls = '') { paras(list).forEach((t, k) => { txt.insertAdjacentHTML('beforeend', pHTML(t, 'novo ' + cls)); txt.lastElementChild.style.animationDelay = (k * .35) + 's'; }); }
+function appendParas(list, cls = '') { const ps = paras(list); ps.forEach((t, k) => { txt.insertAdjacentHTML('beforeend', pHTML(t, 'novo ' + cls)); txt.lastElementChild.style.animationDelay = (k * .35) + 's'; }); if (ps.some((t) => t.includes('⟦'))) later(() => { if (A.ctx && A.on) A.ouro(.04); }, 1500); }
 const riscada = (o) => !!(o.riscavel && o.se && !o.se(st));
-const optHTML = (cid) => (o, k) => `<button class="opt ${o.silencio ? 'sil' : ''} ${nervosa(o, cid) || o.tremida ? 'nervosa' : ''} ${riscada(o) ? 'riscada' : ''}" data-id="${o.id}" ${riscada(o) ? 'disabled aria-disabled="true"' : ''}><span class="k">${riscada(o) ? '–' : k + 1}</span>${o.silencio ? `<em>${U('silencio')}</em>` : `<span class="rot">${esc(rotulo(o, cid))}</span>`}${riscada(o) && U('coracaoNao') ? `<small class="porque">${U('coracaoNao')}</small>` : ''}</button>`;
+const optHTML = (cid) => (o, k) => `<button class="opt ${o.silencio ? 'sil' : ''} ${nervosa(o, cid) || o.tremida ? 'nervosa' : ''} ${riscada(o) ? 'riscada' : ''}" data-id="${o.id}" ${riscada(o) ? 'disabled aria-disabled="true"' : ''}><span class="k">${riscada(o) ? '–' : k + 1}</span>${o.silencio ? `<em>${U('silencio')}</em>` : `<span class="rot">${planta(esc(rotulo(o, cid)))}</span>`}${riscada(o) && U('coracaoNao') ? `<small class="porque">${U('coracaoNao')}</small>` : ''}</button>`;
 const opcoesVis = (lista) => lista.filter((o) => !o.se || o.se(st));
 // numeração só entre as que se pode escolher; as riscadas vêm por último
 const opcoesEscolha = (lista) => { const v = opcoesVis(lista), r = lista.filter(riscada); return { v, r }; };
@@ -477,7 +493,7 @@ function renderQuieto(p) {
 const opsDe = (e) => (typeof e.opcoes === 'function' ? e.opcoes(st) : e.opcoes);
 function renderEscolha(p) {
   const e = p.escolha, feita = st.escolhas[e.id];
-  if (feita) { const o = opsDe(e).find((x) => x.id === feita); if (o) { box.innerHTML = `<p class="feita">${U('escolheu')} ${esc(rotulo(o, e.id))}</p>`; appendParas(resultadoDe(o, e.id)); } return true; }
+  if (feita) { const o = opsDe(e).find((x) => x.id === feita); if (o) { box.innerHTML = `<p class="feita">${U('escolheu')} ${planta(esc(rotulo(o, e.id)))}</p>`; appendParas(resultadoDe(o, e.id)); } return true; }
   // a decisão não aparece sozinha: o leitor termina de ler e clica em "Próxima"; só então ela abre (ver irProxima)
   p._revelado = false; box.innerHTML = '';
   return true;
@@ -511,6 +527,7 @@ function toca(it) {
   if (it.cena) cutscene(it.cena);
   if (it.fundo) setFundo(it.fundo);
   if (it.fx) FX.go(it.fx, it.dur, it.forca);
+  if (it.cala != null && A.ctx) A.cala(it.cala);
   const vz = typeof it.voz === 'function' ? it.voz(st) : it.voz;
   if (window.__VOZLOG && vz) window.__VOZLOG.push(vz);
   if (!A.ctx || !A.on) return;
@@ -536,7 +553,7 @@ function escolher(p, id) {
   box.classList.remove('sobPressao'); Coracao.extra(0);
   const sel = box.querySelector(`.opt[data-id="${id}"]`);
   box.querySelectorAll('.opt').forEach((b) => { b.disabled = true; b.classList.toggle('sel', b.dataset.id === id); });
-  if (!sel) box.innerHTML = `<p class="feita">${U('escolheu')} ${esc(rotulo(o, e.id))}</p>`;
+  if (!sel) box.innerHTML = `<p class="feita">${U('escolheu')} ${planta(esc(rotulo(o, e.id)))}</p>`;
   if (o.som) A.sfx(o.som, .7);
   if (o.pico) Coracao.alvo(o.pico);
   aplicar(o); A.escolha(); registrar(e.id, id); salvar();
@@ -652,7 +669,11 @@ const MG = {
       return { id, nome: tr(s.nome), papel: tr(s.papel), img: s.img, olhar };
     });
     const rot = {}; Object.keys(D.OLHAR_ROTULO).forEach((kk) => { rot[kk] = tr(D.OLHAR_ROTULO[kk]); });
-    return window.JOGOS8.ler(o, { lang: LANG, A, lista, rotulos: rot, max: 6, fundo: tx(p.fundo).img, ja: k === 2 ? (st.leituras || {}) : {} }).then((r) => {
+    // (v21) nas duas noites, antes de olhar, ela escolhe como pergunta
+    const tons = k < 2 ? D.TONS.map((x) => ({ k: x.k, rot: tr(x.rot), desc: tr(x.desc) })) : null;
+    const porTom = {}; if (tons) Object.keys(D.OLHAR_TOM).forEach((tk) => { porTom[tk] = {}; lista.forEach((sx) => { const ov = D.OLHAR_TOM[tk](sx.id); if (ov) { porTom[tk][sx.id] = {}; Object.keys(ov).forEach((kk) => { porTom[tk][sx.id][kk] = tr(ov[kk]); }); } }); });
+    return window.JOGOS8.ler(o, { lang: LANG, A, lista, rotulos: rot, max: 6, fundo: tx(p.fundo).img, ja: k === 2 ? (st.leituras || {}) : {}, tons, olharPorTom: porTom, tomTitulo: tr(D.TOM_TITULO) }).then((r) => {
+      if (r.tom) { (st.tons = st.tons || [])[k] = r.tom; if (r.tom === 'baixa') Object.keys(r.olhares).forEach((id) => { if (r.olhares[id].includes('orelhas')) (st.orelhasLimpas = st.orelhasLimpas || {})[id] = true; }); }
       const lidos = Object.keys(r.olhares).filter((id) => r.olhares[id].length);
       (st.lidoNoite = st.lidoNoite || [])[k] = lidos; st.leituras = st.leituras || {};
       lidos.forEach((id) => { st.leituras[id] = Array.from(new Set((st.leituras[id] || []).concat(r.olhares[id]))); });
@@ -666,15 +687,23 @@ const MG = {
   },
   roda(p) {
     const o = abreOverlay('j8 roda');
-    return window.JOGOS8.roda(o, { lang: LANG, A, img: tx(p.fundo).img }).then((r) => { st.roda = r; registrar('roda', String(r.voltas)); salvar(); fechaOverlay(); });
+    return window.JOGOS8.roda(o, { lang: LANG, A, img: tx(p.fundo).img, lembra: window.LIVRO_DADOS.LEMBRA.map(tr) }).then((r) => {
+      st.roda = r; registrar('roda', r.voltas >= 12 ? 'cheio' : 'soltou'); salvar(); fechaOverlay();
+      // (v21) S1 e H3: o fundo some, o vento fica; o pulso sobe a 64 e desce devagar, de costas para eles
+      if (A.ctx) { A.cala(true); later(() => { if (A.on) A.sfx('vento-campo', .45, () => A.hiss(3, 500, .4, .05)); }, 600); }
+      if (r.voltas >= 12) later(() => Coracao.alvo(64), 2500);
+    });
   },
   chao(p) {
     const o = abreOverlay('j8 chao');
-    return window.JOGOS8.chao(o, { lang: LANG, A, img: tx(p.fundo).img }).then((r) => { st.chao = r; registrar('chao', r.acertos >= 6 ? 'ouviu' : 'vento'); salvar(); fechaOverlay(); });
+    return window.JOGOS8.chao(o, { lang: LANG, A, img: tx(p.fundo).img }).then((r) => { st.chao = r; registrar('chao', r.acertos >= 6 ? 'ouviu' + r.ouvidas : r.resposta || 'vento'); salvar(); fechaOverlay(); });
   },
   erguer(p) {
     const o = abreOverlay('j8 erguer');
-    return window.JOGOS8.erguer(o, { lang: LANG, A, img: tx(p.fundo).img }).then((r) => { st.erguer = r; salvar(); fechaOverlay(); });
+    // (v21) sem jogo: o braço sobe até onde o duelo deixou
+    const vd = st.duelo && Number.isFinite(st.duelo.vida) ? st.duelo.vida : 70;
+    if (A.ctx) A.cala(true);
+    return window.JOGOS8.erguer(o, { lang: LANG, A, img: tx(p.fundo).img, alvo: vd >= 55 ? 1 : .6, cede: vd < 25 }).then((r) => { st.erguer = r; salvar(); fechaOverlay(); });
   },
   conta(p) {
     const o = abreOverlay('j8 conta'), D = window.LIVRO_DADOS;

@@ -243,3 +243,24 @@ body.fx-sol::before { background: radial-gradient(ellipse at 70% 18%, rgba(255,2
 @media (max-width: 720px) { #mg.duelo8 .d8-eu { width: 46%; } .d8-est i { font-size: 9px; padding: 1px 6px; } }
 @media (min-width: 721px) { #mg.duelo8 .d8-menu { width: min(1180px, 100%); } #mg.duelo8 .d8-op { flex: 1 1 128px; max-width: 168px; } }
 @media (max-width: 720px) { #mg.duelo8 .d8-op { padding: 8px 10px; } }
+
+/* (v21) a ideia da Nymae em ouro (Cap. VII): só o jogador vê */
+.planta { animation: planta8 4.5s ease 1.3s both; border-radius: 2px; }
+@keyframes planta8 { 0% { color: inherit; text-shadow: none; } 18% { color: #ffd98a; text-shadow: 0 0 10px rgba(255,214,120,.9); } 100% { color: inherit; text-shadow: none; } }
+@media (prefers-reduced-motion: reduce) { .planta { animation: none; color: #e8c27a; } }
+
+/* (v21) Ler o corpo: como eu pergunto */
+.j8-tom { position: absolute; inset: 0; display: grid; place-items: center; }
+.j8-tom-in { position: relative; z-index: 2; display: grid; gap: .7rem; width: min(560px, 90vw); padding: 1.6rem; background: rgba(12,8,6,.82); border: 1px solid rgba(232,214,182,.25); border-radius: 6px; }
+.j8-tom-b { display: grid; gap: .2rem; text-align: left; }
+.j8-tom-b small { opacity: .75; font-size: .9em; }
+/* (v21) Contar o chão: os botões da resposta */
+.j8-chao .j8-pe { position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%); display: flex; flex-wrap: wrap; gap: .6rem; justify-content: center; z-index: 3; width: min(760px, 94vw); }
+.j8-chao .j8-pe .opt { width: auto; min-width: 9rem; }
+
+/* (v21) H4: o rosto do disfarce escorre como água */
+.rosto-esc { position: fixed; left: 50%; top: 38%; width: min(26vw, 260px); aspect-ratio: 1; transform: translate(-50%, -50%); border-radius: 50%; background-size: cover; background-position: center 30%; pointer-events: none; z-index: 40;
+  box-shadow: 0 0 0 2px rgba(232,214,182,.5); animation: rostoEsc 2.4s ease-in forwards; }
+@keyframes rostoEsc { 0% { opacity: 0; filter: none; } 18% { opacity: .95; filter: none; transform: translate(-50%, -50%); border-radius: 50%; }
+  60% { opacity: .8; filter: blur(2px) hue-rotate(160deg) saturate(.6); }
+  100% { opacity: 0; filter: blur(10px) hue-rotate(180deg); transform: translate(-50%, -10%) scaleY(1.6) scaleX(.7); border-radius: 50% 50% 45% 45% / 30% 30% 70% 70%; } }

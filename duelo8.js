@@ -7,7 +7,12 @@
      hora: ↑ ESCUDO (janela larga) ou ↓ PASSO LATERAL (janela estreita; certo
      no golpe pesado, faz ele passar do ponto e abre um golpe de graça).
    - O CORAÇÃO DE PEDRA: perto de 52, as janelas são largas. Sobe com o sangue.
-   - TRÊS MARCAS e a troca recomeça (do começo da fase, nunca do zero).
+   - A VIDA dela cai a cada golpe que passa; se chegar a zero, a luta recomeça (curta: sem regras,
+     e da segunda derrota em diante a janela abre um pouco, sem aviso).
+   - (v21) ELE LUTA EM FRASES, como a Hessa ensinou ("fechar, abrir"): dois golpes na fase 1,
+     três na 2; na 3 ele repete a frase que mais acertou. A finta mostra a frase inteira.
+   - (v21) ENSINAR FAZENDO: as duas primeiras trocas dele são guiadas e sem dano; o menu cresce;
+     cada golpe novo vem lento e com a dica na primeira vez.
    Kronk: golpe rápido (o ombro da maça recua: escudo) e golpe pesado (a maça
    sobe e fica: passo lateral quando ela descer). Ele morde toda finta.
    Três fases: inteiro · a fúria (ele faz a Laura sangrar) · ferido, protegendo
@@ -25,14 +30,14 @@ const BOT = () => !!window.__JOGO_BOT;
 const TX = {
   pt: {
     tK: 'O Grakh da maça', sK: 'Ler, aguentar, derrubar', tM: 'O Maior', sM: 'Ficar de pé. Chamar as rajadas.',
-    regrasK: [['Seu turno', 'escolha o golpe e toque quando o anel fechar sobre ele'], ['O turno dele', '↑ Escudo segura. ↓ Passo lateral, no último instante, faz ele passar do ponto'], ['O ombro recua', 'o golpe vem rápido: escudo'], ['A maça sobe e fica', 'o golpe pesado: passo lateral quando ela descer, nem antes, nem depois'], ['Três marcas', 'e a troca recomeça']],
+    regrasK: [['Seu turno', 'escolha o golpe e toque quando o anel fechar sobre ele'], ['O turno dele', '↑ Escudo segura. ↓ Passo lateral, no último instante, faz ele passar do ponto'], ['O ombro recua', 'o golpe vem rápido: escudo'], ['A maça sobe e fica', 'o golpe pesado: passo lateral quando ela descer, nem antes, nem depois'], ['O pulso baixo', 'alarga tudo. Respirar ajuda']],
     regrasM: [['O turno dele', '↑ Escudo ou ↓ Passo lateral. Ele vem em sequência e não avisa duas vezes do mesmo jeito'], ['Seu turno', 'chamar a rajada quando o anel fechar sobre ele, ou respirar'], ['O peito aberto', 'depois de uma sequência inteira bem respondida, a rajada entra inteira'], ['A carne fecha', 'sem flecha nova, ele se recupera'], ['O pulso', 'alto, a ordem sai tremida e atrasa']],
     comecar: 'À areia', teclado: 'Teclado: 1 a 5 escolhem · Espaço golpeia · ↑ escudo · ↓ passo lateral',
     pergunta: 'O que Laura faz?',
     golpes: { estocada: ['Estocada', 'Rápida. Menos estrago.'], corte: ['Corte', 'Mais lenta. Mais estrago.'], finta: ['Finta', 'Ele morde.'], respirar: ['Respirar', 'Baixa o pulso. Ele também respira.'], rodear: ['Rodear', 'Andar para o lado dos acampamentos.'],
       chamar: ['Soltem!', 'A rajada.'], tremido: ['Sol… soltem!', 'A voz sai fina. A rajada atrasa.'], respirarM: ['Respirar', 'Baixa um pouco o pulso.'] },
     agora: 'Agora', escudo: 'Escudo', lateral: 'Passo lateral',
-    rot: {perfeito: 'Na hora', bom: 'Entrou', defende: 'Ele desvia', cedo: 'Cedo', tarde: 'Tarde', segurou: 'Segurou', passou: 'Passou', contra: 'Ele passou do ponto', marca: 'Marca' },
+    rot: {raspou: 'Raspou', perfeito: 'Na hora', bom: 'Entrou', defende: 'Ele desvia', cedo: 'Cedo', tarde: 'Tarde', segurou: 'Segurou', passou: 'Passou', contra: 'Ele passou do ponto', marca: 'Marca' },
     ele: 'Ele', coracao: 'Pulso', marcas: 'Marcas', rajadas: 'Rajadas',
     tell: { golpe: 'O ombro da maça recua.', pesado: 'A maça sobe e fica lá em cima.', pesadoRapido: 'A maça sobe. Desce quase sem parar.', desce: 'Desce!', mordeu: { golpe: 'Ele morde a finta. O próximo vem rápido, pelo ombro.', pesado: 'Ele morde a finta. O próximo vem de cima, pesado.' } },
     tellM: { golpe: 'O braço pequeno recua.', pesado: 'O braço grande sobe.', confuso: 'O ombro dele estala. Não sei o que vem.', desce: 'Vem!' },
@@ -69,14 +74,14 @@ const TX = {
   },
   en: {
     tK: 'The Grakh with the mace', sK: 'Read, hold, bring him down', tM: 'The Biggest', sM: 'Stay on your feet. Call the volleys.',
-    regrasK: [['Your turn', 'pick a strike and tap when the ring closes on him'], ['His turn', '↑ Shield holds. ↓ Sidestep, at the last instant, carries him past the point'], ['The shoulder draws back', 'the blow comes fast: shield'], ['The mace rises and stays', 'the heavy blow: sidestep when it comes down, not before, not after'], ['Three marks', 'and the exchange starts over']],
+    regrasK: [['Your turn', 'pick a strike and tap when the ring closes on him'], ['His turn', '↑ Shield holds. ↓ Sidestep, at the last instant, carries him past the point'], ['The shoulder draws back', 'the blow comes fast: shield'], ['The mace rises and stays', 'the heavy blow: sidestep when it comes down, not before, not after'], ['A low pulse', 'widens everything. Breathing helps']],
     regrasM: [['His turn', '↑ Shield or ↓ Sidestep. He comes in sequences and never warns the same way twice'], ['Your turn', 'call the volley when the ring closes on him, or breathe'], ['The open chest', 'after a whole sequence answered well, the volley goes in whole'], ['The flesh closes', 'with no new arrow, he recovers'], ['Your pulse', 'high, the order comes out shaky and late']],
     comecar: 'To the sand', teclado: 'Keyboard: 1 to 5 choose · Space strikes · ↑ shield · ↓ sidestep',
     pergunta: 'What does Laura do?',
     golpes: { estocada: ['Thrust', 'Fast. Less damage.'], corte: ['Cut', 'Slower. More damage.'], finta: ['Feint', 'He bites.'], respirar: ['Breathe', 'The pulse drops. He breathes too.'], rodear: ['Circle', 'Walk toward the camps.'],
       chamar: ['Loose!', 'The volley.'], tremido: ['Loo… loose!', 'The voice comes out thin. The volley is late.'], respirarM: ['Breathe', 'The pulse drops a little.'] },
     agora: 'Now', escudo: 'Shield', lateral: 'Sidestep',
-    rot: {perfeito: 'Right on time', bom: 'It lands', defende: 'He slips it', cedo: 'Too soon', tarde: 'Too late', segurou: 'Held', passou: 'Past', contra: 'He went past the point', marca: 'Mark' },
+    rot: {raspou: 'Grazed', perfeito: 'Right on time', bom: 'It lands', defende: 'He slips it', cedo: 'Too soon', tarde: 'Too late', segurou: 'Held', passou: 'Past', contra: 'He went past the point', marca: 'Mark' },
     ele: 'Him', coracao: 'Pulse', marcas: 'Marks', rajadas: 'Volleys',
     tell: { golpe: 'The mace shoulder draws back.', pesado: 'The mace rises and stays up there.', pesadoRapido: 'The mace rises. It comes down almost without stopping.', desce: 'Down!', mordeu: { golpe: 'He bites on the feint. The next one comes fast, from the shoulder.', pesado: 'He bites on the feint. The next one comes from above, heavy.' } },
     tellM: { golpe: 'The small arm draws back.', pesado: 'The big arm rises.', confuso: 'His shoulder cracks. I don’t know what’s coming.', desce: 'Now!' },
@@ -127,6 +132,12 @@ const TX2 = {
       ler: ['Ler o ombro', 'O próximo golpe não me engana.'], areia: ['Areia nos olhos', 'Um punhado de areia na cara dele.'] },
     est: { sangra: 'Sangra', braco: 'Braço ferido', perna: 'Perna ferida', firme: 'Plantado', presa: 'Presa', escudo: 'Escudo erguido', tonta: 'Tonta', cego: 'Cego', exposto: 'Exposto', lido: 'Lido' },
     tell2: { agarrar: 'A mão livre dele se abre.', peso: 'Ele planta os pés na areia e espera.', maca: 'Ele pega a maça pelo meio, com as duas mãos.', duas: 'Ele vem com duas, uma atrás da outra.' },
+    // (v21) o ensino e as frases
+    dica: { golpe: '↑ Escudo, quando o anel fechar.', pesado: '↓ Passo lateral, só quando a maça descer.', agarrar: '↓ Passo lateral: a mão livre vem pegar.', maca: '↓ Passo lateral: a maça vem de lado.', peso: 'Ele espera o meu erro. Se eu errar agora, ele castiga.', duas: '↑ Escudo duas vezes, uma atrás da outra.' },
+    treinoErro: 'A maça passa raspando. Da próxima, não passa.',
+    abreMenu: 'Agora eu vejo onde cortar. E o escudo fica no braço, se eu quiser.',
+    frase: (l) => 'Ele morde a finta, e eu vejo o que vem: ' + l + '.',
+    nomeGolpe: { golpe: 'rápido', pesado: 'pesado', agarrar: 'a mão', maca: 'a maça de lado', peso: 'os pés plantados', duas: 'dois rápidos' },
     mordeu2: { agarrar: 'Ele morde a finta. A mão livre vai vir.', peso: 'Ele morde a finta e planta os pés.', maca: 'Ele morde a finta. Vai pegar a maça pelo meio.', duas: 'Ele morde a finta. Vai vir com duas.' },
     escapou: 'Saio do alcance da mão por um dedo.',
     presa: 'A mão dele fecha no meu braço do escudo. Puxo, e ele não solta.',
@@ -156,6 +167,7 @@ const TX2 = {
     laminaPouco: 'Ele vira o corpo a tempo. A lâmina pega só a carne do braço.',
     perdeuT: 'Laura cai', perdeu: 'A maça desce mais uma vez, e a areia vem até o meu rosto.', perdeuM: 'O braço grande me tira do chão. Não sei quando caio.', denovo: 'Lutar de novo',
     bonus: { levar: 'A espada do Simon pesa na mão. Conheço este peso.', deixar: 'A minha espada. A mão sabe onde ela termina.', comer: 'Comi na estrada, como prometi. As pernas aguentam.', agua: 'Bebi do barril que os guardas vigiaram.', pai: 'O pai está lá em cima, olhando a roda.', leu: 'Li o rosto dela. Leio o dele.' },
+    dicaM: { varredura: '↑ Escudo: os braços vêm rentes ao chão.', pisao: '↓ Passo lateral: o pé vai descer onde eu estou.' },
     tellM2: { golpe: 'O braço pequeno recua.', pesado: 'O braço grande sobe.', varredura: 'Os dois braços descem, rentes à areia.', pisao: 'Ele levanta o pé.', agarrar: 'A mão grande se abre.' },
     varrOk: 'Finco o escudo na areia. Os dois braços batem nele, e ele aguenta.',
     varrMal: 'Os braços passam por baixo de tudo e me levam junto.',
@@ -183,6 +195,11 @@ const TX2 = {
       ler: ['Read the shoulder', 'The next blow won’t fool me.'], areia: ['Sand in the eyes', 'A fistful of sand in his face.'] },
     est: { sangra: 'Bleeding', braco: 'Wounded arm', perna: 'Wounded leg', firme: 'Planted', presa: 'Held', escudo: 'Shield up', tonta: 'Dazed', cego: 'Blind', exposto: 'Open', lido: 'Read' },
     tell2: { agarrar: 'His free hand opens.', peso: 'He plants his feet in the sand and waits.', maca: 'He takes the mace by the middle, with both hands.', duas: 'He comes with two, one after the other.' },
+    dica: { golpe: '↑ Shield, when the ring closes.', pesado: '↓ Sidestep, only when the mace comes down.', agarrar: '↓ Sidestep: the free hand is coming to grab.', maca: '↓ Sidestep: the mace comes in sideways.', peso: 'He is waiting for my mistake. If I miss now, he punishes it.', duas: '↑ Shield twice, one after the other.' },
+    treinoErro: 'The mace passes close enough to graze. Next time it won’t.',
+    abreMenu: 'Now I can see where to cut. And the shield can stay on my arm, if I want.',
+    frase: (l) => 'He bites on the feint, and I see what is coming: ' + l + '.',
+    nomeGolpe: { golpe: 'fast', pesado: 'heavy', agarrar: 'the hand', maca: 'the mace from the side', peso: 'feet planted', duas: 'two fast' },
     mordeu2: { agarrar: 'He bites on the feint. The free hand is coming.', peso: 'He bites on the feint and plants his feet.', maca: 'He bites on the feint. He’ll take the mace by the middle.', duas: 'He bites on the feint. He’ll come with two.' },
     escapou: 'I get out of the hand’s reach by a finger.',
     presa: 'His hand closes on my shield arm. I pull, and he doesn’t let go.',
@@ -212,6 +229,7 @@ const TX2 = {
     laminaPouco: 'He turns his body in time. The blade only takes the flesh of his arm.',
     perdeuT: 'Laura falls', perdeu: 'The mace comes down once more, and the sand comes up to my face.', perdeuM: 'The big arm lifts me off the ground. I don’t know when I fall.', denovo: 'Fight again',
     bonus: { levar: 'Simon’s sword is heavy in my hand. I know this weight.', deixar: 'My own sword. My hand knows where it ends.', comer: 'I ate on the road, as I promised. My legs hold.', agua: 'I drank from the barrel the guards watched.', pai: 'Father is up there, watching the wheel.', leu: 'I read her face. I read his.' },
+    dicaM: { varredura: '↑ Shield: the arms come in low along the ground.', pisao: '↓ Sidestep: the foot will come down where I stand.' },
     tellM2: { golpe: 'The small arm draws back.', pesado: 'The big arm rises.', varredura: 'Both arms come down, close to the sand.', pisao: 'He lifts his foot.', agarrar: 'The big hand opens.' },
     varrOk: 'I dig the shield into the sand. Both arms strike it, and it holds.',
     varrMal: 'The arms go under everything and take me with them.',
@@ -329,7 +347,20 @@ function start(root, opts) {
     const BB = opts.bonus || {};
     let VMAX = 100 + (BB.comer ? 12 : 0) + (BB.agua ? 12 : 0), vida = VMAX, lamina = !maior && BB.espada === 'levar' ? 34 : 0, primeiroLido = !maior && !!BB.leu;
     let escudoUp = false, escudoHP = 0, presa = false, tonta = false, sangraT = 0, bracoT = 0, pernaT = 0, pesoT = 0, macaCD = 0, cegoT = 0, lidoM = false, areiaCD = 0, perdido = false;
-    const janelaK = () => clamp(1.65 - (bpm - 52) / 95, .45, 1.65);
+    const ajudaK = 1 + Math.min(.24, .08 * Math.max(0, (opts.derrotas || 0) - 1));   // (v21) da segunda derrota em diante, sem aviso
+    const janelaK = () => clamp(1.65 - (bpm - 52) / 95, .45, 1.65) * ajudaK;
+    // (v21) o ensino e as frases
+    let ataques = 0, treino = false, menuAberto = !!(opts.derrotas), fila = opts.derrotas || maior ? [] : ['golpe', 'pesado'], fraseAtual = -1;   // a primeira frase ensina: rápido, depois pesado
+    const vistoK = {}, acertosFrase = {};
+    const FRASES = { 1: [['golpe', 'golpe'], ['golpe', 'pesado'], ['pesado', 'golpe']], 2: [['golpe', 'golpe', 'pesado'], ['agarrar', 'golpe', 'pesado'], ['maca', 'golpe', 'golpe'], ['peso', 'golpe', 'pesado'], ['pesado', 'maca', 'golpe']], 3: [['duas', 'pesado'], ['golpe', 'agarrar', 'pesado'], ['maca', 'duas'], ['peso', 'pesado']] };
+    const novaFrase = () => {
+      const L = FRASES[fase] || FRASES[1];
+      let i = Math.floor(Math.random() * L.length);
+      if (fase === 3 && Math.random() < .6) { let m = -1; Object.keys(acertosFrase).forEach((k) => { const [f, j] = k.split(':').map(Number); if (f >= 2 && acertosFrase[k] > m) { m = acertosFrase[k]; i = j % L.length; } }); }
+      if (L.length > 1 && i === fraseAtual) i = (i + 1) % L.length;
+      fraseAtual = i; fila = L[i].slice().filter((k) => !(k === 'agarrar' && presa) && !(k === 'peso' && pesoT > 0) && !(k === 'maca' && macaCD > 0));
+      if (!fila.length) fila = ['golpe'];
+    };
 
     // ------------------------------------------------------------ som
     const sfx = (n, v = .7, r) => A && A.sfx && A.sfx(n, v, r);
@@ -573,6 +604,7 @@ function start(root, opts) {
     const solta = () => { if (escudoUp) { escudoUp = false; escudoHP = 0; } };
     // o golpe que chega nela: o escudo erguido toma primeiro; o que passa vira vida
     const leva = (x, txt) => {
+      if (treino && !maior) { popTxt(t.rot.raspou, 'meio'); linha(t.treinoErro, 'mal'); bpm += 3; return; }
       if (!maior && bracoT > 0) x = Math.round(x * .6);
       if (escudoUp) {
         if (x >= escudoHP) { x -= escudoHP; escudoUp = false; escudoHP = 0; tonta = true; linha(t.escudoQuebra, 'mal'); MOM.escudo(true); sfx('escudo-impacto-2', 1); shake = .8; }
@@ -597,13 +629,14 @@ function start(root, opts) {
       if (!maior && B.espada === 'levar') ls.push(t.bonus.levar); else if (!maior && B.espada === 'deixar') ls.push(t.bonus.deixar);
       if (B.comer) ls.push(t.bonus.comer); if (B.agua) ls.push(t.bonus.agua);
       if (!maior && B.pai) ls.push(t.bonus.pai); if (!maior && B.leu) ls.push(t.bonus.leu);
-      for (const l of ls.slice(0, 3)) { linha(l, 'ler'); await espera(1300); }
+      for (const l of ls.slice(0, opts.derrotas ? 1 : 3)) { linha(l, 'ler'); await espera(1300); }
     };
 
     // ------------------------------------------------------------ KRONK
     const tipoDele = () => {
       if (rodeando) return 'pesado';
       if (fimPronto && Math.random() < .6) return 'pesado';
+      if (!maior) { if (!fila.length) novaFrase(); return fila.shift(); }
       if (fase === 1) return Math.random() < .4 ? 'pesado' : 'golpe';
       const pool = [['golpe', 35], ['pesado', 30], ['agarrar', presa ? 0 : 15], ['peso', pesoT > 0 ? 0 : 10], ['maca', macaCD > 0 ? 0 : 12], ['duas', fase === 3 ? 18 : 0]];
       let r = Math.random() * pool.reduce((s, p) => s + p[1], 0);
@@ -624,7 +657,9 @@ function start(root, opts) {
       let ops;
       if (presa) ops = [opK('soltar'), opK('curta')];
       else {
-        ops = [opK('estocada'), opK('corte'), opK('mirar'), opK('finta'), opK(escudoUp ? 'manter' : 'escudo'), opK('respirar')];
+        if (!menuAberto && (R.marcas > 0 || R.turnos > 4 || fase > 1)) { menuAberto = true; linha(t.abreMenu, 'ler'); await espera(1200); }
+        ops = menuAberto ? [opK('estocada'), opK('corte'), opK('mirar'), opK('finta'), opK(escudoUp ? 'manter' : 'escudo'), opK('respirar')]
+          : [opK('estocada'), opK('corte'), opK('finta'), opK('respirar')];
         if (fase === 3) ops.push({ k: 'rodear', nome: t.golpes.rodear[0], desc: t.golpes.rodear[1], cls: 'risco' });
         if (lamina >= 100) ops.unshift(opK('lamina', 'lamina'));
       }
@@ -632,7 +667,11 @@ function start(root, opts) {
       if (k === 'mirar') { k = await escolhe([opK('braco'), opK('perna'), opK('torso'), opK('voltar', 'voltar')]); if (k === 'voltar') return turnoDela(); }
       if (k !== 'escudo' && k !== 'manter') solta();
       if (k === 'respirar') { bpm = Math.max(base, bpm - 16); pose('respirar', 1.2); linha(t.respirouM); await espera(900); return; }
-      if (k === 'finta') { revelado = tipoDele(); R.leituras++; bpm += 3; ganha(6); pose('guarda', .4); empurra(CL, 40, 200); linha((t.tell.mordeu[revelado] || t.mordeu2[revelado]), 'ler'); await espera(900); return; }
+      if (k === 'finta') {
+        if (!fila.length) novaFrase();
+        revelado = fila.slice(); R.leituras++; bpm += 6; ganha(6); pose('guarda', .4); empurra(CL, 40, 200);
+        linha(t.frase(revelado.map((x) => t.nomeGolpe[x] || x).join(', ')), 'ler'); await espera(1300); return;
+      }
       if (k === 'escudo' || k === 'manter') { if (!escudoUp) { escudoUp = true; escudoHP = 30; bpm += 5; linha(t.escudoUp); } else { bpm += 4; linha(t.escudoMantem); } pose('escudo', 1); sfx('escudo-impacto-1', .4); await espera(800); return; }
       if (k === 'rodear') { rodeando = true; R.rodeou = true; bpm += 3; linha(t.rodear, 'ler'); await espera(900); return; }
       if (k === 'soltar') {
@@ -738,8 +777,15 @@ function start(root, opts) {
     };
     const turnoDele = async () => {
       if (sangraT > 0) { sangraT--; hp = Math.max(1, hp - 3); CE.hit = .5; sangue(KX - 30, CHAO - KH * .5, 14, 1, .6); if (Math.random() < .5) linha(t.sangra); await espera(500); }
-      const tipo = revelado || tipoDele();
-      const lido = !!revelado || primeiroLido; revelado = null; primeiroLido = false;
+      ataques++;
+      treino = !opts.derrotas && ataques <= 2;
+      const tipo = tipoDele();
+      const leuFrase = Array.isArray(revelado) && revelado.length > 0;
+      if (leuFrase) revelado.shift();
+      const novo = !vistoK[tipo]; vistoK[tipo] = true;
+      const lido = leuFrase || primeiroLido || (novo && fase > 1) || treino; if (!leuFrase || !revelado.length) revelado = null; primeiroLido = false;
+      if ((treino || (novo && fase > 1)) && t.dica[tipo]) { linha(t.dica[tipo], 'ler'); await espera(1100); }
+      const vidaAntes = vida;
       if (presa && tipo !== 'peso' && tipo !== 'agarrar') {
         linha(t.tell.golpe, 'tell'); kAtk('golpe', .6); await espera(650); kSolta('golpe'); presa = false; leva(fase === 3 ? 14 : 12, t.presaGolpe);
       } else if (tipo === 'golpe') await golpeRapido(lido);
@@ -748,6 +794,8 @@ function start(root, opts) {
       else if (tipo === 'maca') await macaCima(lido);
       else if (tipo === 'peso') { pesoT = 4; linha(t.tell2.peso, 'tell'); empurra(CE, -20, 1200, 6, 0); areia(KX, 16, .6); await espera(1100); }
       else if (tipo === 'duas') { linha(t.tell2.duas, 'tell'); await espera(500); await golpeRapido(lido, .9); if (!perdeu() && !acabou) { await espera(260); await golpeRapido(false, .8); } }
+      if (vida < vidaAntes && fraseAtual >= 0) { const kf = fase + ':' + fraseAtual; acertosFrase[kf] = (acertosFrase[kf] || 0) + 1; }
+      treino = false;
       if (bracoT > 0) bracoT--; if (pernaT > 0) pernaT--; if (macaCD > 0) macaCD--;
       if (pesoT > 0 && --pesoT === 0) linha(t.pesoFim);
       if (rodeando) rodeando = false;
@@ -791,10 +839,12 @@ function start(root, opts) {
       const pool = [['golpe', 30], ['pesado', 30], ['varredura', 15], ['pisao', 15], ['agarrar', presa ? 0 : 10]];
       let r0 = Math.random() * pool.reduce((s, p) => s + p[1], 0), tipo = 'golpe';
       for (const [k, w] of pool) { if ((r0 -= w) < 0) { tipo = k; break; } }
-      const confuso = !lido && !cegoT && Math.random() < (hp < HPMAX * .5 ? .38 : .25);
+      const confuso = (tipo === 'golpe' || tipo === 'pesado') && !lido && !cegoT && Math.random() < (hp < HPMAX * .5 ? .38 : .25);   // (v21) só onde o botão errado ainda tem janela
+      const novoM = !vistoK['M' + tipo] && (tipo === 'varredura' || tipo === 'pisao'); vistoK['M' + tipo] = true;
       if (presa) { linha(t.tellM2.golpe, 'tell'); kAtk('golpe', .6); await espera(650); kSolta('golpe'); presa = false; leva(10, t.presaM); return false; }
       linha(confuso ? t.tellM.confuso : t.tellM2[tipo], 'tell');
-      const dur = rnd(.55, .9) * (hp < HPMAX * .4 ? .88 : 1) * (lido ? 1.2 : 1) * (cegoT ? 1.3 : 1); empurra(CE, 40, dur * 900, 0, .06);
+      if (novoM) { await espera(500); linha(t.dicaM[tipo], 'ler'); await espera(900); }
+      const dur = rnd(.55, .9) * (hp < HPMAX * .4 ? .88 : 1) * (lido || novoM ? 1.3 : 1) * (cegoT ? 1.3 : 1); empurra(CE, 40, dur * 900, 0, .06);
       const an = tipo === 'golpe' || tipo === 'agarrar' ? 'golpe' : 'pesado'; kAtk(an, dur);
       poseE = tipo === 'varredura' || tipo === 'pisao' ? tipo : null;
       if (tipo === 'pisao') areia(KX - 60, 10, .5);
@@ -803,7 +853,7 @@ function start(root, opts) {
       kSolta(an); if (poseE) setTimeout(() => { poseE = null; }, BOT() ? 0 : 220);
       const flex = tipo === 'golpe' || tipo === 'pesado';   // nos dois braços, o lado errado ainda serve, com janela estreita
       const jan = r.k === certo ? .14 * (certo === 'escudo' && escudoUp ? 1.8 : 1) : flex ? .07 : 0;
-      const j = jan ? julga(r.err, jan * janelaK() * (lido ? 1.3 : 1)) : 'tarde';
+      const j = jan ? julga(r.err, jan * janelaK() * (lido || novoM ? 1.3 : 1)) : 'tarde';
       if (j === 'perfeito' || j === 'bom') {
         if (r.k === 'lateral') MOM.lateral(); else MOM.escudo(tipo !== 'golpe');
         sfx('escudo-impacto-1', .8); popTxt(t.rot.segurou, 'bom'); R.respostas++; bpm += tipo === 'varredura' ? 5 : 2;
@@ -848,13 +898,12 @@ function start(root, opts) {
         if (areiaCD > 0) areiaCD--;
         if (k === 'respirar') { base = Math.max(96, base - 10); bpm = Math.max(base, bpm - 14); pose('respirar', 1.1); linha(t.respirouM); semFlecha++; }
         else if (k === 'escudo' || k === 'manter') { if (!escudoUp) { escudoUp = true; escudoHP = 30; bpm += 4; linha(t.escudoUp); } else { bpm += 3; linha(t.escudoMantem); } pose('escudo', 1); semFlecha++; }
-        else if (k === 'ler') { lidoM = true; bpm += 2; linha(t.lerOk, 'ler'); semFlecha++; }
+        else if (k === 'ler') { lidoM = true; bpm += 2; linha(t.lerOk, 'ler'); }
         else if (k === 'soltar') { bpm += 4; const r = await anel('eu', .8, [{ k: 'agora', rot: t.agora, cls: 'agora' }]); const j = julga(r.err, .14 * janelaK()); if (j === 'perfeito' || j === 'bom') { presa = false; MOM.lateral(); linha(t.soltouM); } else linha(t.naoSoltou, 'mal'); semFlecha++; }
         else if (k === 'areia') {
           areiaCD = 3; bpm += 4; pose('areia', .9); areia(LX + 80, 20, 1);
           const r = await anel('ele', .85, [{ k: 'agora', rot: t.agora, cls: 'agora' }]); const j = julga(r.err, .12 * janelaK());
           if (j === 'perfeito' || j === 'bom') { cegoT = 2; CE.hit = .6; areia(KX - 40, 30, 1.2); popTxt(t.est.cego, 'bom'); linha(t.areiaOk); } else { popTxt(t.rot[j] || t.rot.tarde, 'mal'); linha(t.areiaMal, 'mal'); }
-          semFlecha++;
         }
         else if (k === 'tremido') { R.deslizes++; linha(t.chamouTremido, 'mal'); atrasada = true; await espera(700); }
         else { await rajada(true); semFlecha = 0; }
@@ -902,7 +951,7 @@ function start(root, opts) {
       (maior ? maiorLuta : kronk)();
     };
     $('.d8-go').onclick = go;
-    if (BOT()) setTimeout(go, 10);
+    if (BOT() || opts.derrotas) setTimeout(go, 10);   // (v21) depois de cair, volta direto à areia
   });
 }
 

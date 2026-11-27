@@ -378,3 +378,11 @@ Tudo resolvido só com texto: nenhuma dublagem nova, nenhuma imagem nova.
 
 ## v20 (24/11/2026)
 - E6 v2 aplicada na d04 (PT+EN): "A última vez que chorei foi na semana do Torneio Real…" + "Os homens do posto estão olhando… A Lâmina não chora na frente dos seus. Fico de costas para eles até o vento secar os meus olhos." Resolve a pendência do "quase chorei" (Cap. IV). Cache ?v=20.
+
+## v21 (27/11/2026) · auditoria de diálogos, HUD e jogos aplicada
+Documento: `claude/CAP8_AUDITORIA_DIALOGOS_HUD_E_JOGOS.md` (Passagem 3, com todas as falas novas e os prompts opcionais).
+- **Motor (`livro8.js`):** `⟦palavra⟧` em ouro (do Cap. VII), `A.cala` e o item `cala` nos sons/Continuar, `A.ouro`, `pico` em item de Continuar, retrato que escorre (`rostoEscorrega`).
+- **Duelo do Kronk:** regra falsa das marcas trocada; duas primeiras trocas guiadas e sem dano; menu cresce (mirar/escudo depois); golpes novos lentos e com dica na 1ª vez; frases de luta (treino da Hessa, Cap. VI) e finta que mostra a frase inteira (+6 de pulso); recomeço curto; janela +8%/derrota a partir da 2ª.
+- **O Maior:** confuso só no rápido/pesado; 1ª varredura e 1º pisão com dica; ler/areia não fecham a carne.
+- **Minijogos:** a laje só abre com catre+laje; Ler o corpo com o tom (dura/baixa/calada) nas duas noites; Contar o chão no lugar de Ouvir o chão; a roda mostra as lembranças e soltar antes corta (E6 seca); Erguer virou cena (altura pela vida do duelo); Contar os vivos por toque.
+- **Texto:** O1 a O8 e o pente fino (O11); ouro para as noites *cheias* do Cap. VII (lê `cap7.alvos`); Joseph lê `cap4.entrada`; `estadoFinal` com `aubert`, `tons`, `chao`, `rodaLembrou`. Cache `?v=21`.
